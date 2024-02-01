@@ -1,9 +1,27 @@
 <template>
   <div>
-    <slot />
+    <div class="sticky top-0 z-10 w-full select-none bg-white p-4">
+      <div
+        class="mx-auto max-w-3xl cursor-pointer text-center text-2xl"
+        @click="goHome"
+      >
+        <span class="text-blue-500">TEO</span>
+        <span>SPACE</span>
+      </div>
+    </div>
+
+    <div class="mx-auto flex max-w-3xl justify-center p-4">
+      <slot />
+    </div>
   </div>
 </template>
 
 <script setup>
-
+const goHome = () => {
+  if (window.scrollY > 0) {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  } else {
+    navigateTo('/')
+  }
+}
 </script>
