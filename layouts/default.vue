@@ -13,10 +13,14 @@
     <div class="mx-auto flex max-w-3xl justify-center p-4">
       <slot />
     </div>
+
+    <SpeedInsights />
   </div>
 </template>
 
 <script setup>
+import { SpeedInsights } from '@vercel/speed-insights/vue'
+
 const goHome = () => {
   if (window.scrollY > 0) {
     window.scrollTo({ top: 0, behavior: 'smooth' })
