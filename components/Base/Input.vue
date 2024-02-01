@@ -16,7 +16,11 @@
       class="flex h-full w-10 items-center justify-center text-xl"
     >
       <button
-        :class="loading ? 'ri-loader-4-line animate-spin' : icon"
+        :class="
+          loading
+            ? 'ri-loader-4-line animate-spin'
+            : `${icon} transition-all active:text-gray-400`
+        "
         @click="$emit('confirm')"
       ></button>
     </div>

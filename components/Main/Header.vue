@@ -9,10 +9,10 @@
 
     <MainHeaderUser />
 
-    <button
+    <NuxtLink
+      to="/search"
       class="ri-donut-chart-line flex h-8 w-8 items-center justify-center rounded-full border text-xl"
-      @click="showSearch"
-    ></button>
+    ></NuxtLink>
   </div>
 </template>
 
