@@ -1,0 +1,190 @@
+.html-style {
+  @apply text-sm text-gray-600;
+
+  h1 {
+    @apply pb-3 pt-4 text-3xl font-bold;
+  }
+
+  h2 {
+    @apply pb-2 pt-4 text-2xl font-bold;
+  }
+
+  h3 {
+    @apply pb-1 pt-4 text-xl font-bold;
+  }
+
+  p {
+    @apply py-2 text-justify leading-7;
+  }
+
+  code {
+    @apply rounded bg-slate-100 px-1.5 py-0.5 font-mono text-xs;
+  }
+
+  pre {
+    @apply my-2 overflow-x-auto rounded-md bg-slate-100 p-3 font-mono;
+    white-space: pre !important;
+
+    code {
+      @apply rounded-none border-none bg-transparent p-0;
+    }
+
+    .hljs {
+      color: #383a42;
+      background: #fafafa;
+    }
+
+    .hljs-comment,
+    .hljs-quote {
+      color: #a0a1a7;
+      font-style: italic;
+    }
+
+    .hljs-doctag,
+    .hljs-keyword,
+    .hljs-formula {
+      color: #c44747;
+    }
+
+    .hljs-section,
+    .hljs-name,
+    .hljs-selector-tag,
+    .hljs-deletion,
+    .hljs-subst {
+      color: #e45649;
+    }
+
+    .hljs-literal {
+      color: #4ba0ad;
+    }
+
+    .hljs-string,
+    .hljs-regexp,
+    .hljs-addition,
+    .hljs-attribute,
+    .hljs-meta .hljs-string {
+      color: #50a14f;
+    }
+
+    .hljs-attr,
+    .hljs-variable,
+    .hljs-template-variable,
+    .hljs-type,
+    .hljs-selector-class,
+    .hljs-selector-attr,
+    .hljs-selector-pseudo,
+    .hljs-number {
+      color: #907846;
+    }
+
+    .hljs-symbol,
+    .hljs-bullet,
+    .hljs-link,
+    .hljs-meta,
+    .hljs-selector-id,
+    .hljs-title {
+      color: #4870c0;
+    }
+
+    .hljs-built_in,
+    .hljs-title.class_,
+    .hljs-class .hljs-title {
+      color: #c18401;
+    }
+
+    .hljs-emphasis {
+      font-style: italic;
+    }
+
+    .hljs-strong {
+      font-weight: bold;
+    }
+
+    .hljs-link {
+      text-decoration: underline;
+    }
+  }
+
+  blockquote {
+    @apply my-2 border-l-2 pl-3;
+
+    p {
+      @apply p-0;
+    }
+  }
+
+  hr {
+    @apply my-5;
+  }
+
+  ul,
+  ol {
+    @apply py-2 pl-7;
+
+    p {
+      @apply ml-1 p-0;
+    }
+  }
+
+  ul {
+    @apply list-disc;
+
+    li::marker {
+      @apply text-slate-400;
+    }
+  }
+
+  ul[data-type='taskList'] {
+    @apply list-none pl-[11px];
+
+    li {
+      @apply flex;
+
+      & > label {
+        @apply mr-1 flex flex-none items-center;
+      }
+
+      & > div {
+        @apply flex-auto;
+      }
+    }
+  }
+
+  ol {
+    @apply list-decimal;
+  }
+
+  img,
+  video {
+    @apply my-2 h-auto max-w-full rounded-md;
+  }
+
+  a {
+    @apply mx-1 text-blue-400 underline;
+  }
+
+  table {
+    @apply my-2 w-full table-fixed border-separate border-spacing-0 overflow-hidden rounded-md border text-sm;
+
+    td,
+    th {
+      @apply relative box-border border-r px-3 py-2 align-middle last:border-r-0;
+    }
+
+    th {
+      @apply bg-slate-50 text-left font-bold;
+    }
+
+    td {
+      @apply border-t;
+    }
+
+    p {
+      @apply p-0 leading-5;
+    }
+
+    .selectedCell:after {
+      @apply pointer-events-none absolute bottom-0 left-0 right-0 top-0 z-[2] bg-blue-200/[.1] content-[''];
+    }
+  }
+}

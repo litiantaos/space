@@ -1,0 +1,280 @@
+<template>
+  <div>
+    <EditorContent :editor="editor" class="html-style h-full" />
+
+    <FloatingMenu
+      v-if="editor"
+      :editor="editor"
+      :tippy-options="{ animation: 'shift-away', duration: 200 }"
+    >
+      <BasePopover
+        :options="{
+          placement: 'bottom-start',
+          theme: 'base',
+        }"
+      >
+        <button class="ri-sparkling-line text-xl text-slate-400"></button>
+
+        <template #content>
+          <div class="grid w-max grid-cols-5 gap-1">
+            <button
+              v-for="menu in floatingMenus"
+              class="menu-button"
+              :class="menu.icon"
+              @click="menu.command(editor)"
+            ></button>
+          </div>
+        </template>
+      </BasePopover>
+    </FloatingMenu>
+
+    <BubbleMenu
+      v-if="editor"
+      :editor="editor"
+      :tippy-options="{
+        animation: 'shift-away',
+        duration: 200,
+        placement: 'top-start',
+        theme: 'base',
+      }"
+      class="bubble-menu"
+      plugin-key="bubbleMenu"
+    >
+      <BasePopover
+        :options="{
+          placement: 'top-start',
+          offset: [-5, 10],
+          theme: 'base',
+        }"
+      >
+        <button class="menu-button ri-text"></button>
+
+        <template #content>
+          <div class="bubble-menu">
+            <button
+              v-for="menu in textMenus"
+              class="menu-button"
+              :class="[
+                menu.icon,
+                {
+                  active: editor.isActive(menu.title, menu.attrs),
+                },
+              ]"
+              @click="menu.command(editor)"
+            ></button>
+          </div>
+        </template>
+      </BasePopover>
+
+      <button
+        v-for="menu in bubbleMenus"
+        class="menu-button"
+        :class="[
+          menu.icon,
+          {
+            active: editor.isActive(menu.title, menu.attrs),
+          },
+        ]"
+        @click="menu.command(editor)"
+      ></button>
+
+      <BasePopover
+        :options="{
+          placement: 'top-end',
+          offset: [5, 10],
+        }"
+      >
+        <button
+          class="menu-button ri-link"
+          :class="{ active: editor.isActive('link') }"
+          @click="onLink"
+        ></button>
+
+        <template #content>
+          <BaseInput
+            type="text"
+            placeholder="URL"
+            v-model="linkUrl"
+            icon="ri-check-line"
+            auto-focus
+            @confirm="setLink"
+            @keyup.enter="setLink"
+            class="w-[294px]"
+          />
+        </template>
+      </BasePopover>
+    </BubbleMenu>
+
+    <BubbleMenu
+      v-if="editor"
+      :editor="editor"
+      :should-show="() => editor.isActive('table')"
+      :tippy-options="{
+        animation: 'shift-away',
+        duration: 200,
+        placement: 'top-start',
+        theme: 'base',
+      }"
+      class="bubble-menu"
+      plugin-key="tableMenu"
+    >
+      <button
+        v-for="menu in tableMenus"
+        class="menu-button"
+        :class="menu.icon"
+        @click="menu.command(editor)"
+      ></button>
+    </BubbleMenu>
+  </div>
+</template>
+
+<script setup>
+import {
+  useEditor,
+  EditorContent,
+  FloatingMenu,
+  BubbleMenu,
+} from '@tiptap/vue-3'
+
+import StarterKit from '@tiptap/starter-kit'
+import TaskList from '@tiptap/extension-task-list'
+import TaskItem from '@tiptap/extension-task-item'
+import Table from '@tiptap/extension-table'
+import TableCell from '@tiptap/extension-table-cell'
+import TableHeader from '@tiptap/extension-table-header'
+import TableRow from '@tiptap/extension-table-row'
+import Placeholder from '@tiptap/extension-placeholder'
+import Link from '@tiptap/extension-link'
+import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight'
+import Media from '@/extensions/media'
+
+import {
+  floatingMenus,
+  bubbleMenus,
+  textMenus,
+  tableMenus,
+} from '@/utils/editor-menus'
+
+import { common, createLowlight } from 'lowlight'
+
+const props = defineProps({
+  modelValue: {
+    type: String,
+    default: '',
+  },
+  editable: {
+    type: Boolean,
+    default: true,
+  },
+})
+
+const emit = defineEmits(['update:modelValue'])
+
+const editor = useEditor({
+  content: props.modelValue,
+  editable: props.editable,
+  autofocus: true,
+  extensions: [
+    StarterKit.configure({
+      codeBlock: false,
+      dropcursor: {
+        width: 3,
+        color: '#59c289',
+      },
+    }),
+    TaskList,
+    TaskItem,
+    Table,
+    TableCell,
+    TableHeader,
+    TableRow,
+    Placeholder.configure({
+      placeholder: '心有从容，向阳而生',
+    }),
+    Link.configure({
+      openOnClick: false,
+    }),
+    CodeBlockLowlight.configure({
+      lowlight: createLowlight(common),
+    }),
+    Media,
+  ],
+  onUpdate: () => {
+    emit('update:modelValue', editor.value.getHTML())
+  },
+})
+
+watch(
+  () => props.modelValue,
+  (value) => {
+    const isSame = editor.value.getHTML() === value
+    if (!isSame) {
+      editor.value.commands.setContent(value, false)
+    }
+  },
+)
+
+// LINK
+const linkUrl = ref(null)
+
+const onLink = () => {
+  const previousUrl = editor.value.getAttributes('link').href
+  linkUrl.value = previousUrl
+}
+
+const setLink = () => {
+  if (linkUrl.value === null) {
+    return
+  }
+
+  if (linkUrl.value === '') {
+    editor.value.chain().focus().extendMarkRange('link').unsetLink().run()
+    return
+  }
+
+  editor.value
+    .chain()
+    .focus()
+    .extendMarkRange('link')
+    .setLink({ href: linkUrl.value })
+    .run()
+}
+</script>
+
+<style>
+.tiptap {
+  @apply h-full overflow-auto;
+
+  &:focus {
+    outline: none;
+  }
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  p.is-editor-empty:first-child::before {
+    @apply pointer-events-none float-left ml-10 h-0 text-gray-300 content-[attr(data-placeholder)];
+  }
+}
+
+.bubble-menu {
+  @apply flex gap-1;
+}
+
+.menu-button {
+  @apply h-8 w-8 rounded active:bg-gray-100;
+
+  &.active {
+    @apply font-bold text-blue-500;
+  }
+}
+
+div[data-tippy-root] {
+  @apply transition-transform duration-300;
+
+  .tippy-box {
+    max-width: none !important;
+  }
+}
+</style>

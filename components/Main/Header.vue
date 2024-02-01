@@ -16,4 +16,10 @@
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+import { usePostStore } from '~/stores/post'
+
+const createPost = () => {
+  usePostStore().isBoardShow = true
+}
+</script>
