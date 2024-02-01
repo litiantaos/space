@@ -29,6 +29,7 @@
 import { useToast } from '~/stores/toast'
 
 const client = useSupabaseClient()
+const user = useSupabaseUser()
 
 const isSignIn = ref(true)
 
@@ -65,6 +66,8 @@ const signIn = async () => {
 
       return
     }
+
+    await getProfile(user.value.id)
 
     navigateTo('/')
   } catch (error) {
