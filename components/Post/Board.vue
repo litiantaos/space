@@ -66,6 +66,9 @@ const upsertPost = async () => {
 
     // console.log(data)
 
+    store.posts = []
+    store.page = 1
+    store.posts = await store.getPosts()
     store.isBoardShow = false
 
     editorContent.value = null

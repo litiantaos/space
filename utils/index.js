@@ -1,3 +1,22 @@
+import dayjs from 'dayjs'
+import relativeTime from 'dayjs/plugin/relativeTime'
+import 'dayjs/locale/zh-cn'
+
+dayjs.extend(relativeTime)
+dayjs.locale('zh-cn')
+
+export const formatTime = (time) => {
+  const now = dayjs()
+  const targetTime = dayjs(time)
+  const diffInDays = now.diff(targetTime, 'day')
+
+  if (diffInDays < 3) {
+    return targetTime.fromNow()
+  }
+
+  return targetTime.format('YYYY-MM-DD HH:mm')
+}
+
 export const throttle = (func, wait) => {
   let prev = 0
   return (...args) => {
