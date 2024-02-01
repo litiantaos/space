@@ -58,7 +58,6 @@ const processHtml = (htmlString) => {
       hidden.value = true
       content.value = props.data.content
     } else {
-      // title.value = match[1]
       content.value = htmlString.replace(regex, '')
       emit('title', match[1])
     }

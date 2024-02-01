@@ -40,6 +40,8 @@ const user = useSupabaseUser()
 const editorContent = ref(null)
 const loading = ref(false)
 
+const emit = defineEmits(['cited'])
+
 const submit = throttle(async () => {
   // console.log(editorContent.value)
 
@@ -74,6 +76,10 @@ const upsertPost = async () => {
     editorContent.value = null
 
     store.citedPostId = null
+
+    if (upsert.cited_post_id) {
+      emit('cited')
+    }
   } catch (error) {
     alert(error.message)
   } finally {
