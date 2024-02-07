@@ -1,75 +1,26 @@
-# Nuxt 3 Minimal Starter
+# TeoSpace
 
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+## Introduction
+
+App built using [Nuxt 3](https://nuxt.com), [Tailwind CSS](https://tailwindcss.com), [Pinia](https://pinia.vuejs.org), [Remix Icon](https://remixicon.com), [Tiptap](https://tiptap.dev) and [Supabase](https://supabase.com/).
+
+Website: [https://www.litiantao.com](https://www.litiantao.com)
+
+## Configuration
+
+Add `SUPABASE_URL` and `SUPABASE_KEY` to the `.env` file:
+
+```
+SUPABASE_URL="https://example.supabase.co"
+SUPABASE_KEY="<your_key>"
+```
 
 ## Setup
 
-Make sure to install the dependencies:
-
 ```bash
-# npm
+# Install dependencies
 npm install
 
-# pnpm
-pnpm install
-
-# yarn
-yarn install
-
-# bun
-bun install
-```
-
-## Development Server
-
-Start the development server on `http://localhost:3000`:
-
-```bash
-# npm
+# Start dev server at localhost:3000
 npm run dev
-
-# pnpm
-pnpm run dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
 ```
-
-## Production
-
-Build the application for production:
-
-```bash
-# npm
-npm run build
-
-# pnpm
-pnpm run build
-
-# yarn
-yarn build
-
-# bun
-bun run build
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm run preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
