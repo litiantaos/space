@@ -125,7 +125,7 @@ const deleteLocalPost = () => {
 // Edit
 const editPost = () => {
   store.isBoardShow = true
-  store.post = props.data
+  store.editablePost = props.data
 
   hideAll()
 }

@@ -43,12 +43,28 @@ const client = useSupabaseClient()
 
 const id = useRoute().params.id
 
-// Fetch From Server
-const { data: post } = await useFetch('/api/post', {
-  query: {
-    id: id,
-  },
-})
+// Get Data
+const post = ref(null)
+
+if (store.localPost) {
+  post.value = store.localPost
+} else {
+  const { data } = await useAsyncData(
+    'post',
+    async () => {
+      return await client
+        .from('posts')
+        .select('*, profiles(id, nickname, avatar_url)')
+        .eq('id', id)
+        .single()
+    },
+    {
+      transform: (res) => res.data,
+    },
+  )
+
+  post.value = data.value
+}
 
 // Get CitedPosts
 const citedPosts = ref(null)
@@ -63,35 +79,7 @@ const getCitedPosts = async () => {
   citedPosts.value = data
 }
 
-// Get Post
-// const post = ref(null)
-
-const getPost = async () => {
-  const { data } = await client
-    .from('posts')
-    .select('*, profiles(id, nickname, avatar_url)')
-    .eq('id', id)
-    .single()
-
-  post.value = data
-}
-
-// Check
-const getData = async () => {
-  const localPostString = localStorage.getItem('post')
-  const localPost = JSON.parse(localPostString)
-
-  if (localPost) {
-    post.value = localPost
-  } else {
-    await getPost()
-  }
-}
-
-// Mounted
 onMounted(async () => {
-  // getData()
-
   getCitedPosts()
 
   // Medium Zoom
@@ -100,7 +88,7 @@ onMounted(async () => {
 })
 
 onBeforeUnmount(() => {
-  localStorage.removeItem('post')
+  store.editablePost = null
 })
 
 // On Post Cited

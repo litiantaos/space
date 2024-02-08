@@ -1,7 +1,9 @@
 export const usePostStore = defineStore('Post', () => {
   const isBoardShow = ref(false)
 
-  const post = ref(null)
+  const editablePost = ref(null)
+  const localPost = ref(null)
+
   const citedPostId = ref(null)
 
   const posts = ref(null)
@@ -28,5 +30,5 @@ export const usePostStore = defineStore('Post', () => {
     }
   }
 
-  return { isBoardShow, post, citedPostId, posts, page, pageSize, getPosts }
+  return { isBoardShow, editablePost, localPost, citedPostId, posts, page, pageSize, getPosts }
 })

@@ -27,6 +27,8 @@
 </template>
 
 <script setup>
+import { usePostStore } from '~/stores/post'
+
 const props = defineProps({
   data: Object,
   type: {
@@ -69,7 +71,8 @@ const processHtml = (htmlString) => {
 const toPost = () => {
   if (props.type !== 'min') return
 
-  localStorage.setItem('post', JSON.stringify(props.data))
+  usePostStore().localPost = props.data
+
   navigateTo('/post/' + props.data.id)
 }
 </script>

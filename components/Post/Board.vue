@@ -58,7 +58,7 @@ const upsertPost = async () => {
   }
 
   if (isEdit.value) {
-    upsert.id = store.post.id
+    upsert.id = store.editablePost.id
   } else if (store.citedPostId) {
     upsert.cited_post_id = store.citedPostId
   }
@@ -90,14 +90,14 @@ const upsertPost = async () => {
 const closeBoard = () => {
   store.isBoardShow = false
   editorContent.value = null
-  store.post = null
+  store.editablePost = null
 }
 
 // Watch Edit
 const isEdit = ref(false)
 
 watch(
-  () => store.post,
+  () => store.editablePost,
   (value) => {
     if (value) {
       editorContent.value = value.content
