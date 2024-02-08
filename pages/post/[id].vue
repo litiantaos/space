@@ -31,6 +31,8 @@
     </div>
 
     <PostBoard @cited="onCited" />
+
+    <BaseLoading :loading="pageLoading" />
   </div>
 </template>
 
@@ -45,10 +47,13 @@ const id = useRoute().params.id
 
 // Get Data
 const post = ref(null)
+const pageLoading = ref(false)
 
 if (store.localPost) {
   post.value = store.localPost
 } else {
+  pageLoading.value = true
+
   const { data } = await useAsyncData(
     'post',
     async () => {
@@ -77,6 +82,8 @@ const getCitedPosts = async () => {
     .order('created_at', { ascending: false })
 
   citedPosts.value = data
+
+  pageLoading.value = false
 }
 
 onMounted(async () => {

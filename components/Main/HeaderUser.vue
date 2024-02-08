@@ -1,14 +1,14 @@
 <template>
   <div
-    v-if="user && profile"
+    v-if="user"
     class="flex h-8 items-center justify-center gap-3 rounded-full border px-1.5"
   >
     <NuxtLink to="/profile" class="flex items-center gap-2">
       <img
-        :src="profile.avatar_url || ''"
+        :src="profile?.avatar_url || defaultAvatarUrl"
         class="h-5 w-5 overflow-hidden rounded-full border bg-slate-100 object-cover"
       />
-      <div class="text-sm">{{ profile.nickname || '' }}</div>
+      <div class="text-sm">{{ profile?.nickname || defaultNickname }}</div>
     </NuxtLink>
 
     <button class="ri-arrow-right-line text-gray-500" @click="signOut"></button>

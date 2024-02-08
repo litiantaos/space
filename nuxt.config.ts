@@ -20,12 +20,7 @@ export default defineNuxtConfig({
     storesDirs: ['./stores/**'],
   },
   supabase: {
-    redirectOptions: {
-      login: '/login',
-      callback: '/',
-      exclude: [],
-      cookieRedirect: false,
-    },
+    redirect: false,
   },
   css: ['remixicon/fonts/remixicon.css', '~/assets/css/main.css'],
 })

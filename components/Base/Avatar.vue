@@ -4,7 +4,7 @@
     class="relative h-20 w-20 overflow-hidden rounded-md border"
   >
     <img
-      :src="src || 'https://api.dicebear.com/7.x/thumbs/svg?seed=teoSpace'"
+      :src="src || defaultAvatarUrl"
       alt="avatar"
       class="h-full w-full object-cover"
     />

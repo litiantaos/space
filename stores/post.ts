@@ -17,7 +17,7 @@ export const usePostStore = defineStore('Post', () => {
     try {
       const { data } = await useSupabaseClient()
         .from('posts')
-        .select('*, profiles(id, nickname, avatar_url)')
+        .select('*, profiles(id, nickname, avatar_url, role)')
         .order('is_recommended', { ascending: false })
         .order('created_at', { ascending: false })
         .range(from, from + pageSize.value - 1)

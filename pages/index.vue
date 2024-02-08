@@ -7,6 +7,8 @@
     </KeepAlive>
 
     <PostBoard />
+
+    <BaseLoading :loading="pageLoading" />
   </div>
 </template>
 
@@ -14,6 +16,22 @@
 import { usePostStore } from '~/stores/post'
 
 const store = usePostStore()
+
+// Loaded
+const pageLoading = ref(true)
+
+watch(
+  () => store.posts,
+  (value) => {
+    if (value) {
+      pageLoading.value = false
+    }
+  },
+)
+
+if (store.posts) {
+  pageLoading.value = false
+}
 
 // Scroll Hidden
 watch(
