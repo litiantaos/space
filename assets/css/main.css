@@ -18,3 +18,11 @@ input {
     display: none;
   }
 }
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.tag {
+  @apply flex h-6 flex-none select-none items-center justify-center rounded-xl border px-3 text-xs text-gray-500;
+}

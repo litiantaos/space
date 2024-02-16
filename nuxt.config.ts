@@ -15,6 +15,7 @@ export default defineNuxtConfig({
     },
     pageTransition: { name: 'page', mode: 'out-in' },
   },
+  css: ['remixicon/fonts/remixicon.css', '~/assets/css/main.css'],
   modules: ['@nuxtjs/tailwindcss', '@pinia/nuxt', '@nuxtjs/supabase'],
   pinia: {
     storesDirs: ['./stores/**'],
@@ -22,5 +23,4 @@ export default defineNuxtConfig({
   supabase: {
     redirect: false,
   },
-  css: ['remixicon/fonts/remixicon.css', '~/assets/css/main.css'],
 })

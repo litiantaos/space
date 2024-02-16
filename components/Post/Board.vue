@@ -14,8 +14,10 @@
 
         <BaseEditor
           v-model="editorContent"
-          class="h-[calc(100%-128px)] w-full"
+          class="h-[calc(100%-200px)] w-full"
         />
+
+        <PostBoardTag @checked="getCheckedTags" />
 
         <button
           v-if="user"
@@ -42,6 +44,42 @@ const loading = ref(false)
 
 const emit = defineEmits(['cited'])
 
+// Watch Edit
+const isEdit = ref(false)
+
+watch(
+  () => store.editablePost,
+  (value) => {
+    if (value) {
+      editorContent.value = value.content
+      isEdit.value = true
+    }
+  },
+)
+
+// Tags
+const tags = ref(null)
+
+const getCheckedTags = (e) => {
+  tags.value = e
+}
+
+const upsertTags = async (id) => {
+  let upsert
+
+  upsert = tags.value.map((tag) => {
+    return {
+      post_id: id,
+      tag_id: tag.id,
+    }
+  })
+
+  console.log(upsert)
+
+  const { data } = await client.from('posts_tags').upsert(upsert).select()
+}
+
+// Submit
 const submit = throttle(async () => {
   // console.log(editorContent.value)
 
@@ -59,6 +97,12 @@ const upsertPost = async () => {
 
   if (isEdit.value) {
     upsert.id = store.editablePost.id
+
+    // Delete All Tags
+    const { error } = await client
+      .from('posts_tags')
+      .delete()
+      .eq('post_id', store.editablePost.id)
   } else if (store.citedPostId) {
     upsert.cited_post_id = store.citedPostId
   }
@@ -66,7 +110,11 @@ const upsertPost = async () => {
   try {
     const { data } = await client.from('posts').upsert(upsert).select()
 
-    // console.log(data)
+    console.log(data)
+
+    if (tags.value) {
+      await upsertTags(data[0].id)
+    }
 
     store.posts = []
     store.page = 1
@@ -92,19 +140,6 @@ const closeBoard = () => {
   editorContent.value = null
   store.editablePost = null
 }
-
-// Watch Edit
-const isEdit = ref(false)
-
-watch(
-  () => store.editablePost,
-  (value) => {
-    if (value) {
-      editorContent.value = value.content
-      isEdit.value = true
-    }
-  },
-)
 </script>
 
 <style>
