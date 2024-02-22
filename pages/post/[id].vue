@@ -127,4 +127,11 @@ watch(
     }
   },
 )
+
+// SEO
+const seoTitle = post.value.content.replace(/<[^>]*>?/gm, '')
+
+useSeoMeta({
+  title: seoTitle,
+})
 </script>

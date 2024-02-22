@@ -16,11 +16,14 @@ export default defineNuxtConfig({
     pageTransition: { name: 'page', mode: 'out-in' },
   },
   css: ['remixicon/fonts/remixicon.css', '~/assets/css/main.css'],
-  modules: ['@nuxtjs/tailwindcss', '@pinia/nuxt', '@nuxtjs/supabase'],
+  modules: ['@nuxtjs/tailwindcss', '@pinia/nuxt', '@nuxtjs/supabase', '@nuxtjs/sitemap'],
   pinia: {
     storesDirs: ['./stores/**'],
   },
   supabase: {
     redirect: false,
   },
+  sitemap: {
+    sources: ['/api/sitemap/urls']
+  }
 })

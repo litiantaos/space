@@ -74,7 +74,7 @@ const upsertTags = async (id) => {
     }
   })
 
-  console.log(upsert)
+  // console.log(upsert)
 
   const { data } = await client.from('posts_tags').upsert(upsert).select()
 }
@@ -110,7 +110,7 @@ const upsertPost = async () => {
   try {
     const { data } = await client.from('posts').upsert(upsert).select()
 
-    console.log(data)
+    // console.log(data)
 
     if (tags.value) {
       await upsertTags(data[0].id)
