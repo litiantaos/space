@@ -16,7 +16,12 @@ export default defineNuxtConfig({
     pageTransition: { name: 'page', mode: 'out-in' },
   },
   css: ['remixicon/fonts/remixicon.css', '~/assets/css/main.css'],
-  modules: ['@nuxtjs/tailwindcss', '@pinia/nuxt', '@nuxtjs/supabase', '@nuxtjs/sitemap'],
+  runtimeConfig: {
+    public: {
+      siteUrl: ''
+    }
+  },
+  modules: ['@nuxtjs/tailwindcss', '@pinia/nuxt', '@nuxtjs/supabase', '@nuxtjs/sitemap', 'nuxt-simple-robots'],
   pinia: {
     storesDirs: ['./stores/**'],
   },
@@ -24,6 +29,12 @@ export default defineNuxtConfig({
     redirect: false,
   },
   sitemap: {
-    sources: ['/api/sitemap/urls']
+    sources: ['/api/sitemap/urls'],
+    autoLastmod: true,
+    exclude: ['/login/**', '/profile/**', '/search/**']
+  },
+  robots: {
+    disallow: ['/login', '/profile', '/search'],
+    sitemap: ['/sitemap.xml']
   }
 })

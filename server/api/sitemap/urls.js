@@ -18,6 +18,10 @@ export default defineSitemapEventHandler(async (event) => {
     const videos = [...videoMatches].map((match) => {
       return {
         content_loc: match[1],
+        title: match[1].slice(
+          match[1].lastIndexOf('/') + 1,
+          match[1].lastIndexOf('.'),
+        ),
       }
     })
 
