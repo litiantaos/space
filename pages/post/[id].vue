@@ -5,9 +5,7 @@
         {{ title }}
       </h1>
 
-      <PostCellHeader v-if="post" :data="post" />
-
-      <PostCellContent v-if="post" :data="post" type="full" @title="getTitle" />
+      <PostCell :data="post" @title="getTitle" />
     </div>
 
     <div class="flex flex-col items-center gap-14 py-14">
@@ -54,19 +52,9 @@ if (store.localPost) {
 } else {
   pageLoading.value = true
 
-  const { data } = await useAsyncData(
-    'post',
-    async () => {
-      return await client
-        .from('posts')
-        .select('*, profiles(id, nickname, avatar_url)')
-        .eq('id', id)
-        .single()
-    },
-    {
-      transform: (res) => res.data,
-    },
-  )
+  const { data } = await useAsyncData(async () => {
+    return await store.getPost(id)
+  })
 
   post.value = data.value
 }

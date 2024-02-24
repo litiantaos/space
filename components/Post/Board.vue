@@ -116,16 +116,34 @@ const upsertPost = async () => {
       await upsertTags(data[0].id)
     }
 
-    store.posts = []
-    store.page = 1
-    store.posts = await store.getPosts()
-    store.isBoardShow = false
+    // Add Post to Store
+    const newPost = await store.getPost(data[0].id)
 
+    if (isEdit.value) {
+      const index = store.posts.findIndex((item) => item.id === data[0].id)
+
+      if (index !== -1) {
+        store.posts.splice(index, 1, newPost)
+      }
+    } else {
+      const index = store.posts.findIndex(
+        (item) => item.is_recommended === false,
+      )
+
+      if (index !== -1) {
+        store.posts.splice(index, 0, newPost)
+      }
+    }
+
+    // Update Post List View
+    store.listKey++
+
+    // Close and Reset Board
+    store.isBoardShow = false
     editorContent.value = null
 
-    store.citedPostId = null
-
     if (upsert.cited_post_id) {
+      store.citedPostId = null
       emit('cited')
     }
   } catch (error) {

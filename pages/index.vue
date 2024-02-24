@@ -3,7 +3,7 @@
     <MainHeader />
 
     <KeepAlive>
-      <PostList />
+      <PostList :key="store.listKey" />
     </KeepAlive>
 
     <PostBoard />

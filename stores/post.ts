@@ -1,4 +1,6 @@
 export const usePostStore = defineStore('Post', () => {
+  const client = useSupabaseClient()
+
   const isBoardShow = ref(false)
 
   const editablePost = ref(null)
@@ -11,11 +13,13 @@ export const usePostStore = defineStore('Post', () => {
   const page = ref(1)
   const pageSize = ref(10)
 
+  const listKey = ref(0)
+
   const getPosts = async () => {
     const from = (page.value - 1) * pageSize.value
 
     try {
-      const { data } = await useSupabaseClient()
+      const { data } = await client
         .from('posts')
         .select('*, profiles(id, nickname, avatar_url, role)')
         .order('is_recommended', { ascending: false })
@@ -30,5 +34,30 @@ export const usePostStore = defineStore('Post', () => {
     }
   }
 
-  return { isBoardShow, editablePost, localPost, citedPostId, posts, page, pageSize, getPosts }
+  const getPost = async (id: number) => {
+    try {
+      const { data } = await client
+        .from('posts')
+        .select('*, profiles(id, nickname, avatar_url)')
+        .eq('id', id)
+        .single()
+
+      return data
+    } catch (error: any) {
+      alert(error.message)
+    }
+  }
+
+  return {
+    isBoardShow,
+    editablePost,
+    localPost,
+    citedPostId,
+    posts,
+    page,
+    pageSize,
+    listKey,
+    getPosts,
+    getPost,
+  }
 })

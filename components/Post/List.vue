@@ -1,7 +1,12 @@
 <template>
   <div v-if="store.posts" class="flex w-full flex-col gap-10">
     <TransitionGroup name="list">
-      <PostCell v-for="post in store.posts" :key="post.id" :data="post" />
+      <PostCell
+        v-for="post in store.posts"
+        :key="post.id"
+        :data="post"
+        type="min"
+      />
     </TransitionGroup>
 
     <div class="mb-10 flex justify-center">
