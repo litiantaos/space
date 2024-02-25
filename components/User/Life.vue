@@ -19,11 +19,9 @@
     >
       <div
         v-for="num in 1080"
-        class="h-3 w-3 flex-none rounded-sm bg-slate-100"
-        :class="[
-          `first:row-start-${birthdayMonth}`,
-          { 'bg-blue-100': num <= monthsDiff },
-        ]"
+        class="h-3 w-3 flex-none rounded-sm"
+        :class="num <= monthsDiff ? 'bg-blue-200' : 'bg-slate-100'"
+        :style="{ 'grid-row-start': num === 1 ? birthdayMonth : 'unset' }"
         @click="check(num)"
       ></div>
     </div>
