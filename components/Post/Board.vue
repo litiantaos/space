@@ -42,7 +42,7 @@ const user = useSupabaseUser()
 const editorContent = ref(null)
 const loading = ref(false)
 
-const emit = defineEmits(['cited'])
+const emit = defineEmits(['cited', 'edited'])
 
 // Watch Edit
 const isEdit = ref(false)
@@ -79,6 +79,13 @@ const upsertTags = async (id) => {
   const { data } = await client.from('posts_tags').upsert(upsert).select()
 }
 
+const profile = ref(null)
+
+onMounted(() => {
+  const profileString = localStorage.getItem('profile')
+  profile.value = JSON.parse(profileString)
+})
+
 // Submit
 const submit = throttle(async () => {
   // console.log(editorContent.value)
@@ -93,6 +100,7 @@ const submit = throttle(async () => {
 const upsertPost = async () => {
   let upsert = {
     content: editorContent.value,
+    user_id: profile.value.id,
   }
 
   if (isEdit.value) {
@@ -108,35 +116,37 @@ const upsertPost = async () => {
   }
 
   try {
-    const { data } = await client.from('posts').upsert(upsert).select()
-
-    // console.log(data)
+    const { data } = await client.from('posts').upsert(upsert).select().single()
 
     if (tags.value) {
-      await upsertTags(data[0].id)
+      await upsertTags(data.id)
     }
 
     // Add Post to Store
-    const newPost = await store.getPost(data[0].id)
+    const newPost = await store.getPost(data.id)
 
-    if (isEdit.value) {
-      const index = store.posts.findIndex((item) => item.id === data[0].id)
+    if (store.posts) {
+      if (isEdit.value) {
+        const index = store.posts.findIndex((item) => item.id === data.id)
 
-      if (index !== -1) {
-        store.posts.splice(index, 1, newPost)
+        if (index !== -1) {
+          store.posts.splice(index, 1, newPost)
+        }
+      } else {
+        const index = store.posts.findIndex(
+          (item) => item.is_recommended === false,
+        )
+
+        if (index !== -1) {
+          store.posts.splice(index, 0, newPost)
+        }
       }
+
+      // Update Post List View
+      store.listKey++
     } else {
-      const index = store.posts.findIndex(
-        (item) => item.is_recommended === false,
-      )
-
-      if (index !== -1) {
-        store.posts.splice(index, 0, newPost)
-      }
+      emit('edited', newPost)
     }
-
-    // Update Post List View
-    store.listKey++
 
     // Close and Reset Board
     store.isBoardShow = false

@@ -35,6 +35,7 @@ const props = defineProps({
   loading: Boolean,
   icon: String,
   autoFocus: Boolean,
+  custom: String,
 })
 
 const emit = defineEmits(['update:modelValue', 'confirm'])
@@ -46,4 +47,25 @@ onMounted(() => {
     inputRef.value.focus()
   }
 })
+
+// Date
+watch(
+  () => props.modelValue,
+  (newVal) => {
+    if (props.custom === 'date' && newVal) {
+      // Keep Number
+      let value = newVal.replace(/\D/g, '').slice(0, 8)
+
+      // Insert '-'
+      if (value.length > 4 && value.length <= 6) {
+        value = value.slice(0, 4) + '-' + value.slice(4)
+      } else if (value.length > 6) {
+        value =
+          value.slice(0, 4) + '-' + value.slice(4, 6) + '-' + value.slice(6)
+      }
+
+      emit('update:modelValue', value)
+    }
+  },
+)
 </script>

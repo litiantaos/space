@@ -5,7 +5,7 @@
         {{ title }}
       </h1>
 
-      <PostCell :data="post" @title="getTitle" />
+      <PostCell :data="post" @title="getTitle" :key="cellKey" />
     </div>
 
     <div class="flex flex-col items-center gap-14 py-14">
@@ -28,7 +28,7 @@
       </div>
     </div>
 
-    <PostBoard @cited="onCited" />
+    <PostBoard @cited="onCited" @edited="onEdited" />
 
     <BaseLoading :loading="pageLoading" />
   </div>
@@ -42,6 +42,7 @@ const store = usePostStore()
 const client = useSupabaseClient()
 
 const id = useRoute().params.id
+const cellKey = ref(0)
 
 // Get Data
 const post = ref(null)
@@ -65,7 +66,7 @@ const citedPosts = ref(null)
 const getCitedPosts = async () => {
   const { data } = await client
     .from('posts')
-    .select('*, profiles(id, nickname, avatar_url)')
+    .select('*, users(id, user_id, nickname, avatar_url)')
     .eq('cited_post_id', post.value.id)
     .order('created_at', { ascending: false })
 
@@ -89,6 +90,12 @@ onBeforeUnmount(() => {
 // On Post Cited
 const onCited = () => {
   getCitedPosts()
+}
+
+// On Post Edited
+const onEdited = (e) => {
+  post.value = e
+  cellKey.value++
 }
 
 // Cite Post

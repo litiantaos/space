@@ -1,9 +1,9 @@
 export const getProfile = async (id) => {
   try {
     const { data } = await useSupabaseClient()
-      .from('profiles')
+      .from('users')
       .select('*')
-      .eq('id', id)
+      .eq('user_id', id)
       .single()
 
     // console.log(data)

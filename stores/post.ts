@@ -21,7 +21,8 @@ export const usePostStore = defineStore('Post', () => {
     try {
       const { data } = await client
         .from('posts')
-        .select('*, profiles(id, nickname, avatar_url, role)')
+        .select('*, users(id, user_id, nickname, avatar_url, role)')
+        .neq('is_hidden', true)
         .order('is_recommended', { ascending: false })
         .order('created_at', { ascending: false })
         .range(from, from + pageSize.value - 1)
@@ -38,7 +39,7 @@ export const usePostStore = defineStore('Post', () => {
     try {
       const { data } = await client
         .from('posts')
-        .select('*, profiles(id, nickname, avatar_url)')
+        .select('*, users(id, user_id, nickname, avatar_url)')
         .eq('id', id)
         .single()
 

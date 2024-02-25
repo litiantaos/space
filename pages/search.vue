@@ -28,7 +28,7 @@ const search = async () => {
 
   const { data } = await useSupabaseClient()
     .from('posts')
-    .select('*, profiles(id, nickname, avatar_url)')
+    .select('*, users(id, user_id, nickname, avatar_url)')
     .ilike('content', `%${keywords.value}%`)
 
   // console.log(data)

@@ -1,14 +1,17 @@
 <template>
   <div class="flex flex-col gap-2">
     <div class="flex items-center justify-between">
-      <div class="flex items-center gap-3 text-sm">
+      <NuxtLink
+        :to="`/${data.users?.id}`"
+        class="flex items-center gap-3 text-sm"
+      >
         <img
-          :src="data.profiles?.avatar_url || defaultAvatarUrl"
+          :src="data.users?.avatar_url || defaultAvatarUrl"
           class="h-6 w-6 overflow-hidden rounded-full border object-cover"
         />
 
         <div class="text-gray-800">
-          {{ data.profiles?.nickname || defaultNickname }}
+          {{ data.users?.nickname || defaultNickname }}
         </div>
 
         <div class="text-gray-400">
@@ -19,7 +22,7 @@
           v-if="recommended"
           class="ri-heart-fill leading-4 text-slate-400"
         ></div>
-      </div>
+      </NuxtLink>
 
       <ClientOnly>
         <BasePopover
@@ -29,14 +32,14 @@
           }"
         >
           <button
-            v-if="user && user.id === data.profiles.id"
+            v-if="user && user.id === data.users.user_id"
             class="ri-more-line btn-base"
           ></button>
 
           <template #content>
             <div class="flex gap-1">
               <button
-                v-if="data.profiles.role === 'admin'"
+                v-if="data.users.role === 'admin'"
                 class="btn-base"
                 :class="
                   recommended

@@ -43,7 +43,6 @@ onUnmounted(destroy)
 
 tippy.setDefaultProps({
   animation: 'shift-away',
-  duration: 200,
   interactive: true,
   trigger: 'click',
 })
