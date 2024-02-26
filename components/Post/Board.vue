@@ -1,5 +1,5 @@
 <template>
-  <Transition name="move-up">
+  <Transition name="board-up">
     <div
       v-if="store.isBoardShow"
       class="fixed bottom-0 left-0 right-0 z-50 h-[calc(100vh-64px)] bg-white"
@@ -171,15 +171,15 @@ const closeBoard = () => {
 </script>
 
 <style>
-.move-up-enter-active,
-.move-up-leave-active {
+.board-up-enter-active,
+.board-up-leave-active {
   transition:
     transform 0.4s,
     opacity 0.4s;
 }
 
-.move-up-enter-from,
-.move-up-leave-to {
+.board-up-enter-from,
+.board-up-leave-to {
   transform: translateY(50vh);
   opacity: 0;
 }

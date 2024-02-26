@@ -1,8 +1,8 @@
 <template>
-  <Transition name="move-up">
+  <Transition name="toast-up">
     <div
       v-if="toast.show"
-      class="fixed bottom-10 left-[50%] z-50 flex h-9 min-w-16 translate-x-[-50%] items-center justify-center gap-3 rounded-full bg-slate-500 pl-4 pr-5"
+      class="fixed bottom-10 left-[50%] z-50 flex h-9 min-w-16 -translate-x-2/4 items-center justify-center gap-3 rounded-full bg-slate-500 px-3"
     >
       <div
         v-if="toast.options?.type"
@@ -13,6 +13,17 @@
       <div class="text-sm text-slate-100">
         {{ toast.options?.text || 'Success' }}
       </div>
+
+      <button
+        v-if="toast.options?.type === 'action'"
+        class="text-xl text-gray-200"
+        :class="
+          toast.loading
+            ? 'ri-loader-4-line animate-spin'
+            : 'ri-checkbox-circle-fill'
+        "
+        @click="toast.options?.action"
+      ></button>
     </div>
   </Transition>
 </template>
@@ -29,15 +40,15 @@ const iconMap = {
 </script>
 
 <style>
-.move-up-enter-active,
-.move-up-leave-active {
+.toast-up-enter-active,
+.toast-up-leave-active {
   transition:
     transform 0.4s,
     opacity 0.4s;
 }
 
-.move-up-enter-from,
-.move-up-leave-to {
+.toast-up-enter-from,
+.toast-up-leave-to {
   transform: translate(-50%, 100px) scale(0.8);
   opacity: 0;
 }

@@ -1,24 +1,34 @@
 export const useToast = defineStore('Toast', () => {
   interface options {
-    duration?: number
+    type: string
   }
 
   const show = ref(false)
   const options = ref({})
 
+  const loading = ref(false)
+
   const push = (e: options) => {
-    show.value = true
+    if (show.value) {
+      show.value = false
+
+      setTimeout(() => {
+        show.value = true
+      }, 400)
+    } else {
+      show.value = true
+    }
 
     if (e) {
       options.value = e
     }
 
-    if (!e.duration || e.duration !== 0) {
+    if (!loading.value) {
       setTimeout(() => {
         show.value = false
       }, 3000)
     }
   }
 
-  return { show, options, push }
+  return { show, options, loading, push }
 })

@@ -1,6 +1,6 @@
 <template>
   <div v-if="store.posts" class="flex w-full flex-col gap-10">
-    <TransitionGroup name="list">
+    <TransitionGroup name="post-list">
       <PostCell
         v-for="post in store.posts"
         :key="post.id"
@@ -49,19 +49,19 @@ const getMorePosts = async () => {
 </script>
 
 <style>
-.list-move,
-.list-enter-active,
-.list-leave-active {
-  transition: all 0.5s;
+.post-list-move,
+.post-list-enter-active,
+.post-list-leave-active {
+  transition: all 0.4s;
 }
 
-.list-enter-from,
-.list-leave-to {
+.post-list-enter-from,
+.post-list-leave-to {
   opacity: 0;
-  transform: translateX(20px);
+  transform: translateY(20px);
 }
 
-.list-leave-active {
+.post-list-leave-active {
   position: absolute;
 }
 </style>

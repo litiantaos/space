@@ -160,7 +160,14 @@
   }
 
   a {
-    @apply mx-1 text-blue-400 underline;
+    @apply text-sky-600 hover:text-sky-700;
+
+    &::after {
+      content: '\ea6c';
+      font-family: 'remixicon';
+
+      @apply ml-1 inline-block text-slate-400;
+    }
   }
 
   table {

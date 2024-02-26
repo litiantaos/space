@@ -11,7 +11,7 @@
       <div class="text-sm">{{ profile?.nickname || defaultNickname }}</div>
     </NuxtLink>
 
-    <button class="ri-arrow-right-line text-gray-500" @click="signOut"></button>
+    <button class="ri-arrow-right-line text-gray-500" @click="logout"></button>
   </div>
 
   <NuxtLink
@@ -22,6 +22,8 @@
 </template>
 
 <script setup>
+import { useToast } from '~/stores/toast'
+
 const client = useSupabaseClient()
 const user = useSupabaseUser()
 
@@ -33,6 +35,14 @@ onMounted(() => {
   profile.value = JSON.parse(profileString)
 })
 
+const logout = () => {
+  useToast().push({
+    type: 'action',
+    text: '确定登出吗？',
+    action: () => signOut(),
+  })
+}
+
 const signOut = async () => {
   try {
     const { error } = await client.auth.signOut()
@@ -40,6 +50,8 @@ const signOut = async () => {
     if (error) throw error
 
     localStorage.removeItem('profile')
+
+    useToast().show = false
 
     navigateTo('/')
   } catch (error) {

@@ -53,34 +53,10 @@
 
               <button class="ri-edit-line btn-base" @click="editPost"></button>
 
-              <BasePopover
-                :options="{
-                  placement: 'left',
-                  theme: 'base',
-                  offset: [0, 0],
-                }"
-              >
-                <button
-                  class="ri-delete-bin-7-line btn-base text-red-500"
-                ></button>
-
-                <template #content>
-                  <div class="flex items-center gap-1">
-                    <div class="ml-2 whitespace-nowrap text-sm text-gray-700">
-                      确认删除
-                    </div>
-                    <button
-                      class="btn-base"
-                      :class="
-                        deleting
-                          ? 'ri-loader-4-line animate-spin'
-                          : 'ri-check-line'
-                      "
-                      @click="deletePost"
-                    ></button>
-                  </div>
-                </template>
-              </BasePopover>
+              <button
+                class="ri-delete-bin-7-line btn-base text-red-500"
+                @click="delPost"
+              ></button>
             </div>
           </template>
         </BasePopover>
@@ -121,6 +97,7 @@
 
 <script setup>
 import { usePostStore } from '~/stores/post'
+import { useToast } from '~/stores/toast'
 import { hideAll } from 'tippy.js'
 
 const store = usePostStore()
@@ -146,10 +123,18 @@ const { data: tagRes } = await client
 tags.value = tagRes.map((item) => item.tags)
 
 // Delete
-const deleting = ref(false)
+// const deleting = ref(false)
+
+const delPost = () => {
+  useToast().push({
+    type: 'action',
+    text: '确定要删除帖子吗？',
+    action: () => deletePost(),
+  })
+}
 
 const deletePost = throttle(async () => {
-  deleting.value = true
+  useToast().loading = true
 
   try {
     const { error } = await client
@@ -159,7 +144,8 @@ const deletePost = throttle(async () => {
 
     if (error) throw error
 
-    deleting.value = false
+    useToast().loading = false
+    useToast().show = false
 
     deleteLocalPost()
 

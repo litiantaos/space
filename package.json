@@ -17,7 +17,7 @@
     "nuxt-simple-robots": "^4.0.0-rc.14",
     "prettier": "^3.2.5",
     "prettier-plugin-tailwindcss": "^0.5.11",
-    "vue": "^3.4.19",
+    "vue": "^3.4.20",
     "vue-router": "^4.3.0"
   },
   "dependencies": {
@@ -40,6 +40,6 @@
     "lowlight": "^3.1.0",
     "medium-zoom": "^1.1.0",
     "pinia": "^2.1.7",
-    "remixicon": "^4.1.0"
+    "remixicon": "^4.2.0"
   }
 }

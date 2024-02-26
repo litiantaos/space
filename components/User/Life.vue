@@ -1,16 +1,24 @@
 <template>
   <div class="flex flex-col gap-5">
-    <div class="flex items-end gap-4">
-      <div class="flex gap-2 text-gray-500">
-        <span>{{ daysDiff }}</span>
-        <span class="text-slate-400">DAYS</span>
-        <span>90</span>
-        <span class="text-slate-400">YEARS</span>
-        <span>LIFE</span>
+    <div class="flex items-end gap-2 text-sm text-slate-400">
+      <div class="text-gray-500">
+        <div>{{ daysDiff }}</div>
+        <div>{{ monthsDiff }}</div>
       </div>
 
-      <Transition>
-        <div v-if="checkedDate" class="text-gray-400">{{ checkedDate }}</div>
+      <div>
+        <div>DAYS</div>
+        <div>MONTHS</div>
+      </div>
+
+      <div class="ml-1 text-[44px] leading-10 text-gray-500">90</div>
+
+      <div>YEARS</div>
+
+      <Transition name="date-left">
+        <div v-if="checkedDate" class="ml-2">
+          {{ checkedDate }}
+        </div>
       </Transition>
     </div>
 
@@ -66,15 +74,15 @@ const check = (num) => {
 </script>
 
 <style>
-.v-enter-active,
-.v-leave-active {
+.date-left-enter-active,
+.date-left-leave-active {
   transition:
     transform 0.2s,
     opacity 0.2s;
 }
 
-.v-enter-from,
-.v-leave-to {
+.date-left-enter-from,
+.date-left-leave-to {
   transform: translateX(10px);
   opacity: 0;
 }
