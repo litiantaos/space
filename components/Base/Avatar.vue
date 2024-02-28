@@ -27,9 +27,6 @@
 </template>
 
 <script setup>
-const client = useSupabaseClient()
-const user = useSupabaseUser()
-
 const props = defineProps(['src'])
 const emit = defineEmits(['update:src', 'upload'])
 
@@ -47,29 +44,21 @@ const uploadFile = async (e) => {
   try {
     uploading.value = true
 
-    if (!files.value || files.value.length === 0) {
-      throw new Error('请选择图片')
-    }
+    if (!files.value || files.value.length === 0) return
 
     const file = files.value[0]
-    const fileExt = file.name.split('.').pop().toLowerCase()
-    const fileName = user.value.id + '.' + fileExt
-    const filePath = 'avatars/' + fileName
 
-    const {
-      data: { path },
-      error: uploadError,
-    } = await client.storage.from('users').upload(filePath, file, {
+    const { profile } = useUserProfile()
+
+    const fileExt = file.name.split('.').pop().toLowerCase()
+    const fileName = profile.value.id + '_' + Date.now() + '.' + fileExt
+    const path = 'avatars/' + fileName
+
+    const url = await uploadToSupabase(file, path, 'users', {
       upsert: true,
     })
 
-    if (uploadError) throw uploadError
-
-    const {
-      data: { publicUrl },
-    } = client.storage.from('users').getPublicUrl(path)
-
-    emit('update:src', publicUrl)
+    emit('update:src', url)
     emit('upload')
   } catch (error) {
     alert(error.message)

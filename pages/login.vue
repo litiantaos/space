@@ -67,7 +67,7 @@ const signIn = async () => {
       return
     }
 
-    await getProfile(user.value.id)
+    await useUserProfile().getProfileFromCloud(user.value.id)
 
     navigateTo('/')
   } catch (error) {

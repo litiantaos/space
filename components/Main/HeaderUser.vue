@@ -30,9 +30,7 @@ const user = useSupabaseUser()
 const profile = ref(null)
 
 onMounted(() => {
-  const profileString = localStorage.getItem('profile')
-
-  profile.value = JSON.parse(profileString)
+  profile.value = useUserProfile().profile.value
 })
 
 const logout = () => {

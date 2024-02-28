@@ -99,42 +99,27 @@ const chooseFile = () => {
   fileInput.value.click()
 }
 
-const client = useSupabaseClient()
-
 const uploadFile = async (e) => {
   files.value = e.target.files
 
-  try {
-    uploading.value = true
+  // console.log(files.value)
 
-    if (!files.value || files.value.length === 0) {
-      throw new Error('请选择文件')
-    }
+  if (!files.value || files.value.length === 0) return
 
-    const file = files.value[0]
-    const fileExt = file.name.split('.').pop().toLowerCase()
-    const fileName =
-      file.name.split('.').shift() + '_' + Date.now() + '.' + fileExt
-    const filePath = isImg.value ? 'images/' + fileName : 'videos/' + fileName
+  const file = files.value[0]
 
-    const {
-      data: { path },
-      error: uploadError,
-    } = await client.storage.from('posts').upload(filePath, file)
+  uploading.value = true
 
-    if (uploadError) throw uploadError
+  const key = isImg.value
+    ? 'post/images/' + file.name
+    : 'post/videos/' + file.name
 
-    const {
-      data: { publicUrl },
-    } = client.storage.from('posts').getPublicUrl(path)
+  const url = await uploadToQiniu(file, key)
 
-    props.updateAttributes({
-      src: publicUrl,
-    })
-  } catch (error) {
-    alert(error.message)
-  } finally {
-    uploading.value = false
-  }
+  props.updateAttributes({
+    src: url,
+  })
+
+  uploading.value = false
 }
 </script>

@@ -8,6 +8,14 @@
 
     <BaseInput placeholder="生日" v-model="birthday" custom="date"></BaseInput>
 
+    <BaseInput
+      placeholder="简历帖文 ID"
+      v-model="resume_post_id"
+      type="number"
+      :icon="resume_post_id ? 'ri-arrow-right-line' : ''"
+      @confirm="toResumePost"
+    ></BaseInput>
+
     <button
       class="mx-auto mt-20 h-12 w-12 rounded-full bg-slate-100 text-xl text-slate-500 transition-all active:bg-slate-300"
       :class="loading ? 'ri-loader-4-line animate-spin' : 'ri-check-line'"
@@ -20,29 +28,24 @@
 import { useToast } from '~/stores/toast'
 
 const client = useSupabaseClient()
-const user = useSupabaseUser()
 
 const loading = ref(false)
 
 const avatar_url = ref('')
 const nickname = ref('')
 const birthday = ref('')
+const resume_post_id = ref('')
 
 const profile = ref(null)
 
-onMounted(async () => {
-  const profileString = localStorage.getItem('profile')
-
-  if (profileString) {
-    profile.value = JSON.parse(profileString)
-  } else {
-    profile.value = await getProfile(user.value.id)
-  }
+onMounted(() => {
+  profile.value = useUserProfile().profile.value
 
   if (profile.value) {
     avatar_url.value = profile.value.avatar_url
     nickname.value = profile.value.nickname
     birthday.value = profile.value.birthday
+    resume_post_id.value = profile.value.resume_post_id?.toString()
   }
 })
 
@@ -53,18 +56,17 @@ const update = throttle(async () => {
     loading.value = true
 
     const updates = {
-      user_id: user.value.id,
+      id: profile.value.id,
       avatar_url: avatar_url.value,
       nickname: nickname.value,
       birthday: birthday.value,
+      resume_post_id: resume_post_id.value,
       updated_at: new Date(),
     }
 
     const { data, error } = await client
       .from('users')
-      .upsert(updates, {
-        onConflict: 'user_id',
-      })
+      .upsert(updates)
       .select()
       .single()
 
@@ -72,7 +74,7 @@ const update = throttle(async () => {
 
     if (error) throw error
 
-    localStorage.setItem('profile', JSON.stringify(data))
+    useUserProfile().setProfile(data)
 
     useToast().push({
       type: 'success',
@@ -84,6 +86,12 @@ const update = throttle(async () => {
     loading.value = false
   }
 }, 2000)
+
+const toResumePost = () => {
+  const siteUrl = useRuntimeConfig().public.siteUrl
+
+  window.open(`${siteUrl}/post/${resume_post_id.value}`, '_blank')
+}
 
 definePageMeta({
   middleware: ['auth'],

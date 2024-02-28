@@ -18,10 +18,20 @@ export default defineNuxtConfig({
   css: ['remixicon/fonts/remixicon.css', '~/assets/css/main.css'],
   runtimeConfig: {
     public: {
-      siteUrl: ''
-    }
+      siteUrl: '',
+      fileUrl: '',
+      supabaseUrl: process.env.SUPABASE_URL,
+    },
+    qiniuAK: '',
+    qiniuSK: '',
   },
-  modules: ['@nuxtjs/tailwindcss', '@pinia/nuxt', '@nuxtjs/supabase', '@nuxtjs/sitemap', 'nuxt-simple-robots'],
+  modules: [
+    '@nuxtjs/tailwindcss',
+    '@pinia/nuxt',
+    '@nuxtjs/supabase',
+    '@nuxtjs/sitemap',
+    'nuxt-simple-robots',
+  ],
   pinia: {
     storesDirs: ['./stores/**'],
   },
@@ -31,10 +41,11 @@ export default defineNuxtConfig({
   sitemap: {
     sources: ['/api/sitemap/urls'],
     autoLastmod: true,
-    exclude: ['/login/**', '/profile/**', '/search/**']
+    exclude: ['/login/**', '/profile/**', '/search/**'],
   },
   robots: {
     disallow: ['/login', '/profile', '/search'],
-    sitemap: ['/sitemap.xml']
-  }
+    sitemap: ['/sitemap.xml'],
+    credits: false,
+  },
 })

@@ -156,7 +156,7 @@
 
   img,
   video {
-    @apply my-2 h-auto max-w-full rounded-md;
+    @apply my-2 h-auto max-w-full rounded-md bg-slate-100;
   }
 
   a {

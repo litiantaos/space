@@ -124,7 +124,8 @@ watch(
 )
 
 // SEO
-const seoTitle = post.value.content.replace(/<[^>]*>?/gm, '')
+let seoTitle = post.value.content.replace(/<\/[^>]+>/g, ' ')
+seoTitle = seoTitle.replace(/<[^>]+>/g, '')
 
 useSeoMeta({
   title: seoTitle,

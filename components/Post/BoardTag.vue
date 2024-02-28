@@ -98,6 +98,6 @@ const insertTag = async () => {
 const profile = ref(null)
 
 onMounted(() => {
-  profile.value = JSON.parse(localStorage.getItem('profile'))
+  profile.value = useUserProfile().profile.value
 })
 </script>
