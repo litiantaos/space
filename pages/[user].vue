@@ -10,8 +10,13 @@
       </div>
     </div>
 
-    <div v-if="profile.resume_post_id">
+    <div v-if="profile.resume_post_id" class="group relative">
       <div v-html="resume" class="html-style"></div>
+      <NuxtLink
+        v-if="user && user.id === profile.user_id"
+        :to="`/post/${profile.resume_post_id}`"
+        class="ri-arrow-right-up-line absolute right-0 top-0 text-xl text-slate-300 opacity-0 transition-all hover:text-slate-400 group-hover:-translate-x-2 group-hover:translate-y-2 group-hover:opacity-100"
+      ></NuxtLink>
     </div>
 
     <UserLife v-if="profile.birthday" :birthday="profile.birthday" />
@@ -22,6 +27,7 @@
 import { usePostStore } from '~/stores/post'
 
 const client = useSupabaseClient()
+const user = useSupabaseUser()
 
 const id = useRoute().params.user
 

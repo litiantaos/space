@@ -28,9 +28,15 @@
       <div
         v-for="num in 1080"
         class="h-3 w-3 flex-none rounded-sm"
-        :class="num <= monthsDiff ? 'bg-blue-200' : 'bg-slate-100'"
+        :class="
+          groupedPosts[toDate(num)]
+            ? 'bg-emerald-300/80'
+            : num <= monthsDiff
+              ? 'bg-blue-200'
+              : 'bg-slate-100'
+        "
         :style="{ 'grid-row-start': num === 1 ? birthdayMonth : 'unset' }"
-        @click="check(num)"
+        @click="checkDate(num)"
       ></div>
     </div>
   </div>
@@ -57,7 +63,7 @@ const birthdayMonth = parseInt(props.birthday.split('-')[1], 10)
 
 const checkedDate = ref('')
 
-const check = (num) => {
+const toDate = (num) => {
   const index = num + birthdayMonth - 2
 
   const year =
@@ -65,12 +71,41 @@ const check = (num) => {
   const mon = (index % 12) + 1
   const month = mon >= 10 ? mon : `0${mon}`
 
-  checkedDate.value = `${year}-${month}`
+  return `${year}-${month}`
+}
+
+const checkDate = (num) => {
+  const postCount = groupedPosts[toDate(num)]
+    ? ' | ' + groupedPosts[toDate(num)].length + ' Posts'
+    : ''
+
+  checkedDate.value = toDate(num) + postCount
 
   setTimeout(() => {
     checkedDate.value = ''
   }, 1500)
 }
+
+// Get All Posts
+const { data: posts } = await useSupabaseClient()
+  .from('posts')
+  .select('id, created_at')
+  .order('created_at', {
+    ascending: false,
+  })
+
+// Group Posts
+const groupedPosts = posts.reduce((acc, post) => {
+  const month = post.created_at.slice(0, 7)
+
+  if (!acc[month]) {
+    acc[month] = []
+  }
+
+  acc[month].push(post)
+
+  return acc
+}, {})
 </script>
 
 <style>
