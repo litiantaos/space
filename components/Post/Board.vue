@@ -1,7 +1,7 @@
 <template>
   <Transition name="board-up">
     <div
-      v-if="store.isBoardShow"
+      v-if="store.boardShow"
       class="fixed bottom-0 left-0 right-0 z-50 h-[calc(100vh-64px)] bg-white"
     >
       <div
@@ -148,7 +148,7 @@ const upsertPost = async () => {
     }
 
     // Close and Reset Board
-    store.isBoardShow = false
+    store.boardShow = false
     editorContent.value = null
 
     if (upsert.cited_post_id) {
@@ -163,7 +163,7 @@ const upsertPost = async () => {
 }
 
 const closeBoard = () => {
-  store.isBoardShow = false
+  store.boardShow = false
   editorContent.value = null
   store.editablePost = null
 }

@@ -29,5 +29,15 @@ input {
 }
 
 .tag {
-  @apply flex h-6 flex-none select-none items-center justify-center rounded-xl border px-3 text-xs text-gray-500;
+  @apply flex-none select-none rounded-md px-3 text-xs leading-7 text-gray-500;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }

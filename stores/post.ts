@@ -1,7 +1,7 @@
 export const usePostStore = defineStore('Post', () => {
   const client = useSupabaseClient()
 
-  const isBoardShow = ref(false)
+  const boardShow = ref(false)
 
   const editablePost = ref(null)
   const localPost = ref(null)
@@ -50,7 +50,7 @@ export const usePostStore = defineStore('Post', () => {
   }
 
   return {
-    isBoardShow,
+    boardShow,
     editablePost,
     localPost,
     citedPostId,

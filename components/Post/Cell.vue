@@ -51,6 +51,11 @@
                 @click="topPost"
               ></button>
 
+              <button
+                class="ri-image-circle-line btn-base"
+                @click="capture"
+              ></button>
+
               <button class="ri-edit-line btn-base" @click="editPost"></button>
 
               <button
@@ -64,7 +69,7 @@
     </div>
 
     <div v-if="tags?.length" class="mt-3 flex items-center gap-2">
-      <div class="tag" v-for="tag in tags">{{ tag.name }}</div>
+      <div class="tag bg-slate-100/85" v-for="tag in tags">{{ tag.name }}</div>
     </div>
 
     <div v-if="content" class="flex flex-col gap-2">
@@ -99,6 +104,7 @@
 import { usePostStore } from '~/stores/post'
 import { useToast } from '~/stores/toast'
 import { hideAll } from 'tippy.js'
+import { useOverlay } from '~/stores/overlay'
 
 const store = usePostStore()
 const client = useSupabaseClient()
@@ -167,7 +173,7 @@ const deleteLocalPost = () => {
 
 // Edit
 const editPost = () => {
-  store.isBoardShow = true
+  store.boardShow = true
   store.editablePost = props.data
   store.editablePost.tags = tags.value
 
@@ -228,6 +234,14 @@ const toPost = () => {
   store.localPost = props.data
 
   navigateTo('/post/' + props.data.id)
+}
+
+const capture = () => {
+  const overlay = useOverlay()
+
+  overlay.handleShow()
+  overlay.data = props.data
+  overlay.data.tags = tags.value
 }
 </script>
 

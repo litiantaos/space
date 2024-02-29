@@ -20,6 +20,6 @@
 import { usePostStore } from '~/stores/post'
 
 const createPost = () => {
-  usePostStore().isBoardShow = true
+  usePostStore().boardShow = true
 }
 </script>

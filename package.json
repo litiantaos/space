@@ -17,7 +17,7 @@
     "nuxt-simple-robots": "^4.0.0-rc.14",
     "prettier": "^3.2.5",
     "prettier-plugin-tailwindcss": "^0.5.11",
-    "vue": "^3.4.20",
+    "vue": "^3.4.21",
     "vue-router": "^4.3.0"
   },
   "dependencies": {
@@ -37,6 +37,7 @@
     "@vercel/analytics": "^1.2.2",
     "@vercel/speed-insights": "^1.0.10",
     "dayjs": "^1.11.10",
+    "html-to-image": "^1.11.11",
     "lowlight": "^3.1.0",
     "medium-zoom": "^1.1.0",
     "pinia": "^2.1.7",

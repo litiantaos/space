@@ -1,15 +1,18 @@
 <template>
   <div class="no-scrollbar my-3 flex items-center gap-2 overflow-x-auto">
-    <div
+    <button
       v-for="(tag, idx) in tags"
       class="tag"
-      :class="{ 'border-blue-200 bg-blue-200/20': tag?.checked }"
+      :class="tag.checked ? 'bg-slate-200' : 'bg-slate-100/85'"
       @click="checkTag(idx)"
     >
       {{ tag.name }}
-    </div>
+    </button>
 
-    <div v-if="user && profile?.role === 'admin'" class="tag">
+    <div
+      v-if="user && profile?.role === 'admin'"
+      class="tag flex items-center bg-slate-100/85"
+    >
       <input
         :type="editable ? 'text' : 'button'"
         v-model="inputValue"
@@ -17,10 +20,10 @@
         :class="editable ? 'w-20' : 'w-0'"
         @keyup.enter="insertTag"
       />
-      <div
+      <button
         :class="editable ? 'ri-close-line' : 'ri-add-line'"
         @click="addTag"
-      ></div>
+      ></button>
     </div>
   </div>
 </template>

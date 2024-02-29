@@ -8,12 +8,17 @@
 
     <PostBoard />
 
+    <BaseOverlay v-slot="{ data }">
+      <PostCapture :data="data" />
+    </BaseOverlay>
+
     <BaseLoading :loading="pageLoading" />
   </div>
 </template>
 
 <script setup>
 import { usePostStore } from '~/stores/post'
+import { useOverlay } from '~/stores/overlay'
 
 const store = usePostStore()
 
@@ -35,9 +40,9 @@ if (store.posts) {
 
 // Scroll Hidden
 watch(
-  () => store.isBoardShow,
-  (value) => {
-    if (value) {
+  () => [store.boardShow, useOverlay().show],
+  ([newVal1, newVal2]) => {
+    if (newVal1 || newVal2) {
       document.body.style.overflow = 'hidden'
     } else {
       document.body.style.overflow = ''
