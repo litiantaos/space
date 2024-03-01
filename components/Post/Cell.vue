@@ -106,6 +106,8 @@ import { useToast } from '~/stores/toast'
 import { hideAll } from 'tippy.js'
 import { useOverlay } from '~/stores/overlay'
 
+import PostCapture from '~/components/Post/Capture.vue'
+
 const store = usePostStore()
 const client = useSupabaseClient()
 const user = useSupabaseUser()
@@ -239,9 +241,12 @@ const toPost = () => {
 const capture = () => {
   const overlay = useOverlay()
 
-  overlay.handleShow()
+  overlay.show = true
+  overlay.component = PostCapture
   overlay.data = props.data
   overlay.data.tags = tags.value
+
+  hideAll()
 }
 </script>
 

@@ -1,5 +1,5 @@
 <template>
-  <div class="h-fit p-4">
+  <div class="h-fit max-h-[calc(100vh-32px)]">
     <div class="relative mx-auto w-full overflow-hidden rounded-md sm:w-96">
       <img v-if="image && !loading" :src="image" class="w-full" />
 
@@ -42,14 +42,7 @@
         </div>
       </div>
 
-      <Transition name="fade">
-        <div
-          v-if="loading"
-          class="absolute bottom-0 left-0 right-0 top-0 flex items-center justify-center bg-white opacity-75"
-        >
-          <div class="ri-loader-4-line animate-spin text-xl"></div>
-        </div>
-      </Transition>
+      <BaseLoading type="absolute" :loading="loading" />
     </div>
   </div>
 </template>

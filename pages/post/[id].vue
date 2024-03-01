@@ -30,10 +30,6 @@
 
     <PostBoard @cited="onCited" @edited="onEdited" />
 
-    <BaseOverlay v-slot="{ data }">
-      <PostCapture :data="data" />
-    </BaseOverlay>
-
     <BaseLoading :loading="pageLoading" />
   </div>
 </template>

@@ -15,6 +15,8 @@ export const usePostStore = defineStore('Post', () => {
 
   const listKey = ref(0)
 
+  const editorContent = ref(null)
+
   const getPosts = async () => {
     const from = (page.value - 1) * pageSize.value
 
@@ -58,6 +60,7 @@ export const usePostStore = defineStore('Post', () => {
     page,
     pageSize,
     listKey,
+    editorContent,
     getPosts,
     getPost,
   }

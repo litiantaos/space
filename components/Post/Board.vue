@@ -2,7 +2,7 @@
   <Transition name="board-up">
     <div
       v-if="store.boardShow"
-      class="fixed bottom-0 left-0 right-0 z-50 h-[calc(100vh-64px)] bg-white"
+      class="fixed bottom-0 left-0 right-0 z-20 h-[calc(100vh-64px)] bg-white"
     >
       <div
         class="mx-auto flex h-full max-w-3xl flex-col items-center gap-4 p-4"
@@ -48,11 +48,15 @@ const emit = defineEmits(['cited', 'edited'])
 const isEdit = ref(false)
 
 watch(
-  () => store.editablePost,
-  (value) => {
-    if (value) {
-      editorContent.value = value.content
+  () => [store.editablePost, store.editorContent],
+  ([newVal1, newVal2]) => {
+    if (newVal1) {
+      editorContent.value = newVal1.content
       isEdit.value = true
+    }
+
+    if (newVal2) {
+      editorContent.value = newVal2
     }
   },
 )
@@ -166,6 +170,7 @@ const closeBoard = () => {
   store.boardShow = false
   editorContent.value = null
   store.editablePost = null
+  store.editorContent = null
 }
 </script>
 

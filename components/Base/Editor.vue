@@ -23,6 +23,11 @@
               :class="menu.icon"
               @click="menu.command(editor)"
             ></button>
+
+            <button
+              class="menu-button ri-infinity-line"
+              @click="askAi('gemini')"
+            ></button>
           </div>
         </template>
       </BasePopover>
@@ -103,6 +108,33 @@
           />
         </template>
       </BasePopover>
+
+      <BasePopover
+        :options="{
+          placement: 'top-end',
+          offset: [5, 10],
+          theme: 'base',
+        }"
+      >
+        <button class="menu-button ri-infinity-line"></button>
+
+        <template #content>
+          <div class="bubble-menu">
+            <button class="menu-button" @click="runAi('rewrite', 'gemini')">
+              R
+            </button>
+            <button class="menu-button" @click="runAi('summarize', 'gemini')">
+              S
+            </button>
+            <button class="menu-button" @click="runAi('expand', 'gemini')">
+              E
+            </button>
+            <button class="menu-button" @click="runAi('continue', 'gemini')">
+              C
+            </button>
+          </div>
+        </template>
+      </BasePopover>
     </BubbleMenu>
 
     <BubbleMenu
@@ -156,6 +188,10 @@ import {
 } from '@/utils/editor-menus'
 
 import { common, createLowlight } from 'lowlight'
+
+import { useOverlay } from '~/stores/overlay'
+
+import PostAiContent from '~/components/Post/AiContent.vue'
 
 const props = defineProps({
   modelValue: {
@@ -238,6 +274,43 @@ const setLink = () => {
     .extendMarkRange('link')
     .setLink({ href: linkUrl.value })
     .run()
+}
+
+// Ai
+const overlay = useOverlay()
+
+const runAi = async (type, model) => {
+  const content = window.getSelection().toString()
+
+  overlay.show = true
+  overlay.component = PostAiContent
+  overlay.data = {
+    content,
+    type,
+    model,
+    editorContent: props.modelValue,
+  }
+
+  const result = await $fetch(`/api/ai/${model}`, {
+    query: {
+      content,
+      type,
+    },
+    timeout: 50000,
+  })
+
+  // console.log(result)
+
+  overlay.data.result = result
+}
+
+const askAi = (model) => {
+  overlay.show = true
+  overlay.component = PostAiContent
+  overlay.data = {
+    mode: 'ask',
+    model,
+  }
 }
 </script>
 
