@@ -16,7 +16,7 @@
 
       <button
         v-if="toast.options?.type === 'action'"
-        class="text-xl text-gray-200"
+        class="text-xl text-gray-200 active:text-gray-300"
         :class="
           toast.loading
             ? 'ri-loader-4-line animate-spin'

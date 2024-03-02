@@ -18,7 +18,7 @@
   }
 
   code {
-    @apply rounded bg-slate-100 px-1.5 py-0.5 font-mono text-xs;
+    @apply rounded bg-slate-100 px-1.5 py-1 font-mono text-xs;
   }
 
   pre {

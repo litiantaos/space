@@ -61,15 +61,15 @@ const image = ref(null)
 const shot = async () => {
   if (shotRef.value) {
     image.value = await toPng(shotRef.value)
+
+    setTimeout(() => {
+      loading.value = false
+    }, 1000)
   }
 }
 
 onMounted(() => {
   shot()
-
-  setTimeout(() => {
-    loading.value = false
-  }, 1000)
 })
 
 const loading = ref(true)

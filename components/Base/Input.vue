@@ -3,12 +3,11 @@
     class="flex h-10 items-center overflow-hidden rounded-md border bg-white text-gray-600"
   >
     <input
+      ref="inputRef"
       class="h-full flex-1 px-2"
+      v-model="model"
       :type="type"
       :placeholder="placeholder"
-      :value="modelValue"
-      @input="$emit('update:modelValue', $event.target.value)"
-      ref="inputRef"
     />
 
     <div
@@ -31,14 +30,15 @@
 const props = defineProps({
   type: String,
   placeholder: String,
-  modelValue: String,
   loading: Boolean,
   icon: String,
   autoFocus: Boolean,
   custom: String,
 })
 
-const emit = defineEmits(['update:modelValue', 'confirm'])
+const model = defineModel()
+
+const emit = defineEmits(['confirm'])
 
 const inputRef = ref()
 
@@ -50,7 +50,7 @@ onMounted(() => {
 
 // Date
 watch(
-  () => props.modelValue,
+  () => model.value,
   (newVal) => {
     if (props.custom === 'date' && newVal) {
       // Keep Number
@@ -64,7 +64,7 @@ watch(
           value.slice(0, 4) + '-' + value.slice(4, 6) + '-' + value.slice(6)
       }
 
-      emit('update:modelValue', value)
+      model.value = value
     }
   },
 )

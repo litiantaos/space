@@ -13,7 +13,9 @@
           theme: 'base',
         }"
       >
-        <button class="ri-sparkling-line text-xl text-slate-400"></button>
+        <button
+          class="ri-sparkling-line text-xl text-slate-400 transition-all active:text-slate-300"
+        ></button>
 
         <template #content>
           <div class="grid w-max grid-cols-5 gap-1">
@@ -194,20 +196,16 @@ import { useOverlay } from '~/stores/overlay'
 import PostAiContent from '~/components/Post/AiContent.vue'
 
 const props = defineProps({
-  modelValue: {
-    type: String,
-    default: '',
-  },
   editable: {
     type: Boolean,
     default: true,
   },
 })
 
-const emit = defineEmits(['update:modelValue'])
+const model = defineModel()
 
 const editor = useEditor({
-  content: props.modelValue,
+  content: model.value,
   editable: props.editable,
   autofocus: true,
   extensions: [
@@ -236,12 +234,12 @@ const editor = useEditor({
     Media,
   ],
   onUpdate: () => {
-    emit('update:modelValue', editor.value.getHTML())
+    model.value = editor.value.getHTML()
   },
 })
 
 watch(
-  () => props.modelValue,
+  () => model.value,
   (value) => {
     const isSame = editor.value.getHTML() === value
     if (!isSame) {
@@ -288,7 +286,7 @@ const runAi = async (type, model) => {
     content,
     type,
     model,
-    editorContent: props.modelValue,
+    editorContent: model.value,
   }
 
   const result = await $fetch(`/api/ai/${model}`, {

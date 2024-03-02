@@ -102,8 +102,13 @@
 
 <script setup>
 import { usePostStore } from '~/stores/post'
+
+import { common, createLowlight } from 'lowlight'
+import { toHtml } from 'hast-util-to-html'
+
 import { useToast } from '~/stores/toast'
 import { hideAll } from 'tippy.js'
+
 import { useOverlay } from '~/stores/overlay'
 
 import PostCapture from '~/components/Post/Capture.vue'
@@ -131,8 +136,6 @@ const { data: tagRes } = await client
 tags.value = tagRes.map((item) => item.tags)
 
 // Delete
-// const deleting = ref(false)
-
 const delPost = () => {
   useToast().push({
     type: 'action',
@@ -214,20 +217,37 @@ const content = ref(null)
 const hidden = ref(false)
 
 const processHtml = (htmlString) => {
+  const html = highlight(htmlString)
+
   const regex = /^<h1>(.*?)<\/h1>/
-  const match = htmlString.match(regex)
+  const match = html.match(regex)
 
   if (match) {
     if (props.type === 'min') {
       hidden.value = true
-      content.value = props.data.content
+      content.value = html
     } else {
-      content.value = htmlString.replace(regex, '')
+      content.value = html.replace(regex, '')
       emit('title', match[1])
     }
   } else {
-    content.value = props.data.content
+    content.value = html
   }
+}
+
+const highlight = (htmlString) => {
+  const parser = new DOMParser()
+
+  const doc = parser.parseFromString(htmlString, 'text/html')
+
+  const lowlight = createLowlight(common)
+
+  doc.querySelectorAll('pre code').forEach((code) => {
+    const tree = lowlight.highlightAuto(code.textContent)
+    code.innerHTML = toHtml(tree)
+  })
+
+  return doc.body.innerHTML
 }
 
 const toPost = () => {

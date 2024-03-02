@@ -27,8 +27,9 @@
 </template>
 
 <script setup>
-const props = defineProps(['src'])
-const emit = defineEmits(['update:src', 'upload'])
+const src = defineModel('src')
+
+const emit = defineEmits(['upload'])
 
 const fileInput = ref()
 const files = ref(null)
@@ -58,7 +59,8 @@ const uploadFile = async (e) => {
       upsert: true,
     })
 
-    emit('update:src', url)
+    src.value = url
+
     emit('upload')
   } catch (error) {
     alert(error.message)

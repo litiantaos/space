@@ -8,7 +8,7 @@
         class="mx-auto flex h-full max-w-3xl flex-col items-center gap-4 p-4"
       >
         <button
-          class="ri-arrow-down-wide-fill text-xl text-gray-400"
+          class="ri-arrow-down-wide-fill text-xl text-gray-400 active:text-gray-300"
           @click="closeBoard"
         ></button>
 
