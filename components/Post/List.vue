@@ -1,12 +1,7 @@
 <template>
-  <div v-if="store.posts" class="flex w-full flex-col gap-10">
+  <div v-if="posts" class="flex w-full flex-col gap-10">
     <TransitionGroup name="post-list">
-      <PostCell
-        v-for="post in store.posts"
-        :key="post.id"
-        :data="post"
-        type="min"
-      />
+      <PostCell v-for="post in posts" :key="post.id" :data="post" type="min" />
     </TransitionGroup>
 
     <div class="mb-10 flex justify-center">
@@ -25,24 +20,36 @@ import { usePostStore } from '~/stores/post'
 
 const store = usePostStore()
 
-onMounted(async () => {
-  if (store.posts === null) {
-    store.posts = await store.getPosts()
-  }
-})
+const posts = defineModel('posts')
+
+const page = defineModel('page')
+
+const props = defineProps(['ilike'])
 
 // Get More Posts
 const loading = ref(false)
 const noMore = ref(false)
 
+if (posts.value?.length < store.pageSize) noMore.value = true
+
 const getMorePosts = async () => {
   loading.value = true
 
-  const newPosts = await store.getPosts()
+  let obj = {
+    page: page.value,
+  }
+
+  if (props.ilike) {
+    obj.ilike = props.ilike
+  }
+
+  const newPosts = await store.getPosts(obj)
+
+  page.value++
 
   if (newPosts.length < store.pageSize) noMore.value = true
 
-  store.posts = [...store.posts, ...newPosts]
+  posts.value = [...posts.value, ...newPosts]
 
   loading.value = false
 }

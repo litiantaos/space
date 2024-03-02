@@ -4,7 +4,7 @@
       <BaseInput
         type="text"
         placeholder="搜索"
-        v-model="keywords"
+        v-model="input"
         icon="ri-close-line"
         :loading="loading"
         auto-focus
@@ -13,37 +13,56 @@
       />
     </div>
 
-    <div v-if="posts" class="my-6 flex w-full flex-col gap-10">
-      <PostCell v-for="post in posts" :key="post.id" :data="post" type="min" />
-    </div>
+    <PostList
+      v-if="posts"
+      v-model:posts="posts"
+      v-model:page="page"
+      :ilike="input"
+      class="mt-10"
+    />
+
+    <BaseDefault v-if="!posts" />
   </div>
 </template>
 
 <script setup>
-const keywords = ref(null)
+import { usePostStore } from '~/stores/post'
+
+const store = usePostStore()
+
+const route = useRoute()
+
+const input = ref(route.query.q || '')
+
+onMounted(() => {
+  if (route.query?.q) {
+    search()
+  }
+})
 
 const posts = ref(null)
 
 const loading = ref(false)
 
+const page = ref(2)
+
 const search = async () => {
-  if (!keywords.value) return
+  if (!input.value) return
+
+  navigateTo(`/search?q=${input.value}`, {
+    replace: true,
+  })
 
   loading.value = true
 
-  const { data } = await useSupabaseClient()
-    .from('posts')
-    .select('*, users(id, user_id, nickname, avatar_url)')
-    .ilike('content', `%${keywords.value}%`)
+  posts.value = await store.getPosts({ ilike: input.value })
 
-  // console.log(data)
-
-  posts.value = data
+  if (!posts.value.length) posts.value = null
 
   loading.value = false
 }
 
 const clear = () => {
-  keywords.value = null
+  input.value = null
 }
 </script>

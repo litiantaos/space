@@ -4,32 +4,40 @@ export const usePostStore = defineStore('Post', () => {
   const boardShow = ref(false)
 
   const editablePost = ref(null)
+
   const localPost = ref(null)
 
   const citedPostId = ref(null)
 
   const posts = ref(null)
 
-  const page = ref(1)
   const pageSize = ref(10)
+
+  const currentPage = ref(2)
 
   const listKey = ref(0)
 
   const editorContent = ref(null)
 
-  const getPosts = async () => {
-    const from = (page.value - 1) * pageSize.value
+  const getPosts = async ({ page = 1, ilike = '', inArr = [] } = {}) => {
+    const from = (page - 1) * pageSize.value
+
+    let query = client
+      .from('posts')
+      .select('*, users(id, user_id, nickname, avatar_url, role)')
+      .neq('is_hidden', true)
+
+    if (ilike) {
+      query = query.ilike('content', `%${ilike}%`)
+    } else if (inArr.length) {
+      query = query.in('id', inArr)
+    }
 
     try {
-      const { data } = await client
-        .from('posts')
-        .select('*, users(id, user_id, nickname, avatar_url, role)')
-        .neq('is_hidden', true)
+      const { data } = await query
         .order('is_recommended', { ascending: false })
         .order('created_at', { ascending: false })
         .range(from, from + pageSize.value - 1)
-
-      page.value++
 
       return data
     } catch (error: any) {
@@ -57,8 +65,8 @@ export const usePostStore = defineStore('Post', () => {
     localPost,
     citedPostId,
     posts,
-    page,
     pageSize,
+    currentPage,
     listKey,
     editorContent,
     getPosts,

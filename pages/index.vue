@@ -3,7 +3,11 @@
     <MainHeader />
 
     <KeepAlive>
-      <PostList :key="store.listKey" />
+      <PostList
+        v-model:posts="store.posts"
+        v-model:page="store.currentPage"
+        :key="store.listKey"
+      />
     </KeepAlive>
 
     <PostBoard />
@@ -18,21 +22,15 @@ import { useOverlay } from '~/stores/overlay'
 
 const store = usePostStore()
 
-// Loaded
 const pageLoading = ref(true)
 
-watch(
-  () => store.posts,
-  (value) => {
-    if (value) {
-      pageLoading.value = false
-    }
-  },
-)
+onMounted(async () => {
+  if (store.posts === null) {
+    store.posts = await store.getPosts()
+  }
 
-if (store.posts) {
   pageLoading.value = false
-}
+})
 
 // Scroll Hidden
 watch(

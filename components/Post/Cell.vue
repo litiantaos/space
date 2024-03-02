@@ -69,7 +69,13 @@
     </div>
 
     <div v-if="tags?.length" class="mt-3 flex items-center gap-2">
-      <div class="tag bg-slate-100/85" v-for="tag in tags">{{ tag.name }}</div>
+      <NuxtLink
+        class="tag bg-slate-100/85"
+        v-for="tag in tags"
+        :to="`/tag/${tag.id}`"
+      >
+        {{ tag.name }}
+      </NuxtLink>
     </div>
 
     <div v-if="content" class="flex flex-col gap-2">
