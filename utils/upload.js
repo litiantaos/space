@@ -2,29 +2,37 @@ import * as qiniu from 'qiniu-js'
 
 // Qiniu
 export const uploadToQiniu = async (file, path) => {
-  const uploadToken = await $fetch('/api/qiniu/get-upload-token')
+  return new Promise(async (resolve, reject) => {
+    try {
+      const uploadToken = await $fetch('/api/qiniu/get-upload-token')
 
-  const observable = qiniu.upload(file, path, uploadToken)
+      if (!uploadToken) {
+        throw new Error('无法获取上传 Token')
+      }
 
-  const observer = {
-    next(res) {
-      // console.log('next', res)
-    },
-    error(err) {
-      // console.log('err', err)
-    },
-    complete(res) {
-      // console.log('complete', res)
-    },
-  }
+      const observable = qiniu.upload(file, path, uploadToken)
 
-  const subscription = observable.subscribe(observer)
+      const observer = {
+        next(res) {
+          // console.log('next', res)
+        },
+        error(err) {
+          reject(err)
+        },
+        complete(res) {
+          const config = useRuntimeConfig()
 
-  const config = useRuntimeConfig()
+          const publicUrl = config.public.fileUrl + '/' + path
 
-  const publicUrl = config.public.fileUrl + '/' + path
+          resolve(publicUrl)
+        },
+      }
 
-  return publicUrl
+      const subscription = observable.subscribe(observer)
+    } catch (error) {
+      reject(error)
+    }
+  })
 }
 
 // Supabase

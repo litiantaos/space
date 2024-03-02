@@ -1,11 +1,11 @@
 import { GoogleGenerativeAI } from '@google/generative-ai'
 
 export default defineEventHandler(async (event) => {
-  const config = useRuntimeConfig(event)
+  const { geminiAK } = useRuntimeConfig()
 
   const { content, type, mode } = getQuery(event)
 
-  const genAI = new GoogleGenerativeAI(config.geminiAK)
+  const genAI = new GoogleGenerativeAI(geminiAK)
 
   const model = genAI.getGenerativeModel({ model: 'gemini-pro' })
 
@@ -25,7 +25,7 @@ export default defineEventHandler(async (event) => {
       '**' + keys[type] + '**以下内容并直接输出纯文本结果：<br><br>>' + content
   }
 
-  console.log(prompt)
+  // console.log(prompt)
 
   const result = await model.generateContent(prompt)
 

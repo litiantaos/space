@@ -1,6 +1,6 @@
 <template>
   <NodeViewWrapper>
-    <div v-if="!attrs.src" class="my-2 flex w-full gap-2">
+    <div v-if="!attrs.src" class="my-2 flex w-full gap-2 sm:w-96">
       <BaseInput
         type="text"
         placeholder="URL"
@@ -35,12 +35,24 @@
       v-else
       draggable="true"
       data-drag-handle
-      :style="`width: ${attrs.width}; ${attrs.style}`"
+      :style="[{ width: attrs.width }, attrs.style]"
       class="group relative transition-[width] duration-300"
     >
-      <img v-if="isImg" :src="attrs.src" alt="image" class="w-full" />
+      <img
+        v-if="isImg"
+        :src="attrs.src"
+        alt="image"
+        class="w-full"
+        @load="onLoaded"
+      />
 
-      <video v-else :src="attrs.src" class="w-full" controls></video>
+      <video
+        v-else
+        :src="attrs.src"
+        class="w-full"
+        controls
+        @canplay="onLoaded"
+      ></video>
 
       <div
         class="absolute right-2 top-2 flex overflow-hidden rounded border bg-white opacity-0 transition-opacity group-hover:opacity-90"
@@ -58,6 +70,8 @@
           @click="() => updateAttributes({ width: '100%' })"
         ></button>
       </div>
+
+      <BaseLoading type="absolute" :loading="!loaded" />
     </div>
   </NodeViewWrapper>
 </template>
@@ -121,5 +135,11 @@ const uploadFile = async (e) => {
   })
 
   uploading.value = false
+}
+
+const loaded = ref(false)
+
+const onLoaded = () => {
+  loaded.value = true
 }
 </script>

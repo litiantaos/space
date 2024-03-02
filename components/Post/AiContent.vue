@@ -76,7 +76,7 @@ if (data.value.mode && data.value.mode === 'ask') {
 const input = ref('')
 
 // Generate
-const generate = async () => {
+const generate = throttle(async () => {
   loading.value = true
 
   let query = {}
@@ -97,7 +97,7 @@ const generate = async () => {
   data.value.result = res
 
   loading.value = false
-}
+}, 3000)
 
 // Copy
 const copied = ref(false)
