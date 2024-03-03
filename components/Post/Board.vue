@@ -92,6 +92,7 @@ onMounted(() => {
 // Submit
 const submit = throttle(async () => {
   // console.log(editorContent.value)
+  // return
 
   if (!editorContent.value || editorContent.value === '<p></p>') return
 

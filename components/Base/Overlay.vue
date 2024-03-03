@@ -7,7 +7,7 @@
     ></div>
   </Transition>
 
-  <Transition name="overlay-up">
+  <Transition name="move-up-center">
     <div
       v-if="store.show"
       class="no-scrollbar fixed left-2/4 top-2/4 z-30 flex max-h-screen w-[calc(100vw-32px)] -translate-x-2/4 -translate-y-2/4 justify-center overflow-auto drop-shadow-xl sm:w-fit"
@@ -22,18 +22,3 @@ import { useOverlay } from '~/stores/overlay'
 
 const store = useOverlay()
 </script>
-
-<style>
-.overlay-up-enter-active,
-.overlay-up-leave-active {
-  transition:
-    transform 0.3s,
-    opacity 0.3s;
-}
-
-.overlay-up-enter-from,
-.overlay-up-leave-to {
-  transform: translate(-50%, 10px);
-  opacity: 0;
-}
-</style>

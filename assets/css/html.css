@@ -194,4 +194,12 @@
       @apply pointer-events-none absolute bottom-0 left-0 right-0 top-0 z-[2] bg-blue-200/[.1] content-[''];
     }
   }
+
+  div[location] {
+    @apply my-2 h-80 w-full rounded-md bg-slate-100 text-gray-500;
+  }
+
+  div[address] {
+    @apply absolute bottom-2 left-2 h-fit rounded-md bg-white/50 px-3 py-1.5 text-xs text-gray-500 backdrop-blur-md;
+  }
 }

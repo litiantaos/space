@@ -15,7 +15,7 @@
 
       <div>YEARS</div>
 
-      <Transition name="date-left">
+      <Transition name="move-left">
         <div v-if="checkedDate" class="ml-2">
           {{ checkedDate }}
         </div>
@@ -107,18 +107,3 @@ const groupedPosts = posts.reduce((acc, post) => {
   return acc
 }, {})
 </script>
-
-<style>
-.date-left-enter-active,
-.date-left-leave-active {
-  transition:
-    transform 0.2s,
-    opacity 0.2s;
-}
-
-.date-left-enter-from,
-.date-left-leave-to {
-  transform: translateX(10px);
-  opacity: 0;
-}
-</style>

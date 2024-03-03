@@ -25,6 +25,8 @@ export default defineNuxtConfig({
     qiniuAK: '',
     qiniuSK: '',
     geminiAK: '',
+    amapAK: '',
+    amapSK: '',
   },
   modules: [
     '@nuxtjs/tailwindcss',

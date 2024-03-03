@@ -1,6 +1,6 @@
 <template>
   <div v-if="posts" class="flex w-full flex-col gap-10">
-    <TransitionGroup name="post-list">
+    <TransitionGroup name="list-move-up">
       <PostCell v-for="post in posts" :key="post.id" :data="post" type="min" />
     </TransitionGroup>
 
@@ -54,21 +54,3 @@ const getMorePosts = async () => {
   loading.value = false
 }
 </script>
-
-<style>
-.post-list-move,
-.post-list-enter-active,
-.post-list-leave-active {
-  transition: all 0.4s;
-}
-
-.post-list-enter-from,
-.post-list-leave-to {
-  opacity: 0;
-  transform: translateY(20px);
-}
-
-.post-list-leave-active {
-  position: absolute;
-}
-</style>

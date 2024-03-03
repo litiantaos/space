@@ -87,6 +87,12 @@ export const floatingMenus = [
         .run()
     },
   },
+  {
+    icon: 'ri-compass-discover-line',
+    command: (editor) => {
+      editor.chain().focus().setMap().run()
+    },
+  },
 ]
 
 export const textMenus = [

@@ -70,7 +70,7 @@
 
     <div v-if="tags?.length" class="mt-3 flex items-center gap-2">
       <NuxtLink
-        class="tag bg-slate-100/85"
+        class="tag bg-slate-100/85 transition-all active:bg-slate-200"
         v-for="tag in tags"
         :to="`/tag/${tag.id}`"
       >
@@ -78,7 +78,7 @@
       </NuxtLink>
     </div>
 
-    <div v-if="content" class="flex flex-col gap-2">
+    <div v-if="content" class="flex flex-col gap-2" ref="contentRef">
       <div
         :class="[
           { 'relative h-[600px] overflow-hidden': hidden },
@@ -131,7 +131,139 @@ const props = defineProps({
 
 const emit = defineEmits(['title'])
 
-// Tags
+// Parse HTML Content
+const content = ref(null)
+const hidden = ref(false)
+
+const parseHtmlContent = () => {
+  // Highlight
+  const hledContent = highlight(props.data.content)
+
+  // H1 Title
+  const h1edContent = h1Title(hledContent)
+
+  // Map
+  processMap(h1edContent)
+
+  content.value = h1edContent
+}
+
+const highlight = (htmlContent) => {
+  const parser = new DOMParser()
+
+  const doc = parser.parseFromString(htmlContent, 'text/html')
+
+  const lowlight = createLowlight(common)
+
+  doc.querySelectorAll('pre code').forEach((code) => {
+    const tree = lowlight.highlightAuto(code.textContent)
+
+    code.innerHTML = toHtml(tree)
+  })
+
+  return doc.body.innerHTML
+}
+
+const h1Title = (htmlContent) => {
+  const parser = new DOMParser()
+
+  const doc = parser.parseFromString(htmlContent, 'text/html')
+
+  const h1 = doc.querySelector('h1')
+
+  if (h1 && h1 === doc.body.firstChild) {
+    const h1Content = h1.textContent || ''
+
+    h1.remove()
+
+    const htmlWithoutH1 = doc.body.innerHTML
+
+    if (props.type === 'min') {
+      hidden.value = true
+      return htmlContent
+    } else {
+      emit('title', h1Content)
+      return htmlWithoutH1
+    }
+  } else {
+    return htmlContent
+  }
+}
+
+// Map
+let AMap = null
+let map = null
+
+const processMap = async (htmlContent) => {
+  const loc = checkMap(htmlContent)
+
+  if (loc) {
+    AMap = await loadAMap()
+
+    const location = loc.split(',')
+
+    map = await setAMap(AMap, location)
+
+    const marker = await setAMapMarker(AMap, location)
+
+    map.add(marker)
+
+    addMapAddress(location)
+  }
+}
+
+const checkMap = (htmlContent) => {
+  const parser = new DOMParser()
+
+  const doc = parser.parseFromString(htmlContent, 'text/html')
+
+  const mapDivs = doc.querySelectorAll('div[location]')
+
+  if (mapDivs.length > 0) {
+    return mapDivs[0].getAttribute('location')
+  } else {
+    return false
+  }
+}
+
+// Add Map Address
+const addMapAddress = async (location) => {
+  const address = await getAMapAddress(AMap, location)
+
+  if (contentRef.value) {
+    const mapDiv = contentRef.value.querySelector('#mapContainer')
+
+    const newChild = document.createElement('div')
+
+    newChild.textContent = address
+    newChild.setAttribute('address', '')
+
+    mapDiv.appendChild(newChild)
+  }
+}
+
+// Change Map Div Id
+const contentRef = ref(null)
+
+const changeMapId = () => {
+  if (contentRef.value) {
+    const els = contentRef.value.querySelectorAll('div[location]')
+
+    els.forEach((el) => {
+      el.id = Date.now()
+    })
+  }
+}
+
+onMounted(async () => {
+  parseHtmlContent()
+})
+
+onUnmounted(() => {
+  map?.destroy()
+})
+
+// Get Tags
 const tags = ref(null)
 
 const { data: tagRes } = await client
@@ -141,7 +273,16 @@ const { data: tagRes } = await client
 
 tags.value = tagRes.map((item) => item.tags)
 
-// Delete
+// Go To Post Page
+const toPost = () => {
+  if (props.type !== 'min') return
+
+  store.localPost = props.data
+
+  navigateTo('/post/' + props.data.id)
+}
+
+// Delete Post
 const delPost = () => {
   useToast().push({
     type: 'action',
@@ -182,16 +323,18 @@ const deleteLocalPost = () => {
   }
 }
 
-// Edit
+// Edit Post
 const editPost = () => {
   store.boardShow = true
   store.editablePost = props.data
   store.editablePost.tags = tags.value
 
+  changeMapId()
+
   hideAll()
 }
 
-// Top
+// To Top
 const recommended = ref(props.data.is_recommended)
 const loading = ref(false)
 
@@ -214,56 +357,7 @@ const topPost = async () => {
   }
 }
 
-// Process HTML
-onMounted(() => {
-  processHtml(props.data.content)
-})
-
-const content = ref(null)
-const hidden = ref(false)
-
-const processHtml = (htmlString) => {
-  const html = highlight(htmlString)
-
-  const regex = /^<h1>(.*?)<\/h1>/
-  const match = html.match(regex)
-
-  if (match) {
-    if (props.type === 'min') {
-      hidden.value = true
-      content.value = html
-    } else {
-      content.value = html.replace(regex, '')
-      emit('title', match[1])
-    }
-  } else {
-    content.value = html
-  }
-}
-
-const highlight = (htmlString) => {
-  const parser = new DOMParser()
-
-  const doc = parser.parseFromString(htmlString, 'text/html')
-
-  const lowlight = createLowlight(common)
-
-  doc.querySelectorAll('pre code').forEach((code) => {
-    const tree = lowlight.highlightAuto(code.textContent)
-    code.innerHTML = toHtml(tree)
-  })
-
-  return doc.body.innerHTML
-}
-
-const toPost = () => {
-  if (props.type !== 'min') return
-
-  store.localPost = props.data
-
-  navigateTo('/post/' + props.data.id)
-}
-
+// Capture
 const capture = () => {
   const overlay = useOverlay()
 

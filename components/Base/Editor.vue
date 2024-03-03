@@ -181,6 +181,7 @@ import Placeholder from '@tiptap/extension-placeholder'
 import Link from '@tiptap/extension-link'
 import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight'
 import Media from '@/extensions/media'
+import Map from '@/extensions/map'
 
 import {
   floatingMenus,
@@ -232,6 +233,7 @@ const editor = useEditor({
       lowlight: createLowlight(common),
     }),
     Media,
+    Map,
   ],
   onUpdate: () => {
     model.value = editor.value.getHTML()

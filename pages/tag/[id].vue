@@ -1,13 +1,16 @@
 <template>
   <div class="w-full">
     <div
-      class="sticky top-16 z-10 flex items-center gap-5 overflow-auto bg-white py-4 text-xl text-gray-400"
+      class="no-scrollbar sticky top-16 z-10 flex items-center gap-5 overflow-x-auto bg-white py-4 text-xl text-gray-400"
     >
-      <TransitionGroup name="post-list">
+      <TransitionGroup name="list-move-left">
         <button
           v-for="(tag, idx) in tags"
           :key="tag.id"
-          :class="{ 'font-bold text-gray-500': idx === 0 }"
+          :class="[
+            'whitespace-nowrap',
+            { 'font-bold text-gray-500': idx === 0 },
+          ]"
           @click="checkTag(idx)"
         >
           {{ tag.name }}

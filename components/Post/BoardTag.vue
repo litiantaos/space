@@ -56,6 +56,8 @@ if (checkedTags?.length) {
     ...tag,
     checked: checkedTags.some((checkedTag) => checkedTag.id === tag.id),
   }))
+
+  emit('checked', checkedTags)
 }
 
 // Checked Tags
@@ -65,7 +67,7 @@ const checkTag = (index) => {
   tags.value[index].checked = !tags.value[index].checked
 
   checked.value = tags.value.filter((tag) => tag.checked)
-  // console.log(checked.value)
+
   emit('checked', checked.value)
 }
 
