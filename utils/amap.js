@@ -1,13 +1,11 @@
-const { amapAK, amapSK } = await $fetch('/api/map/amap')
+export const loadAMap = async () => {
+  const AMapLoader = await import('@amap/amap-jsapi-loader')
 
-if (process.client) {
+  const { amapAK, amapSK } = await $fetch('/api/map/amap')
+
   window._AMapSecurityConfig = {
     securityJsCode: amapSK,
   }
-}
-
-export const loadAMap = async () => {
-  const AMapLoader = await import('@amap/amap-jsapi-loader')
 
   return await AMapLoader.load({
     key: amapAK,
