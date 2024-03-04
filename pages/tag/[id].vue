@@ -1,6 +1,7 @@
 <template>
   <div class="w-full">
     <div
+      ref="tagsRef"
       class="no-scrollbar sticky top-16 z-10 flex items-center gap-5 overflow-x-auto bg-white py-4 text-xl text-gray-400"
     >
       <TransitionGroup name="list-move-left">
@@ -25,7 +26,7 @@
       class="mt-10"
     />
 
-    <BaseDefault v-if="!posts" />
+    <BaseDefault v-if="!posts" class="h-[calc(100vh-200px)]" />
 
     <BaseLoading :loading="pageLoading" />
   </div>
@@ -61,6 +62,14 @@ const checkTag = (index) => {
     tags.value.unshift(item)
 
     getTagPosts(tags.value[0].id)
+
+    navigateTo(`/tag/${tags.value[0].id}`, {
+      replace: true,
+    })
+
+    setTimeout(() => {
+      toTagsStart()
+    }, 500)
   }
 }
 
@@ -85,6 +94,14 @@ const getTagPosts = async (tagId) => {
   }
 
   pageLoading.value = false
+}
+
+const tagsRef = ref(null)
+
+const toTagsStart = () => {
+  if (tagsRef.value) {
+    tagsRef.value.scrollTo({ left: 0, behavior: 'smooth' })
+  }
 }
 
 onMounted(async () => {

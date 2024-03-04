@@ -50,6 +50,9 @@ export const setAMap = async (AMap, center) => {
     rotateEnable: false,
     rotateEnable: false,
     pitchEnable: false,
+    WebGLParams: {
+      preserveDrawingBuffer: true,
+    },
   })
 }
 
@@ -84,4 +87,14 @@ export const getAMapAddress = async (AMap, lnglat) => {
       }
     })
   })
+}
+
+export const changeAMapId = (dom) => {
+  if (dom) {
+    const els = dom.querySelectorAll('div[location]')
+
+    els.forEach((el) => {
+      el.id = Date.now()
+    })
+  }
 }

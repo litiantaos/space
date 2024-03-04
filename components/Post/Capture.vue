@@ -1,22 +1,21 @@
 <template>
   <div class="h-fit max-h-[calc(100vh-32px)]">
-    <div class="relative mx-auto w-full overflow-hidden rounded-md sm:w-96">
+    <div
+      class="relative mx-auto w-[calc(100vw-32px)] overflow-hidden rounded-md sm:w-96"
+    >
       <img v-if="image && !loading" :src="image" class="w-full" />
 
       <div
         v-if="loading"
         ref="shotRef"
-        class="mx-auto w-full overflow-hidden bg-white text-gray-500"
+        class="w-full overflow-hidden bg-white text-gray-500"
       >
         <div class="p-8">
           <div class="text-sm text-gray-400">
             {{ formatTime(data.created_at) }}
           </div>
 
-          <div
-            v-html="replaceVideo(data.content)"
-            class="html-style mt-4"
-          ></div>
+          <div v-if="content" v-html="content" class="html-style mt-4"></div>
 
           <div v-if="data.tags?.length" class="mt-4 flex items-center gap-2">
             <div class="tag bg-slate-100/85" v-for="tag in data.tags">
@@ -54,9 +53,12 @@ const props = defineProps({
   data: Object,
 })
 
+// Shot
 const shotRef = ref(null)
 
 const image = ref(null)
+
+const loading = ref(true)
 
 const shot = async () => {
   if (shotRef.value) {
@@ -68,17 +70,49 @@ const shot = async () => {
   }
 }
 
-onMounted(() => {
-  shot()
-})
+// Parse
+const content = ref(null)
 
-const loading = ref(true)
-
-// Replace Video
 const replaceVideo = (html) => {
   return html.replace(
     /<video.*?video>/g,
-    '<div class="w-full h-40 rounded-md bg-slate-100 ri-play-circle-fill text-slate-300 text-3xl flex justify-center items-center"></div>',
+    '<div class="w-full h-40 rounded-md bg-slate-300 ri-play-circle-fill text-white text-3xl flex justify-center items-center"></div>',
   )
 }
+
+const replaceMap = (html, mapImg) => {
+  const parser = new DOMParser()
+
+  const doc = parser.parseFromString(html, 'text/html')
+
+  const mapDivs = doc.querySelectorAll('div[location]')
+
+  let img = document.createElement('img')
+
+  img.src = mapImg
+
+  mapDivs[0].parentNode.replaceChild(img, mapDivs[0])
+
+  return doc.body.innerHTML
+}
+
+const process = async () => {
+  const newContent = replaceVideo(props.data.content)
+
+  if (props.data.mapDiv) {
+    const mapImg = await toPng(props.data.mapDiv)
+
+    content.value = replaceMap(newContent, mapImg)
+  } else {
+    content.value = newContent
+  }
+
+  setTimeout(() => {
+    shot()
+  }, 500)
+}
+
+onMounted(() => {
+  process()
+})
 </script>

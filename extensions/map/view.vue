@@ -6,6 +6,8 @@
         class="h-80 w-full rounded-md bg-slate-100 text-gray-500"
       ></div>
 
+      <div v-if="address" address="">{{ address }}</div>
+
       <div
         class="absolute right-0 top-0 flex max-h-full w-60 flex-col gap-2 p-2"
       >
@@ -61,8 +63,6 @@
           </div>
         </Transition>
       </div>
-
-      <div v-if="address" address="">{{ address }}</div>
 
       <BaseLoading type="absolute" :loading="loading" />
     </div>

@@ -1,20 +1,21 @@
-.html-style {
-  @apply text-sm text-gray-600;
+.html-style,
+.tiptap {
+  @apply flex flex-col gap-4 text-sm text-gray-600;
 
   h1 {
-    @apply pb-3 pt-4 text-3xl font-bold;
+    @apply mt-3 text-3xl font-bold;
   }
 
   h2 {
-    @apply pb-2 pt-4 text-2xl font-bold;
+    @apply mt-3 text-2xl font-bold;
   }
 
   h3 {
-    @apply pb-1 pt-4 text-xl font-bold;
+    @apply mt-3 text-xl font-bold;
   }
 
   p {
-    @apply py-2 text-justify leading-7;
+    @apply text-justify leading-7;
   }
 
   code {
@@ -22,8 +23,12 @@
   }
 
   pre {
-    @apply my-2 overflow-x-auto rounded-md bg-slate-100 p-3 font-mono;
+    @apply overflow-x-auto rounded-md bg-slate-100 p-4 font-mono;
     white-space: pre !important;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
 
     code {
       @apply rounded-none border-none bg-transparent p-0;
@@ -106,7 +111,7 @@
   }
 
   blockquote {
-    @apply my-2 border-l-2 pl-3;
+    @apply border-l-2 pl-3;
 
     p {
       @apply p-0;
@@ -119,7 +124,7 @@
 
   ul,
   ol {
-    @apply py-2 pl-7;
+    @apply pl-7;
 
     p {
       @apply ml-1 p-0;
@@ -156,7 +161,7 @@
 
   img,
   video {
-    @apply my-2 h-auto max-w-full rounded-md bg-slate-100;
+    @apply h-auto max-w-full rounded-md bg-slate-100;
   }
 
   a {
@@ -171,7 +176,7 @@
   }
 
   table {
-    @apply my-2 w-full table-fixed border-separate border-spacing-0 overflow-hidden rounded-md border text-sm;
+    @apply w-full table-fixed border-separate border-spacing-0 overflow-hidden rounded-md border text-sm;
 
     td,
     th {
@@ -196,10 +201,10 @@
   }
 
   div[location] {
-    @apply my-2 h-80 w-full rounded-md bg-slate-100 text-gray-500;
+    @apply pointer-events-none h-80 w-full rounded-md bg-slate-100 text-gray-500;
   }
 
   div[address] {
-    @apply absolute bottom-2 left-2 h-fit rounded-md bg-white/50 px-3 py-1.5 text-xs text-gray-500 backdrop-blur-md;
+    @apply absolute bottom-2 left-2 h-fit max-w-[calc(100%-16px)] rounded-md bg-white/60 px-3 py-1.5 text-xs text-gray-500 backdrop-blur-md;
   }
 }

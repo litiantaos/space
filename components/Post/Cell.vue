@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col gap-2">
+  <div class="flex flex-col gap-4">
     <div class="flex items-center justify-between">
       <NuxtLink
         :to="`/${data.users?.id}`"
@@ -68,7 +68,7 @@
       </ClientOnly>
     </div>
 
-    <div v-if="tags?.length" class="mt-3 flex items-center gap-2">
+    <div v-if="tags?.length" class="flex items-center gap-2">
       <NuxtLink
         class="tag bg-slate-100/85 transition-all active:bg-slate-200"
         v-for="tag in tags"
@@ -194,13 +194,15 @@ const h1Title = (htmlContent) => {
 let AMap = null
 let map = null
 
-const processMap = async (htmlContent) => {
-  const loc = checkMap(htmlContent)
+const loc = ref(null)
 
-  if (loc) {
+const processMap = async (htmlContent) => {
+  loc.value = checkMap(htmlContent)
+
+  if (loc.value) {
     AMap = await loadAMap()
 
-    const location = loc.split(',')
+    const location = loc.value.split(',')
 
     map = await setAMap(AMap, location)
 
@@ -227,6 +229,8 @@ const checkMap = (htmlContent) => {
 }
 
 // Add Map Address
+const contentRef = ref(null)
+
 const addMapAddress = async (location) => {
   const address = await getAMapAddress(AMap, location)
 
@@ -239,19 +243,6 @@ const addMapAddress = async (location) => {
     newChild.setAttribute('address', '')
 
     mapDiv.appendChild(newChild)
-  }
-}
-
-// Change Map Div Id
-const contentRef = ref(null)
-
-const changeMapId = () => {
-  if (contentRef.value) {
-    const els = contentRef.value.querySelectorAll('div[location]')
-
-    els.forEach((el) => {
-      el.id = Date.now()
-    })
   }
 }
 
@@ -329,7 +320,7 @@ const editPost = () => {
   store.editablePost = props.data
   store.editablePost.tags = tags.value
 
-  changeMapId()
+  changeAMapId(contentRef.value)
 
   hideAll()
 }
@@ -358,13 +349,19 @@ const topPost = async () => {
 }
 
 // Capture
-const capture = () => {
+const capture = async () => {
   const overlay = useOverlay()
 
   overlay.show = true
   overlay.component = PostCapture
   overlay.data = props.data
   overlay.data.tags = tags.value
+
+  if (loc.value && contentRef.value) {
+    const mapDivs = contentRef.value.querySelectorAll('div[location]')
+
+    overlay.data.mapDiv = mapDivs[0]
+  }
 
   hideAll()
 }
