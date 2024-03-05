@@ -62,16 +62,60 @@ const loading = ref(true)
 
 const shot = async () => {
   if (shotRef.value) {
+    await toPng(shotRef.value)
+    await toPng(shotRef.value)
+    await toPng(shotRef.value)
+
     image.value = await toPng(shotRef.value)
 
     setTimeout(() => {
       loading.value = false
-    }, 1000)
+    }, 500)
+  }
+}
+
+const watchImgsLoaded = () => {
+  const images = shotRef.value.querySelectorAll('img')
+
+  if (images.length) {
+    let loadedCount = 0
+
+    images.forEach((img) => {
+      img.addEventListener('load', () => {
+        loadedCount++
+
+        if (loadedCount === images.length) {
+          shot()
+        }
+      })
+
+      if (img.complete && img.naturalWidth !== 0) {
+        img.dispatchEvent(new Event('load'))
+      }
+    })
+  } else {
+    shot()
   }
 }
 
 // Parse
 const content = ref(null)
+
+const process = async () => {
+  const newContent = replaceVideo(props.data.content)
+
+  if (props.data.mapDiv) {
+    const mapImg = await toPng(props.data.mapDiv)
+
+    content.value = replaceMap(newContent, mapImg)
+  } else {
+    content.value = newContent
+  }
+
+  setTimeout(() => {
+    watchImgsLoaded()
+  }, 300)
+}
 
 const replaceVideo = (html) => {
   return html.replace(
@@ -94,22 +138,6 @@ const replaceMap = (html, mapImg) => {
   mapDivs[0].parentNode.replaceChild(img, mapDivs[0])
 
   return doc.body.innerHTML
-}
-
-const process = async () => {
-  const newContent = replaceVideo(props.data.content)
-
-  if (props.data.mapDiv) {
-    const mapImg = await toPng(props.data.mapDiv)
-
-    content.value = replaceMap(newContent, mapImg)
-  } else {
-    content.value = newContent
-  }
-
-  setTimeout(() => {
-    shot()
-  }, 500)
 }
 
 onMounted(() => {

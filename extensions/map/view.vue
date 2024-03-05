@@ -2,7 +2,7 @@
   <NodeViewWrapper>
     <div class="relative my-2 w-full overflow-hidden">
       <div
-        id="mapContainer"
+        :id="mapId"
         class="h-80 w-full rounded-md bg-slate-100 text-gray-500"
       ></div>
 
@@ -88,6 +88,8 @@ const address = ref(null)
 const input = ref('')
 const pois = ref(null)
 
+const mapId = `map_${Date.now()}`
+
 const setMap = async () => {
   if (props.node.attrs.location) {
     location.value = props.node.attrs.location.split(',')
@@ -99,7 +101,7 @@ const setMap = async () => {
     })
   }
 
-  map = await setAMap(AMap, location.value)
+  map = await setAMap(AMap, location.value, mapId)
 
   const marker = await setAMapMarker(AMap, location.value)
 
@@ -167,7 +169,7 @@ const checkPlace = async (lnglat) => {
 
   location.value = [lnglat.lng, lnglat.lat]
 
-  map = await setAMap(AMap, location.value)
+  map = await setAMap(AMap, location.value, mapId)
 
   const marker = await setAMapMarker(AMap, location.value)
 

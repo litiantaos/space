@@ -17,9 +17,6 @@ export default Node.create({
       location: {
         default: '',
       },
-      id: {
-        default: 'mapContainer',
-      },
     }
   },
 

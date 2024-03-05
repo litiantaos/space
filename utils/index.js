@@ -27,3 +27,13 @@ export const throttle = (func, wait) => {
     }
   }
 }
+
+export const splitFileName = (fileName) => {
+  const matches = fileName.match(/([^\/]+)\.(\w+)$/)
+
+  if (matches) {
+    return [matches[1], matches[2].toLowerCase()]
+  } else {
+    return null
+  }
+}

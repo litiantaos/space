@@ -34,8 +34,8 @@ export const getAMapLocation = async (AMap) => {
   })
 }
 
-export const setAMap = async (AMap, center) => {
-  return await new AMap.Map('mapContainer', {
+export const setAMap = async (AMap, center, id) => {
+  return await new AMap.Map(id, {
     viewMode: '2D',
     zoom: 12,
     center,
@@ -87,14 +87,4 @@ export const getAMapAddress = async (AMap, lnglat) => {
       }
     })
   })
-}
-
-export const changeAMapId = (dom) => {
-  if (dom) {
-    const els = dom.querySelectorAll('div[location]')
-
-    els.forEach((el) => {
-      el.id = Date.now()
-    })
-  }
 }

@@ -53,9 +53,9 @@ const uploadFile = async (e) => {
 
     const fileExt = file.name.split('.').pop().toLowerCase()
     const fileName = profile.value.id + '_' + Date.now() + '.' + fileExt
-    const path = 'avatars/' + fileName
+    const path = 'user/avatars/' + fileName
 
-    const url = await uploadToSupabase(file, path, 'users', {
+    const url = await uploadToSupabase(file, path, 'space', {
       upsert: true,
     })
 

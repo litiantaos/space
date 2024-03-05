@@ -143,15 +143,17 @@ const parseHtmlContent = () => {
   const h1edContent = h1Title(hledContent)
 
   // Map
-  processMap(h1edContent)
+  const mapedContent = checkMap(h1edContent)
 
-  content.value = h1edContent
+  content.value = mapedContent
+
+  setMap()
 }
 
-const highlight = (htmlContent) => {
+const highlight = (html) => {
   const parser = new DOMParser()
 
-  const doc = parser.parseFromString(htmlContent, 'text/html')
+  const doc = parser.parseFromString(html, 'text/html')
 
   const lowlight = createLowlight(common)
 
@@ -164,10 +166,10 @@ const highlight = (htmlContent) => {
   return doc.body.innerHTML
 }
 
-const h1Title = (htmlContent) => {
+const h1Title = (html) => {
   const parser = new DOMParser()
 
-  const doc = parser.parseFromString(htmlContent, 'text/html')
+  const doc = parser.parseFromString(html, 'text/html')
 
   const h1 = doc.querySelector('h1')
 
@@ -180,13 +182,13 @@ const h1Title = (htmlContent) => {
 
     if (props.type === 'min') {
       hidden.value = true
-      return htmlContent
+      return html
     } else {
       emit('title', h1Content)
       return htmlWithoutH1
     }
   } else {
-    return htmlContent
+    return html
   }
 }
 
@@ -195,36 +197,39 @@ let AMap = null
 let map = null
 
 const loc = ref(null)
+const mapId = `map_${Date.now()}`
 
-const processMap = async (htmlContent) => {
-  loc.value = checkMap(htmlContent)
+const checkMap = (html) => {
+  const parser = new DOMParser()
 
+  const doc = parser.parseFromString(html, 'text/html')
+
+  const mapDivs = doc.querySelectorAll('div[location]')
+
+  if (mapDivs.length > 0) {
+    mapDivs[0].setAttribute('id', mapId)
+
+    loc.value = mapDivs[0].getAttribute('location')
+
+    return doc.body.innerHTML
+  } else {
+    return html
+  }
+}
+
+const setMap = async () => {
   if (loc.value) {
     AMap = await loadAMap()
 
     const location = loc.value.split(',')
 
-    map = await setAMap(AMap, location)
+    map = await setAMap(AMap, location, mapId)
 
     const marker = await setAMapMarker(AMap, location)
 
     map.add(marker)
 
     addMapAddress(location)
-  }
-}
-
-const checkMap = (htmlContent) => {
-  const parser = new DOMParser()
-
-  const doc = parser.parseFromString(htmlContent, 'text/html')
-
-  const mapDivs = doc.querySelectorAll('div[location]')
-
-  if (mapDivs.length > 0) {
-    return mapDivs[0].getAttribute('location')
-  } else {
-    return false
   }
 }
 
@@ -235,7 +240,7 @@ const addMapAddress = async (location) => {
   const address = await getAMapAddress(AMap, location)
 
   if (contentRef.value) {
-    const mapDiv = contentRef.value.querySelector('#mapContainer')
+    const mapDiv = contentRef.value.querySelector(`#${mapId}`)
 
     const newChild = document.createElement('div')
 
@@ -319,8 +324,6 @@ const editPost = () => {
   store.boardShow = true
   store.editablePost = props.data
   store.editablePost.tags = tags.value
-
-  changeAMapId(contentRef.value)
 
   hideAll()
 }

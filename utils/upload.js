@@ -1,7 +1,35 @@
-import * as qiniu from 'qiniu-js'
+// Supabase
+export const uploadToSupabase = async (
+  file,
+  path,
+  bucket = 'space',
+  options = {},
+) => {
+  const client = useSupabaseClient()
+  const config = useRuntimeConfig()
+
+  const { data, error } = await client.storage
+    .from(bucket)
+    .upload(path, file, options)
+
+  if (error) {
+    console.log(error)
+  }
+
+  const url =
+    config.public.supabaseUrl +
+    '/storage/v1/object/public/' +
+    bucket +
+    '/' +
+    path
+
+  return url
+}
 
 // Qiniu
 export const uploadToQiniu = async (file, path) => {
+  const qiniu = await import('qiniu-js')
+
   return new Promise(async (resolve, reject) => {
     try {
       const uploadToken = await $fetch('/api/qiniu/get-upload-token')
@@ -22,9 +50,9 @@ export const uploadToQiniu = async (file, path) => {
         complete(res) {
           const config = useRuntimeConfig()
 
-          const publicUrl = config.public.fileUrl + '/' + path
+          const url = config.public.fileUrl + '/' + path
 
-          resolve(publicUrl)
+          resolve(url)
         },
       }
 
@@ -33,27 +61,4 @@ export const uploadToQiniu = async (file, path) => {
       reject(error)
     }
   })
-}
-
-// Supabase
-export const uploadToSupabase = async (file, path, bucket, options) => {
-  const client = useSupabaseClient()
-  const config = useRuntimeConfig()
-
-  const { data, error } = await client.storage
-    .from(bucket)
-    .upload(path, file, options)
-
-  if (error) {
-    console.log(error)
-  }
-
-  const publicUrl =
-    config.public.supabaseUrl +
-    '/storage/v1/object/public/' +
-    bucket +
-    '/' +
-    path
-
-  return publicUrl
 }

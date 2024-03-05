@@ -36,7 +36,7 @@
       draggable="true"
       data-drag-handle
       :style="[{ width: attrs.width }, attrs.style]"
-      class="group relative transition-[width] duration-300"
+      class="group relative min-h-12 overflow-hidden rounded-md bg-slate-100 transition-[width] duration-300"
     >
       <img
         v-if="isImg"
@@ -124,11 +124,15 @@ const uploadFile = async (e) => {
 
   uploading.value = true
 
-  const key = isImg.value
-    ? 'post/images/' + file.name
-    : 'post/videos/' + file.name
+  const fileExt = splitFileName(file.name)[1]
+  const fileName =
+    splitFileName(file.name)[0] + '_' + Date.now() + '.' + fileExt
 
-  const url = await uploadToQiniu(file, key)
+  const path = isImg.value
+    ? 'post/images/' + fileName
+    : 'post/videos/' + fileName
+
+  const url = await uploadToSupabase(file, path)
 
   props.updateAttributes({
     src: url,
