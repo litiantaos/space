@@ -145,9 +145,9 @@ const parseHtmlContent = () => {
   // Map
   const mapedContent = checkMap(h1edContent)
 
-  content.value = mapedContent
-
   setMap()
+
+  content.value = mapedContent
 }
 
 const highlight = (html) => {

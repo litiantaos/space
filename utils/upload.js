@@ -26,6 +26,31 @@ export const uploadToSupabase = async (
   return url
 }
 
+// Supabase Tus Options
+export const uploadToSupabaseOptions = async (path, bucket = 'space') => {
+  const client = useSupabaseClient()
+  const config = useRuntimeConfig()
+
+  const { data: session } = await client.auth.getSession()
+
+  return {
+    endpoint: config.public.supabaseUrl + '/storage/v1/upload/resumable',
+    retryDelays: [0, 3000, 5000, 10000, 20000],
+    headers: {
+      authorization: `Bearer ${session.session.access_token}`,
+      'x-upsert': 'false',
+    },
+    uploadDataDuringCreation: true,
+    removeFingerprintOnSuccess: true,
+    metadata: {
+      bucketName: bucket,
+      objectName: path,
+      cacheControl: 3600,
+    },
+    chunkSize: 6 * 1024 * 1024,
+  }
+}
+
 // Qiniu
 export const uploadToQiniu = async (file, path) => {
   const qiniu = await import('qiniu-js')

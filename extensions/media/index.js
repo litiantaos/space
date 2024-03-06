@@ -23,8 +23,8 @@ export default Node.create({
       width: {
         default: '100%',
       },
-      style: {
-        default: 'margin-left: auto; margin-right: auto;',
+      align: {
+        default: 'center',
       },
     }
   },
@@ -50,14 +50,12 @@ export default Node.create({
         tag: 'img[src]:not([src^="data:"])',
         getAttrs: (element) => ({
           src: element.getAttribute('src'),
-          type: 'img',
         }),
       },
       {
         tag: 'video',
         getAttrs: (element) => ({
           src: element.getAttribute('src'),
-          type: 'video',
         }),
       },
     ]
