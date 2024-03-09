@@ -31,37 +31,39 @@
             theme: 'base',
           }"
         >
-          <button
-            v-if="user && user.id === data.users.user_id"
-            class="ri-more-line btn-base"
-          ></button>
+          <button class="ri-more-line btn-base"></button>
 
           <template #content>
             <div class="flex gap-1">
-              <button
-                v-if="data.users.role === 'admin'"
-                class="btn-base"
-                :class="
-                  recommended
-                    ? 'ri-heart-fill'
-                    : loading
-                      ? 'ri-loader-4-line animate-spin'
-                      : 'ri-heart-line'
-                "
-                @click="topPost"
-              ></button>
-
               <button
                 class="ri-image-circle-line btn-base"
                 @click="capture"
               ></button>
 
-              <button class="ri-edit-line btn-base" @click="editPost"></button>
+              <div v-if="user && user.id === data.users.user_id">
+                <button
+                  v-if="data.users.role === 'admin'"
+                  class="btn-base"
+                  :class="
+                    recommended
+                      ? 'ri-heart-fill'
+                      : loading
+                        ? 'ri-loader-4-line animate-spin'
+                        : 'ri-heart-line'
+                  "
+                  @click="topPost"
+                ></button>
 
-              <button
-                class="ri-delete-bin-7-line btn-base text-red-500"
-                @click="delPost"
-              ></button>
+                <button
+                  class="ri-edit-line btn-base"
+                  @click="editPost"
+                ></button>
+
+                <button
+                  class="ri-delete-bin-7-line btn-base text-red-500"
+                  @click="delPost"
+                ></button>
+              </div>
             </div>
           </template>
         </BasePopover>

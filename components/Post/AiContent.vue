@@ -34,6 +34,7 @@
         @click="copy"
       ></button>
       <button
+        v-if="!isAsk"
         class="ri-ai-generate hover:text-blue-500"
         @click="apply"
       ></button>

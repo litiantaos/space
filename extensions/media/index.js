@@ -29,21 +29,6 @@ export default Node.create({
     }
   },
 
-  renderHTML({ HTMLAttributes }) {
-    const { type } = HTMLAttributes
-
-    if (type === 'img') {
-      return ['img', HTMLAttributes]
-    } else if (type === 'video') {
-      return [
-        'video',
-        mergeAttributes(HTMLAttributes, {
-          controls: 'true',
-        }),
-      ]
-    }
-  },
-
   parseHTML() {
     return [
       {
@@ -59,6 +44,21 @@ export default Node.create({
         }),
       },
     ]
+  },
+
+  renderHTML({ HTMLAttributes }) {
+    const { type } = HTMLAttributes
+
+    if (type === 'img') {
+      return ['img', HTMLAttributes]
+    } else if (type === 'video') {
+      return [
+        'video',
+        mergeAttributes(HTMLAttributes, {
+          controls: 'true',
+        }),
+      ]
+    }
   },
 
   addCommands() {

@@ -1,5 +1,5 @@
 <template>
-  <NodeViewWrapper>
+  <NodeViewWrapper class="w-fit flex-none" draggable="true" data-drag-handle>
     <div v-if="!src" class="flex w-full gap-2 sm:w-96">
       <button
         @click="chooseFile"
@@ -33,8 +33,6 @@
 
     <div
       v-else
-      draggable="true"
-      data-drag-handle
       :style="{ width: attrs.width }"
       :class="{ 'mx-auto': attrs.align === 'center' }"
       class="group relative overflow-hidden rounded-md bg-slate-100 transition-[width] duration-300"
@@ -156,6 +154,8 @@ const uploadFile = async (e) => {
   src.value = URL.createObjectURL(file)
 
   uploading.value = true
+
+  // return
 
   const fileExt = splitFileName(file.name)[1]
   const fileName =

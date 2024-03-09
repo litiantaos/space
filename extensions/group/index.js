@@ -1,43 +1,32 @@
 import { mergeAttributes, Node } from '@tiptap/core'
 import { VueNodeViewRenderer } from '@tiptap/vue-3'
 
-import MapView from './view.vue'
+import GroupView from './view.vue'
 
 export default Node.create({
-  name: 'Map',
+  name: 'Group',
 
   group: 'block',
 
-  selectable: true,
+  content: 'block*',
 
   draggable: true,
-
-  addAttributes() {
-    return {
-      location: {
-        default: '',
-      },
-    }
-  },
 
   parseHTML() {
     return [
       {
-        tag: 'div[location]',
-        getAttrs: (element) => ({
-          location: element.getAttribute('location'),
-        }),
+        tag: 'div[type="group"]',
       },
     ]
   },
 
   renderHTML({ HTMLAttributes }) {
-    return ['div', mergeAttributes(HTMLAttributes)]
+    return ['div', mergeAttributes(HTMLAttributes, { type: 'group' }), 0]
   },
 
   addCommands() {
     return {
-      setMap:
+      setGroup:
         (options) =>
         ({ commands }) => {
           return commands.insertContent({
@@ -49,6 +38,6 @@ export default Node.create({
   },
 
   addNodeView() {
-    return VueNodeViewRenderer(MapView)
+    return VueNodeViewRenderer(GroupView)
   },
 })
