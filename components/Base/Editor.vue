@@ -73,6 +73,36 @@
         </template>
       </BasePopover>
 
+      <BasePopover
+        :options="{
+          placement: 'top-start',
+          offset: [-41, 10],
+          theme: 'base',
+        }"
+      >
+        <button class="menu-button ri-font-color"></button>
+
+        <template #content>
+          <div class="bubble-menu">
+            <button
+              class="menu-button ri-slash-commands-2 text-lg"
+              @click="editor.chain().focus().unsetColor().run()"
+            ></button>
+
+            <button
+              v-for="menu in colorMenus"
+              class="menu-button flex items-center justify-center"
+              @click="menu.command(editor, menu.color)"
+            >
+              <div
+                class="h-4 w-4 rounded-sm"
+                :style="{ background: menu.color }"
+              ></div>
+            </button>
+          </div>
+        </template>
+      </BasePopover>
+
       <button
         v-for="menu in bubbleMenus"
         class="menu-button"
@@ -180,21 +210,22 @@ import TableRow from '@tiptap/extension-table-row'
 import Placeholder from '@tiptap/extension-placeholder'
 import Link from '@tiptap/extension-link'
 import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight'
-import Media from '@/extensions/media'
-import Map from '@/extensions/map'
-import Group from '@/extensions/group'
+import { common, createLowlight } from 'lowlight'
+import TextStyle from '@tiptap/extension-text-style'
+import { Color } from '@tiptap/extension-color'
+import Media from '~/extensions/media'
+import Map from '~/extensions/map'
+import Group from '~/extensions/group'
 
 import {
   floatingMenus,
   bubbleMenus,
   textMenus,
   tableMenus,
-} from '@/utils/editor-menus'
-
-import { common, createLowlight } from 'lowlight'
+  colorMenus,
+} from '~/utils/editor-menus'
 
 import { useOverlay } from '~/stores/overlay'
-
 import PostAiContent from '~/components/Post/AiContent.vue'
 
 const props = defineProps({
@@ -233,6 +264,8 @@ const editor = useEditor({
     CodeBlockLowlight.configure({
       lowlight: createLowlight(common),
     }),
+    TextStyle,
+    Color,
     Media,
     Map,
     Group,

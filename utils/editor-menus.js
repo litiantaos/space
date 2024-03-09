@@ -135,14 +135,6 @@ export const textMenus = [
     attrs: {},
   },
   {
-    icon: 'ri-italic',
-    command: (editor) => {
-      editor.chain().focus().toggleItalic().run()
-    },
-    title: 'italic',
-    attrs: {},
-  },
-  {
     icon: 'ri-strikethrough',
     command: (editor) => {
       editor.chain().focus().toggleStrike().run()
@@ -150,9 +142,6 @@ export const textMenus = [
     title: 'strike',
     attrs: {},
   },
-]
-
-export const bubbleMenus = [
   {
     icon: 'ri-code-s-slash-line',
     command: (editor) => {
@@ -161,14 +150,9 @@ export const bubbleMenus = [
     title: 'code',
     attrs: {},
   },
-  {
-    icon: 'ri-code-box-line',
-    command: (editor) => {
-      editor.chain().focus().toggleCodeBlock().run()
-    },
-    title: 'codeBlock',
-    attrs: {},
-  },
+]
+
+export const bubbleMenus = [
   {
     icon: 'ri-quote-text',
     command: (editor) => {
@@ -250,6 +234,51 @@ export const tableMenus = [
     icon: 'ri-merge-cells-horizontal',
     command: (editor) => {
       editor.chain().focus().mergeOrSplit().run()
+    },
+  },
+]
+
+export const colorMenus = [
+  {
+    color: 'rgba(160, 160, 160, 1)',
+    command: (editor, color) => {
+      editor.chain().focus().setColor(color).run()
+    },
+  },
+  {
+    color: 'rgba(212, 76, 71, 1)',
+    command: (editor, color) => {
+      editor.chain().focus().setColor(color).run()
+    },
+  },
+  {
+    color: 'rgba(217, 115, 13, 1)',
+    command: (editor, color) => {
+      editor.chain().focus().setColor(color).run()
+    },
+  },
+  {
+    color: 'rgba(203, 145, 47, 1)',
+    command: (editor, color) => {
+      editor.chain().focus().setColor(color).run()
+    },
+  },
+  {
+    color: 'rgba(68, 131, 97, 1)',
+    command: (editor, color) => {
+      editor.chain().focus().setColor(color).run()
+    },
+  },
+  {
+    color: 'rgba(51, 126, 169, 1)',
+    command: (editor, color) => {
+      editor.chain().focus().setColor(color).run()
+    },
+  },
+  {
+    color: 'rgba(144, 101, 176, 1)',
+    command: (editor, color) => {
+      editor.chain().focus().setColor(color).run()
     },
   },
 ]

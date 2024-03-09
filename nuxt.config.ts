@@ -44,10 +44,9 @@ export default defineNuxtConfig({
   sitemap: {
     sources: ['/api/sitemap/urls'],
     autoLastmod: true,
-    exclude: ['/login/**', '/profile/**', '/search/**'],
   },
   robots: {
-    disallow: ['/login', '/profile', '/search'],
+    disallow: ['/login', '/profile', '/search', '/tag'],
     sitemap: ['/sitemap.xml'],
     credits: false,
   },
