@@ -72,7 +72,7 @@
 
     <div v-if="tags?.length" class="flex items-center gap-2">
       <NuxtLink
-        class="tag bg-slate-100/85 transition-all active:bg-slate-200"
+        class="tag bg-slate-100 text-gray-500 active:bg-slate-200"
         v-for="tag in tags"
         :to="`/tag/${tag.id}`"
       >

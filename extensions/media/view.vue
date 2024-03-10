@@ -177,7 +177,7 @@ const uploadFile = async (e) => {
 }
 
 // Tus
-const uploadToSupabaseWithTus = async (file, path, bucket = 'space') => {
+const uploadToSupabaseWithTus = async (file, path, bucket = 'main') => {
   const tus = await import('tus-js-client')
 
   const options = await uploadToSupabaseOptions(path)

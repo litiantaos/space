@@ -30,7 +30,7 @@ input {
 }
 
 .tag {
-  @apply flex-none select-none rounded-md px-3 text-xs leading-7 text-gray-500;
+  @apply flex-none select-none rounded-md px-3 text-xs leading-7 transition-all duration-300;
 }
 
 /* Move Up */

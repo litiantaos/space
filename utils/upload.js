@@ -2,7 +2,7 @@
 export const uploadToSupabase = async (
   file,
   path,
-  bucket = 'space',
+  bucket = 'main',
   options = {},
 ) => {
   const client = useSupabaseClient()
@@ -27,7 +27,7 @@ export const uploadToSupabase = async (
 }
 
 // Supabase Tus Options
-export const uploadToSupabaseOptions = async (path, bucket = 'space') => {
+export const uploadToSupabaseOptions = async (path, bucket = 'main') => {
   const client = useSupabaseClient()
   const config = useRuntimeConfig()
 

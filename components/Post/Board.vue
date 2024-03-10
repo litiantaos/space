@@ -17,7 +17,25 @@
           class="h-[calc(100%-200px)] w-full"
         />
 
-        <PostBoardTag @checked="getCheckedTags" />
+        <Transition name="fade">
+          <div
+            v-if="tags"
+            class="no-scrollbar my-3 flex items-center gap-2 overflow-x-auto"
+          >
+            <button
+              v-for="(tag, idx) in tags"
+              class="tag"
+              :class="
+                tag.checked
+                  ? 'bg-slate-400 text-white'
+                  : 'bg-slate-100 text-gray-500'
+              "
+              @click="checkTag(idx)"
+            >
+              {{ tag.name }}
+            </button>
+          </div>
+        </Transition>
 
         <button
           v-if="user"
@@ -53,6 +71,7 @@ watch(
     if (newVal1) {
       editorContent.value = newVal1.content
       isEdit.value = true
+      matchCheckedTags()
     }
 
     if (newVal2) {
@@ -61,17 +80,33 @@ watch(
   },
 )
 
-// Tags
+// Get All Tags
 const tags = ref(null)
 
-const getCheckedTags = (e) => {
-  tags.value = e
+const { data: tagsRes } = await client.from('tags').select('id, name')
+
+const initTags = () => {
+  tags.value = tagsRes.map((item) => ({
+    ...item,
+    checked: false,
+  }))
+}
+
+initTags()
+
+// Check Tag
+const checkedTags = ref(null)
+
+const checkTag = (index) => {
+  tags.value[index].checked = !tags.value[index].checked
+
+  checkedTags.value = tags.value.filter((tag) => tag.checked)
 }
 
 const upsertTags = async (id) => {
   let upsert
 
-  upsert = tags.value.map((tag) => {
+  upsert = checkedTags.value.map((tag) => {
     return {
       post_id: id,
       tag_id: tag.id,
@@ -83,6 +118,22 @@ const upsertTags = async (id) => {
   const { data } = await client.from('posts_tags').upsert(upsert).select()
 }
 
+// Edit Post: Match Checked Tags
+const matchCheckedTags = () => {
+  const postTags = store.editablePost.tags
+
+  if (postTags?.length) {
+    checkedTags.value = postTags
+
+    tags.value = tags.value.map((tag) => ({
+      id: tag.id,
+      name: tag.name,
+      checked: postTags.some((postTag) => postTag.id === tag.id),
+    }))
+  }
+}
+
+// Profile
 const profile = ref(null)
 
 onMounted(() => {
@@ -122,7 +173,7 @@ const upsertPost = async () => {
   try {
     const { data } = await client.from('posts').upsert(upsert).select().single()
 
-    if (tags.value) {
+    if (checkedTags.value) {
       await upsertTags(data.id)
     }
 
@@ -172,6 +223,8 @@ const closeBoard = () => {
   editorContent.value = null
   store.editablePost = null
   store.editorContent = null
+
+  initTags()
 }
 </script>
 
