@@ -1,6 +1,6 @@
 <template>
   <div class="w-full">
-    <div class="sticky top-16 z-10 bg-white py-4">
+    <div class="c-bg-page sticky top-16 z-10 py-4">
       <BaseInput
         type="text"
         placeholder="搜索"

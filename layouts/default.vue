@@ -1,8 +1,8 @@
 <template>
   <div>
-    <div class="sticky top-0 z-10 w-full select-none bg-white p-4">
+    <div class="c-bg-page sticky top-0 z-10 w-full select-none p-4">
       <div
-        class="mx-auto max-w-3xl cursor-pointer text-center text-2xl"
+        class="c-text-base mx-auto max-w-3xl cursor-pointer text-center text-2xl"
         @click="goHome"
       >
         <span class="text-blue-500">TEO</span>

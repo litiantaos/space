@@ -35,11 +35,17 @@ export const getAMapLocation = async (AMap) => {
 }
 
 export const setAMap = async (AMap, center, id) => {
+  const isDarkMode = ref(
+    window.matchMedia('(prefers-color-scheme: dark)').matches,
+  )
+
   return await new AMap.Map(id, {
     viewMode: '2D',
     zoom: 12,
     center,
-    mapStyle: 'amap://styles/whitesmoke',
+    mapStyle: isDarkMode.value
+      ? 'amap://styles/grey'
+      : 'amap://styles/whitesmoke',
     scrollWheel: false,
     doubleClickZoom: false,
     dragEnable: false,

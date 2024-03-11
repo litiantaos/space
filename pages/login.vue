@@ -1,6 +1,6 @@
 <template>
   <div class="mt-10 flex w-full flex-col gap-6 sm:w-72">
-    <button class="w-fit text-xl font-bold" @click="toggle">
+    <button class="c-text-base w-fit text-xl font-bold" @click="toggle">
       {{ isSignIn ? '登录' : '注册' }}
     </button>
 

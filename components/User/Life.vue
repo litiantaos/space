@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col gap-5">
     <div class="flex items-end gap-2 text-sm text-slate-400">
-      <div class="text-gray-500">
+      <div class="c-text-base">
         <div>{{ daysDiff }}</div>
         <div>{{ monthsDiff }}</div>
       </div>
@@ -11,7 +11,7 @@
         <div>MONTHS</div>
       </div>
 
-      <div class="ml-1 text-[44px] leading-10 text-gray-500">90</div>
+      <div class="c-text-base ml-1 text-[44px] leading-10">90</div>
 
       <div>YEARS</div>
 
@@ -32,8 +32,8 @@
           groupedPosts[toDate(num)]
             ? 'bg-emerald-300/80'
             : num <= monthsDiff
-              ? 'bg-blue-200'
-              : 'bg-slate-100'
+              ? 'bg-blue-200 dark:bg-sky-700'
+              : 'bg-slate-100 dark:bg-slate-700'
         "
         :style="{ 'grid-row-start': num === 1 ? birthdayMonth : 'unset' }"
         @click="checkDate(num)"

@@ -1,6 +1,6 @@
 .html-style,
 .tiptap {
-  @apply flex flex-col gap-4 text-sm text-gray-600;
+  @apply c-text-base flex flex-col gap-4 text-sm;
 
   h1 {
     @apply mt-3 text-3xl font-bold;
@@ -19,11 +19,11 @@
   }
 
   code {
-    @apply rounded bg-slate-100 px-1.5 py-1 font-mono text-xs;
+    @apply c-bg-el rounded px-1.5 py-1 font-mono text-xs;
   }
 
   pre {
-    @apply overflow-x-auto rounded-md bg-slate-100 p-4 font-mono;
+    @apply c-bg-el flex-none overflow-x-auto rounded-md p-4 font-mono;
     white-space: pre !important;
 
     &::-webkit-scrollbar {
@@ -36,7 +36,7 @@
   }
 
   blockquote {
-    @apply border-l-2 pl-3;
+    @apply border-l-2 pl-3 dark:border-slate-700;
 
     p {
       @apply p-0;
@@ -44,15 +44,15 @@
   }
 
   hr {
-    @apply my-5;
+    @apply my-5 border-t dark:border-slate-700;
   }
 
   ul,
   ol {
-    @apply pl-7;
+    @apply pl-6;
 
     p {
-      @apply ml-1 p-0;
+      @apply ml-1;
     }
   }
 
@@ -65,7 +65,7 @@
   }
 
   ul[data-type='taskList'] {
-    @apply list-none pl-[11px];
+    @apply list-none pl-2;
 
     li {
       @apply flex;
@@ -78,6 +78,10 @@
         @apply flex-auto;
       }
     }
+
+    input[type='checkbox'] {
+      background: rgb(30, 41, 59) !important;
+    }
   }
 
   ol {
@@ -86,7 +90,7 @@
 
   img,
   video {
-    @apply h-auto max-w-full rounded-md bg-slate-100;
+    @apply c-bg-el h-auto max-w-full rounded-md;
 
     &[align='center'] {
       @apply mx-auto;
@@ -100,20 +104,20 @@
       content: '\ea6c';
       font-family: 'remixicon';
 
-      @apply ml-1 inline-block text-slate-400;
+      @apply c-text-base ml-1 inline-block;
     }
   }
 
   table {
-    @apply w-full table-fixed border-separate border-spacing-0 overflow-hidden rounded-md border text-sm;
+    @apply c-border-el w-full table-fixed border-separate border-spacing-0 overflow-hidden rounded-md text-sm;
 
     td,
     th {
-      @apply relative box-border border-r px-3 py-2 align-middle last:border-r-0;
+      @apply relative box-border border-r px-3 py-2 align-middle last:border-r-0 dark:border-slate-700;
     }
 
     th {
-      @apply bg-slate-50 text-left font-bold;
+      @apply c-bg-el text-left font-bold;
     }
 
     td {
@@ -130,11 +134,11 @@
   }
 
   div[location] {
-    @apply pointer-events-none h-80 w-full rounded-md bg-slate-100 text-gray-500;
+    @apply c-bg-el pointer-events-none h-80 w-full rounded-md;
   }
 
   div[address] {
-    @apply absolute bottom-2 left-2 h-fit max-w-[calc(100%-16px)] rounded-md bg-white/60 px-3 py-1.5 text-justify text-xs text-gray-500 backdrop-blur-md;
+    @apply c-bg-page-opacity c-text-base absolute bottom-2 left-2 h-fit max-w-[calc(100%-16px)] rounded-md px-3 py-1.5 text-justify text-xs backdrop-blur-md;
   }
 
   div[type='group'] {

@@ -2,7 +2,7 @@
   <Transition name="board-up">
     <div
       v-if="store.boardShow"
-      class="fixed bottom-0 left-0 right-0 z-20 h-[calc(100vh-64px)] bg-white"
+      class="c-bg-page fixed bottom-0 left-0 right-0 z-20 h-[calc(100vh-64px)]"
     >
       <div
         class="mx-auto flex h-full max-w-3xl flex-col items-center gap-4 p-4"
@@ -26,9 +26,7 @@
               v-for="(tag, idx) in tags"
               class="tag"
               :class="
-                tag.checked
-                  ? 'bg-slate-400 text-white'
-                  : 'bg-slate-100 text-gray-500'
+                tag.checked ? 'c-text-base c-bg-el-2' : 'c-text-base c-bg-el'
               "
               @click="checkTag(idx)"
             >
@@ -37,11 +35,7 @@
           </div>
         </Transition>
 
-        <button
-          v-if="user"
-          @click="submit"
-          class="h-12 w-12 overflow-hidden rounded-full bg-slate-200 text-xl text-slate-500 transition-all duration-300 hover:scale-110 hover:bg-slate-500 hover:text-slate-200"
-        >
+        <button v-if="user" @click="submit" class="btn-circle">
           <div class="ri-rocket-fill" :class="{ bounce: loading }"></div>
         </button>
       </div>

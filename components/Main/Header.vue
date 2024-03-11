@@ -2,7 +2,7 @@
   <ClientOnly>
     <div class="flex justify-center gap-2 transition-all duration-200">
       <button
-        class="flex h-8 items-center gap-3 rounded-full border px-4 text-xs transition-all active:bg-slate-50"
+        class="c-border-el c-text-base c-bg-el-active flex h-8 items-center gap-3 rounded-full px-4 text-xs"
         @click="createPost"
       >
         心有从容，向阳而生
@@ -12,7 +12,7 @@
 
       <NuxtLink
         to="/search"
-        class="ri-donut-chart-line flex h-8 w-8 items-center justify-center rounded-full border text-xl transition-all active:bg-slate-50"
+        class="ri-donut-chart-line c-bg-el-active c-border-el c-text-base flex h-8 w-8 items-center justify-center rounded-full text-xl"
       ></NuxtLink>
     </div>
   </ClientOnly>

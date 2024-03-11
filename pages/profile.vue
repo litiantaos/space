@@ -1,6 +1,6 @@
 <template>
   <div class="mt-10 flex w-full flex-col gap-6 sm:w-72">
-    <div class="text-xl font-bold">个人</div>
+    <div class="c-text-base text-xl font-bold">个人</div>
 
     <BaseAvatar v-model:src="avatar_url" @upload="update" />
 
@@ -17,7 +17,7 @@
     ></BaseInput>
 
     <button
-      class="mx-auto mt-20 h-12 w-12 rounded-full bg-slate-100 text-xl text-slate-500 transition-all active:bg-slate-300"
+      class="btn-circle mx-auto mt-20"
       :class="loading ? 'ri-loader-4-line animate-spin' : 'ri-check-line'"
       @click="update"
     ></button>

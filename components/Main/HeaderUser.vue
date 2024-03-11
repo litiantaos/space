@@ -1,7 +1,7 @@
 <template>
   <div
     v-if="user"
-    class="flex h-8 items-center justify-center gap-3 rounded-full border px-1.5"
+    class="c-border-el c-text-base c-bg-el-active flex h-8 items-center justify-center gap-3 rounded-full px-1.5"
   >
     <NuxtLink
       to="/profile"
@@ -9,7 +9,7 @@
     >
       <img
         :src="profile?.avatar_url || defaultAvatarUrl"
-        class="h-5 w-5 overflow-hidden rounded-full border bg-slate-100 object-cover"
+        class="c-bg-el c-border-el h-5 w-5 overflow-hidden rounded-full object-cover"
       />
       <div class="text-sm">{{ profile?.nickname || defaultNickname }}</div>
     </NuxtLink>
@@ -23,7 +23,7 @@
   <NuxtLink
     v-else
     to="/login"
-    class="ri-user-smile-line flex h-8 w-8 items-center justify-center rounded-full border text-xl transition-all active:bg-slate-50"
+    class="ri-user-smile-line c-border-el c-text-base c-bg-el-active flex h-8 w-8 items-center justify-center rounded-full text-xl"
   ></NuxtLink>
 </template>
 

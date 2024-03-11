@@ -1,7 +1,7 @@
 <template>
   <div class="w-full">
     <div class="flex flex-col gap-5">
-      <h1 v-if="title" class="py-5 text-3xl font-bold text-gray-600">
+      <h1 v-if="title" class="c-text-base py-5 text-3xl font-bold">
         {{ title }}
       </h1>
 
@@ -9,13 +9,12 @@
     </div>
 
     <div class="flex flex-col items-center gap-14 py-14">
-      <button
-        class="ri-chat-new-line h-12 w-12 rounded-full bg-slate-100 text-slate-500 transition-all duration-300 active:scale-110"
-        @click="citePost"
-      ></button>
+      <button class="ri-chat-2-line btn-circle" @click="citePost"></button>
 
       <div v-if="citedPosts?.length" class="flex w-full flex-col gap-10">
-        <div class="border-b py-4 text-lg font-bold text-gray-600">
+        <div
+          class="c-text-base border-b py-4 text-lg font-bold dark:border-slate-700"
+        >
           来自引用
         </div>
 

@@ -7,10 +7,10 @@
       >
         <img
           :src="data.users?.avatar_url || defaultAvatarUrl"
-          class="h-6 w-6 overflow-hidden rounded-full border object-cover"
+          class="c-border-el h-6 w-6 overflow-hidden rounded-full object-cover"
         />
 
-        <div class="text-gray-800">
+        <div class="c-text-base">
           {{ data.users?.nickname || defaultNickname }}
         </div>
 
@@ -72,7 +72,7 @@
 
     <div v-if="tags?.length" class="flex items-center gap-2">
       <NuxtLink
-        class="tag bg-slate-100 text-gray-500 active:bg-slate-200"
+        class="tag c-bg-el c-text-base c-bg-el-active-2"
         v-for="tag in tags"
         :to="`/tag/${tag.id}`"
       >
@@ -92,14 +92,14 @@
 
         <div
           v-if="hidden"
-          class="ri-more-line absolute bottom-0 left-0 right-0 flex h-48 items-end justify-center bg-gradient-to-t from-white to-transparent pb-3 text-xl"
+          class="ri-more-line c-text-base absolute bottom-0 left-0 right-0 flex h-48 items-end justify-center bg-gradient-to-t from-white to-transparent pb-3 text-xl dark:from-slate-900"
         ></div>
       </div>
 
       <NuxtLink
         v-if="data.cited_post_id && !hideCitedPost"
         :to="`/post/${data.cited_post_id}`"
-        class="flex h-8 w-fit items-center justify-center gap-3 rounded-md bg-gray-100 px-2 text-xs"
+        class="c-bg-el c-text-base c-bg-el-active-2 flex h-8 w-fit items-center justify-center gap-3 rounded-md px-3 text-xs"
       >
         引用原文
         <div class="ri-arrow-right-line text-sm"></div>
@@ -371,9 +371,3 @@ const capture = async () => {
   hideAll()
 }
 </script>
-
-<style>
-.btn-base {
-  @apply h-8 w-8 rounded active:bg-gray-100;
-}
-</style>

@@ -1,6 +1,6 @@
 <template>
   <NodeViewWrapper
-    class="flex w-full flex-col gap-3 rounded-md border border-dashed bg-white p-3"
+    class="c-border-el c-bg-page flex w-full flex-col gap-3 rounded-md border-dashed p-3"
     draggable="true"
     data-drag-handle
   >

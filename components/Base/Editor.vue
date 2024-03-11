@@ -118,7 +118,7 @@
       <BasePopover
         :options="{
           placement: 'top-end',
-          offset: [5, 10],
+          offset: [41, 10],
         }"
       >
         <button
@@ -371,7 +371,7 @@ const askAi = (model) => {
 }
 
 .menu-button {
-  @apply h-8 w-8 rounded active:bg-gray-100;
+  @apply c-bg-el-active c-text-base h-8 w-8 rounded;
 
   &.active {
     @apply font-bold text-blue-500;

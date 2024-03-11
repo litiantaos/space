@@ -1,7 +1,7 @@
 <template>
   <button
     @click="chooseFile"
-    class="relative h-20 w-20 overflow-hidden rounded-md border"
+    class="c-border-el relative h-20 w-20 overflow-hidden rounded-md"
   >
     <img
       :src="src || defaultAvatarUrl"

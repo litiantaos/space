@@ -1,17 +1,28 @@
 @import url('https://fonts.googleapis.com/css2?family=Asap:wght@400;700&display=swap');
+@import url('./color.css');
 @import url('./html.css');
 @import url('./highlight.css');
+@import url('./transition.css');
 @import url('./tippy.css');
 
 html {
+  @apply c-bg-page;
+
   font-family: 'Asap', sans-serif;
 }
 
 input {
-  @apply bg-transparent text-sm focus:outline-none;
+  @apply text-sm focus:outline-none;
+
+  background: transparent !important;
 
   &:-webkit-autofill {
     -webkit-box-shadow: 0 0 0 30px white inset;
+
+    @media (prefers-color-scheme: dark) {
+      -webkit-box-shadow: 0 0 0 30px rgb(30, 41, 59) inset;
+      -webkit-text-fill-color: rgb(209 213 219);
+    }
   }
 
   &[type='password']::-ms-reveal,
@@ -29,93 +40,14 @@ input {
   display: none;
 }
 
+.btn-base {
+  @apply c-bg-el-active c-text-base-2 h-8 w-8 rounded;
+}
+
+.btn-circle {
+  @apply c-text-base-2 c-bg-el c-bg-el-active-2 h-12 w-12 overflow-hidden rounded-full text-xl active:scale-110;
+}
+
 .tag {
-  @apply flex-none select-none rounded-md px-3 text-xs leading-7 transition-all duration-300;
-}
-
-/* Move Up */
-.page-enter-active,
-.page-leave-active {
-  transition:
-    transform 0.3s,
-    opacity 0.3s;
-}
-
-.page-enter-from,
-.page-leave-to {
-  transform: translateY(10px);
-  opacity: 0;
-}
-
-/* Move Up Center */
-.move-up-center-enter-active,
-.move-up-center-leave-active {
-  transition:
-    transform 0.3s,
-    opacity 0.3s;
-}
-
-.move-up-center-enter-from,
-.move-up-center-leave-to {
-  transform: translate(-50%, 10px);
-  opacity: 0;
-}
-
-/* Move Left */
-.move-left-enter-active,
-.move-left-leave-active {
-  transition:
-    transform 0.2s,
-    opacity 0.2s;
-}
-
-.move-left-enter-from,
-.move-left-leave-to {
-  transform: translateX(10px);
-  opacity: 0;
-}
-
-/* Fade */
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.3s;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-}
-
-/* List Move Up */
-.list-move-up-move,
-.list-move-up-enter-active,
-.list-move-up-leave-active {
-  transition: all 0.4s;
-}
-
-.list-move-up-enter-from,
-.list-move-up-leave-to {
-  opacity: 0;
-  transform: translateY(20px);
-}
-
-.list-move-up-leave-active {
-  position: absolute;
-}
-
-/* List Move Left */
-.list-move-left-move,
-.list-move-left-enter-active,
-.list-move-left-leave-active {
-  transition: all 0.4s;
-}
-
-.list-move-left-enter-from,
-.list-move-left-leave-to {
-  opacity: 0;
-  transform: translateX(20px);
-}
-
-.list-move-left-leave-active {
-  position: absolute;
+  @apply flex-none select-none rounded-md px-3 text-xs leading-7;
 }

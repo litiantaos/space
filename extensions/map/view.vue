@@ -1,10 +1,7 @@
 <template>
   <NodeViewWrapper>
     <div class="relative my-2 w-full overflow-hidden">
-      <div
-        :id="mapId"
-        class="h-80 w-full rounded-md bg-slate-100 text-gray-500"
-      ></div>
+      <div :id="mapId" class="c-bg-el c-text-base h-80 w-full rounded-md"></div>
 
       <div v-if="address" address="">{{ address }}</div>
 
@@ -25,20 +22,20 @@
         <Transition name="page">
           <div
             v-if="pois"
-            class="no-scrollbar flex w-full flex-1 flex-col overflow-y-auto overflow-x-hidden rounded-md border bg-white"
+            class="no-scrollbar c-border-el c-bg-page flex w-full flex-1 flex-col overflow-y-auto overflow-x-hidden rounded-md"
           >
             <TransitionGroup name="list-move-up">
               <button
                 v-for="poi in pois"
                 :key="poi.id"
-                class="flex-none whitespace-nowrap p-2 text-left transition-all active:bg-slate-50"
+                class="c-bg-el-active flex-none whitespace-nowrap p-2 text-left"
                 @click="checkPlace(poi.location)"
               >
                 <div class="overflow-hidden text-ellipsis text-sm">
                   {{ poi.name }}
                 </div>
                 <div
-                  class="overflow-hidden text-ellipsis text-xs text-gray-400"
+                  class="c-text-base-2 overflow-hidden text-ellipsis text-xs"
                 >
                   {{ poi.address }}
                 </div>
@@ -46,7 +43,7 @@
 
               <div
                 v-if="poisPage <= poisTotalPage"
-                class="flex flex-none items-center justify-center p-2 text-xl text-gray-400"
+                class="c-text-base-2 flex flex-none items-center justify-center p-2 text-xl"
                 key="more"
               >
                 <button

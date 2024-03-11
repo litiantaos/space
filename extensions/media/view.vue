@@ -3,7 +3,7 @@
     <div v-if="!src" class="flex w-full gap-2 sm:w-96">
       <button
         @click="chooseFile"
-        class="flex h-10 w-20 items-center justify-center rounded-md border bg-white text-xl text-gray-600 transition-all active:bg-slate-50"
+        class="c-text-base c-border-el c-bg-page c-bg-el-active flex h-10 w-20 items-center justify-center rounded-md text-xl"
       >
         <div
           :class="
@@ -35,33 +35,33 @@
       v-else
       :style="{ width: attrs.width }"
       :class="{ 'mx-auto': attrs.align === 'center' }"
-      class="group relative overflow-hidden rounded-md bg-slate-100 transition-[width] duration-300"
+      class="c-bg-el group relative overflow-hidden rounded-md transition-[width] duration-300"
     >
       <img v-if="isImg" :src="src" alt="image" class="w-full" />
 
       <video v-else :src="src" class="w-full" controls></video>
 
       <div
-        class="absolute right-2 top-2 flex overflow-hidden rounded border bg-white opacity-0 transition-opacity group-hover:opacity-90"
+        class="c-bg-el absolute right-2 top-2 flex overflow-hidden rounded border opacity-0 transition-opacity group-hover:opacity-90"
       >
         <button
-          class="ri-layout-column-fill h-8 w-8 active:bg-slate-100"
+          class="ri-layout-column-fill c-bg-el-active-2 h-8 w-8"
           @click="() => updateAttributes({ align: 'left' })"
         ></button>
         <button
-          class="ri-layout-column-line h-8 w-8 active:bg-slate-100"
+          class="ri-layout-column-line c-bg-el-active-2 h-8 w-8"
           @click="() => updateAttributes({ align: 'center' })"
         ></button>
         <button
-          class="ri-checkbox-indeterminate-line h-8 w-8 active:bg-slate-100"
+          class="ri-checkbox-indeterminate-line c-bg-el-active-2 h-8 w-8"
           @click="() => updateAttributes({ width: '30%' })"
         ></button>
         <button
-          class="ri-checkbox-blank-line h-8 w-8 active:bg-slate-100"
+          class="ri-checkbox-blank-line c-bg-el-active-2 h-8 w-8"
           @click="() => updateAttributes({ width: '60%' })"
         ></button>
         <button
-          class="ri-add-box-line h-8 w-8 active:bg-slate-100"
+          class="ri-add-box-line c-bg-el-active-2 h-8 w-8"
           @click="() => updateAttributes({ width: '100%' })"
         ></button>
       </div>
@@ -224,6 +224,8 @@ const inputValue = ref('')
 
 const submit = () => {
   if (!inputValue.value) return
+
+  src.value = inputValue.value
 
   props.updateAttributes({
     src: inputValue.value,

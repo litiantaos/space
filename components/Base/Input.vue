@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex h-10 items-center overflow-hidden rounded-md border bg-white text-gray-600"
+    class="c-border-el c-bg-page c-text-base c-text-base flex h-10 items-center overflow-hidden rounded-md"
   >
     <input
       ref="inputRef"

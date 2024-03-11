@@ -1,5 +1,5 @@
 <template>
-  <div class="flex w-full flex-col gap-10 pb-10">
+  <div class="c-text-base flex w-full flex-col gap-10 pb-10">
     <div v-if="profile">
       <div class="flex items-center gap-4">
         <img

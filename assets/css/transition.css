@@ -1,0 +1,86 @@
+/* Move Up */
+.page-enter-active,
+.page-leave-active {
+  transition:
+    transform 0.3s,
+    opacity 0.3s;
+}
+
+.page-enter-from,
+.page-leave-to {
+  transform: translateY(10px);
+  opacity: 0;
+}
+
+/* Move Up Center */
+.move-up-center-enter-active,
+.move-up-center-leave-active {
+  transition:
+    transform 0.3s,
+    opacity 0.3s;
+}
+
+.move-up-center-enter-from,
+.move-up-center-leave-to {
+  transform: translate(-50%, 10px);
+  opacity: 0;
+}
+
+/* Move Left */
+.move-left-enter-active,
+.move-left-leave-active {
+  transition:
+    transform 0.2s,
+    opacity 0.2s;
+}
+
+.move-left-enter-from,
+.move-left-leave-to {
+  transform: translateX(10px);
+  opacity: 0;
+}
+
+/* Fade */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+/* List Move Up */
+.list-move-up-move,
+.list-move-up-enter-active,
+.list-move-up-leave-active {
+  transition: all 0.4s;
+}
+
+.list-move-up-enter-from,
+.list-move-up-leave-to {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.list-move-up-leave-active {
+  position: absolute;
+}
+
+/* List Move Left */
+.list-move-left-move,
+.list-move-left-enter-active,
+.list-move-left-leave-active {
+  transition: all 0.4s;
+}
+
+.list-move-left-enter-from,
+.list-move-left-leave-to {
+  opacity: 0;
+  transform: translateX(20px);
+}
+
+.list-move-left-leave-active {
+  position: absolute;
+}
