@@ -5,6 +5,8 @@
 @import url('./transition.css');
 @import url('./tippy.css');
 
+@tailwind utilities;
+
 html {
   @apply c-bg-page;
 

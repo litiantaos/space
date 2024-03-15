@@ -63,13 +63,9 @@ if (store.localPost) {
 const citedPosts = ref(null)
 
 const getCitedPosts = async () => {
-  const { data } = await client
-    .from('posts')
-    .select('*, users(id, user_id, nickname, avatar_url)')
-    .eq('cited_post_id', post.value.id)
-    .order('created_at', { ascending: false })
-
-  citedPosts.value = data
+  citedPosts.value = await store.getPosts({
+    cite: ['cited_post_id', post.value.id],
+  })
 
   pageLoading.value = false
 }

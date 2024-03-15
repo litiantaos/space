@@ -20,7 +20,7 @@
         <Transition name="fade">
           <div
             v-if="tags"
-            class="no-scrollbar my-3 flex items-center gap-2 overflow-x-auto"
+            class="no-scrollbar flex items-center gap-2 overflow-x-auto"
           >
             <button
               v-for="(tag, idx) in tags"
@@ -35,7 +35,22 @@
           </div>
         </Transition>
 
-        <button v-if="user" @click="submit" class="btn-circle">
+        <div
+          v-if="isCite"
+          class="c-text-base-2 mt-3 flex items-center gap-2 text-xs"
+        >
+          <button
+            class="c-border-el-2 flex h-[14px] w-[14px] items-center justify-center rounded-sm"
+            :class="{
+              'after:c-bg-el-2 after:rounded-xs after:block after:h-2 after:w-2':
+                citeAsComment,
+            }"
+            @click="() => (citeAsComment = !citeAsComment)"
+          ></button>
+          <div>只作为回帖</div>
+        </div>
+
+        <button v-if="user" @click="submit" class="btn-circle mt-3">
           <div class="ri-rocket-fill" :class="{ bounce: loading }"></div>
         </button>
       </div>
@@ -56,20 +71,25 @@ const loading = ref(false)
 
 const emit = defineEmits(['cited', 'edited'])
 
-// Watch Edit
+// Watch
 const isEdit = ref(false)
+const isCite = ref(false)
 
 watch(
-  () => [store.editablePost, store.editorContent],
-  ([newVal1, newVal2]) => {
+  () => [store.editorContent, store.editablePost, store.citedPostId],
+  ([newVal1, newVal2, newVal3]) => {
     if (newVal1) {
-      editorContent.value = newVal1.content
-      isEdit.value = true
-      matchCheckedTags()
+      editorContent.value = newVal1
     }
 
     if (newVal2) {
-      editorContent.value = newVal2
+      isEdit.value = true
+      editorContent.value = newVal2.content
+      matchCheckedTags()
+    }
+
+    if (newVal3) {
+      isCite.value = true
     }
   },
 )
@@ -135,6 +155,8 @@ onMounted(() => {
 })
 
 // Submit
+const citeAsComment = ref(false)
+
 const submit = throttle(async () => {
   // console.log(editorContent.value)
   // return
@@ -160,8 +182,12 @@ const upsertPost = async () => {
       .from('posts_tags')
       .delete()
       .eq('post_id', store.editablePost.id)
-  } else if (store.citedPostId) {
+  } else if (isCite.value) {
     upsert.cited_post_id = store.citedPostId
+
+    if (citeAsComment.value) {
+      upsert.as_comment = true
+    }
   }
 
   try {

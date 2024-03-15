@@ -62,10 +62,6 @@ const loading = ref(true)
 
 const shot = async () => {
   if (shotRef.value) {
-    await toPng(shotRef.value)
-    await toPng(shotRef.value)
-    await toPng(shotRef.value)
-
     image.value = await toPng(shotRef.value)
 
     setTimeout(() => {

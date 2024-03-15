@@ -19,13 +19,25 @@ export const usePostStore = defineStore('Post', () => {
 
   const editorContent = ref(null)
 
-  const getPosts = async ({ page = 1, ilike = '', inArr = [] } = {}) => {
+  const getPosts = async ({
+    page = 1,
+    ilike = '',
+    inArr = [],
+    cite = [],
+  } = {}) => {
     const from = (page - 1) * pageSize.value
 
     let query = client
       .from('posts')
       .select('*, users(id, user_id, nickname, avatar_url, role)')
-      .neq('is_hidden', true)
+
+    if (cite.length) {
+      query = query.eq(cite[0], cite[1])
+    } else {
+      query = query.neq('as_comment', true)
+    }
+
+    query = query.neq('is_hidden', true)
 
     if (ilike) {
       query = query.ilike('content', `%${ilike}%`)
