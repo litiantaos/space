@@ -1,11 +1,54 @@
 @import url('https://fonts.googleapis.com/css2?family=Asap:wght@400;700&display=swap');
-@import url('./color.css');
-@import url('./html.css');
-@import url('./highlight.css');
 @import url('./transition.css');
-@import url('./tippy.css');
+@import url('./html.css');
+@import url('tippy.js/animations/shift-away.css');
 
+@tailwind base;
+@tailwind components;
 @tailwind utilities;
+
+@layer components {
+  /* Color */
+  .c-bg-page {
+    @apply bg-white dark:bg-slate-900;
+  }
+
+  .c-bg-page-opacity {
+    @apply bg-white/75 dark:bg-slate-900/75;
+  }
+
+  .c-bg-el {
+    @apply bg-slate-100 dark:bg-slate-800;
+  }
+
+  .c-bg-el-2 {
+    @apply bg-slate-200 dark:bg-slate-700;
+  }
+
+  .c-bg-el-active {
+    @apply transition-all duration-200 active:bg-slate-100 dark:active:bg-slate-800;
+  }
+
+  .c-bg-el-active-2 {
+    @apply transition-all duration-200 active:bg-slate-200 dark:active:bg-slate-700;
+  }
+
+  .c-border-el {
+    @apply border dark:border-slate-700;
+  }
+
+  .c-border-el-2 {
+    @apply border border-slate-300 dark:border-slate-600;
+  }
+
+  .c-text-base {
+    @apply text-gray-600 dark:text-gray-300;
+  }
+
+  .c-text-base-2 {
+    @apply text-gray-500 dark:text-gray-400;
+  }
+}
 
 html {
   @apply c-bg-page;
@@ -14,9 +57,7 @@ html {
 }
 
 input {
-  @apply text-sm focus:outline-none;
-
-  background: transparent !important;
+  @apply bg-transparent text-sm focus:outline-none !important;
 
   &:-webkit-autofill {
     -webkit-box-shadow: 0 0 0 30px white inset;
@@ -43,7 +84,11 @@ input {
 }
 
 .btn-base {
-  @apply c-bg-el-active c-text-base-2 h-8 w-8 rounded;
+  @apply c-bg-el-active c-text-base h-8 w-8 rounded;
+
+  &.active {
+    @apply font-bold text-blue-500;
+  }
 }
 
 .btn-circle {
@@ -52,4 +97,8 @@ input {
 
 .tag {
   @apply flex-none select-none rounded-md px-3 text-xs leading-7;
+}
+
+.popover-base {
+  @apply c-bg-page c-border-el rounded-md p-1;
 }

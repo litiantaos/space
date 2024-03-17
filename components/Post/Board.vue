@@ -17,37 +17,31 @@
           class="h-[calc(100%-200px)] w-full"
         />
 
-        <Transition name="fade">
-          <div
-            v-if="tags"
-            class="no-scrollbar flex items-center gap-2 overflow-x-auto"
-          >
+        <div class="no-scrollbar flex items-center gap-2 overflow-x-auto">
+          <div v-if="isCite" class="flex flex-none items-center gap-2">
             <button
-              v-for="(tag, idx) in tags"
               class="tag"
               :class="
-                tag.checked ? 'c-text-base c-bg-el-2' : 'c-text-base c-bg-el'
+                citeAsComment ? 'c-text-base c-bg-el-2' : 'c-text-base c-bg-el'
               "
-              @click="checkTag(idx)"
+              @click="() => (citeAsComment = !citeAsComment)"
             >
-              {{ tag.name }}
+              仅回帖
             </button>
-          </div>
-        </Transition>
 
-        <div
-          v-if="isCite"
-          class="c-text-base-2 mt-3 flex items-center gap-2 text-xs"
-        >
+            <div class="c-bg-el-2 mx-1 h-5 w-px"></div>
+          </div>
+
           <button
-            class="c-border-el-2 flex h-[14px] w-[14px] items-center justify-center rounded-sm"
-            :class="{
-              'after:c-bg-el-2 after:rounded-xs after:block after:h-2 after:w-2':
-                citeAsComment,
-            }"
-            @click="() => (citeAsComment = !citeAsComment)"
-          ></button>
-          <div>只作为回帖</div>
+            v-for="(tag, idx) in tags"
+            class="tag"
+            :class="
+              tag.checked ? 'c-text-base c-bg-el-2' : 'c-text-base c-bg-el'
+            "
+            @click="checkTag(idx)"
+          >
+            {{ tag.name }}
+          </button>
         </div>
 
         <button v-if="user" @click="submit" class="btn-circle mt-3">
@@ -76,19 +70,30 @@ const isEdit = ref(false)
 const isCite = ref(false)
 
 watch(
-  () => [store.editorContent, store.editablePost, store.citedPostId],
-  ([newVal1, newVal2, newVal3]) => {
-    if (newVal1) {
-      editorContent.value = newVal1
+  () => [
+    store.boardShow,
+    store.editorContent,
+    store.editablePost,
+    store.citedPostId,
+  ],
+  ([newBoardShow, newEditorContent, newEditablePost, newCitedPostId]) => {
+    if (newBoardShow) {
+      document.body.style.overflow = 'hidden'
+    } else if (!newBoardShow) {
+      document.body.style.overflow = ''
     }
 
-    if (newVal2) {
+    if (newEditorContent) {
+      editorContent.value = newEditorContent
+    }
+
+    if (newEditablePost) {
       isEdit.value = true
-      editorContent.value = newVal2.content
+      editorContent.value = newEditablePost.content
       matchCheckedTags()
     }
 
-    if (newVal3) {
+    if (newCitedPostId) {
       isCite.value = true
     }
   },

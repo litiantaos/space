@@ -10,8 +10,8 @@
       <BasePopover
         :options="{
           placement: 'bottom-start',
-          theme: 'base',
         }"
+        :theme="true"
       >
         <button
           class="ri-sparkling-line text-xl text-slate-400 transition-all active:text-slate-300"
@@ -21,13 +21,13 @@
           <div class="grid w-max grid-cols-5 gap-1">
             <button
               v-for="menu in floatingMenus"
-              class="menu-button"
+              class="btn-base"
               :class="menu.icon"
               @click="menu.command(editor)"
             ></button>
 
             <button
-              class="menu-button ri-infinity-line"
+              class="btn-base ri-infinity-line"
               @click="askAi('gemini')"
             ></button>
           </div>
@@ -37,30 +37,30 @@
 
     <BubbleMenu
       v-if="editor"
+      v-show="!editor.isActive('Media')"
       :editor="editor"
       :tippy-options="{
         animation: 'shift-away',
         duration: 200,
         placement: 'top-start',
-        theme: 'base',
       }"
-      class="bubble-menu"
+      class="bubble-menu popover-base"
       plugin-key="bubbleMenu"
     >
       <BasePopover
         :options="{
           placement: 'top-start',
           offset: [-5, 10],
-          theme: 'base',
         }"
+        :theme="true"
       >
-        <button class="menu-button ri-text"></button>
+        <button class="btn-base ri-text"></button>
 
         <template #content>
           <div class="bubble-menu">
             <button
               v-for="menu in textMenus"
-              class="menu-button"
+              class="btn-base"
               :class="[
                 menu.icon,
                 {
@@ -77,21 +77,21 @@
         :options="{
           placement: 'top-start',
           offset: [-41, 10],
-          theme: 'base',
         }"
+        :theme="true"
       >
-        <button class="menu-button ri-font-color"></button>
+        <button class="btn-base ri-font-color"></button>
 
         <template #content>
           <div class="bubble-menu">
             <button
-              class="menu-button ri-slash-commands-2 text-lg"
+              class="btn-base ri-slash-commands-2 text-lg"
               @click="editor.chain().focus().unsetColor().run()"
             ></button>
 
             <button
               v-for="menu in colorMenus"
-              class="menu-button flex items-center justify-center"
+              class="btn-base flex items-center justify-center"
               @click="menu.command(editor, menu.color)"
             >
               <div
@@ -105,7 +105,7 @@
 
       <button
         v-for="menu in bubbleMenus"
-        class="menu-button"
+        class="btn-base"
         :class="[
           menu.icon,
           {
@@ -122,7 +122,7 @@
         }"
       >
         <button
-          class="menu-button ri-link"
+          class="btn-base ri-link"
           :class="{ active: editor.isActive('link') }"
           @click="onLink"
         ></button>
@@ -145,23 +145,23 @@
         :options="{
           placement: 'top-end',
           offset: [5, 10],
-          theme: 'base',
         }"
+        :theme="true"
       >
-        <button class="menu-button ri-infinity-line"></button>
+        <button class="btn-base ri-infinity-line"></button>
 
         <template #content>
           <div class="bubble-menu">
-            <button class="menu-button" @click="runAi('rewrite', 'gemini')">
+            <button class="btn-base" @click="runAi('rewrite', 'gemini')">
               R
             </button>
-            <button class="menu-button" @click="runAi('summarize', 'gemini')">
+            <button class="btn-base" @click="runAi('summarize', 'gemini')">
               S
             </button>
-            <button class="menu-button" @click="runAi('expand', 'gemini')">
+            <button class="btn-base" @click="runAi('expand', 'gemini')">
               E
             </button>
-            <button class="menu-button" @click="runAi('continue', 'gemini')">
+            <button class="btn-base" @click="runAi('continue', 'gemini')">
               C
             </button>
           </div>
@@ -177,14 +177,13 @@
         animation: 'shift-away',
         duration: 200,
         placement: 'top-start',
-        theme: 'base',
       }"
-      class="bubble-menu"
+      class="bubble-menu popover-base"
       plugin-key="tableMenu"
     >
       <button
         v-for="menu in tableMenus"
-        class="menu-button"
+        class="btn-base"
         :class="menu.icon"
         @click="menu.command(editor)"
       ></button>
@@ -277,10 +276,11 @@ const editor = useEditor({
 
 watch(
   () => model.value,
-  (value) => {
-    const isSame = editor.value.getHTML() === value
+  (newModelVal) => {
+    const isSame = editor.value.getHTML() === newModelVal
+
     if (!isSame) {
-      editor.value.commands.setContent(value, false)
+      editor.value.commands.setContent(newModelVal, false)
     }
   },
 )
@@ -368,14 +368,6 @@ const askAi = (model) => {
 
 .bubble-menu {
   @apply flex gap-1;
-}
-
-.menu-button {
-  @apply c-bg-el-active c-text-base h-8 w-8 rounded;
-
-  &.active {
-    @apply font-bold text-blue-500;
-  }
 }
 
 div[data-tippy-root] {

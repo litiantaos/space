@@ -1,5 +1,0 @@
-@import url('tippy.js/animations/shift-away.css');
-
-.tippy-box[data-theme~='base'] {
-  @apply c-bg-page c-border-el rounded-md p-1;
-}

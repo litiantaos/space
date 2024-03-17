@@ -4,7 +4,7 @@
       <slot />
     </div>
 
-    <div ref="content">
+    <div ref="content" :class="theme ? 'popover-base' : ''">
       <slot name="content" />
     </div>
   </div>
@@ -15,6 +15,7 @@ import tippy from 'tippy.js'
 
 const props = defineProps({
   options: Object,
+  theme: Boolean,
 })
 
 const popover = ref(null)

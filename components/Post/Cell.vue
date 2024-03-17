@@ -28,8 +28,8 @@
         <BasePopover
           :options="{
             placement: 'top-end',
-            theme: 'base',
           }"
+          :theme="true"
         >
           <button class="ri-more-line btn-base"></button>
 

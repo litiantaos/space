@@ -106,18 +106,6 @@ const getTitle = (e) => {
   title.value = e
 }
 
-// Scroll Hidden
-watch(
-  () => [store.boardShow, useOverlay().show],
-  ([newVal1, newVal2]) => {
-    if (newVal1 || newVal2) {
-      document.body.style.overflow = 'hidden'
-    } else {
-      document.body.style.overflow = ''
-    }
-  },
-)
-
 // SEO
 let seoTitle = post.value.content.replace(/<\/[^>]+>/g, ' ')
 seoTitle = seoTitle.replace(/<[^>]+>/g, '')
