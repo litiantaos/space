@@ -26,6 +26,9 @@ export default Node.create({
       align: {
         default: 'center',
       },
+      srcs: {
+        default: null,
+      },
     }
   },
 
@@ -47,9 +50,9 @@ export default Node.create({
   },
 
   renderHTML({ HTMLAttributes }) {
-    const { type } = HTMLAttributes
+    const { type, srcs } = HTMLAttributes
 
-    if (type === 'img') {
+    if (type === 'img' && !srcs) {
       return ['img', HTMLAttributes]
     } else if (type === 'video') {
       return [
@@ -57,6 +60,23 @@ export default Node.create({
         mergeAttributes(HTMLAttributes, {
           controls: 'true',
         }),
+      ]
+    } else if (srcs) {
+      let arr = srcs.map((src) => {
+        return [
+          'img',
+          {
+            src,
+          },
+        ]
+      })
+
+      return [
+        'div',
+        {
+          type: 'group',
+        },
+        ...arr,
       ]
     }
   },

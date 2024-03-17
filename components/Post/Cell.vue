@@ -40,7 +40,10 @@
                 @click="capture"
               ></button>
 
-              <div v-if="user && user.id === data.users.user_id">
+              <div
+                v-if="user && user.id === data.users.user_id"
+                class="flex gap-1"
+              >
                 <button
                   v-if="data.users.role === 'admin'"
                   class="btn-base"
@@ -60,7 +63,7 @@
                 ></button>
 
                 <button
-                  class="ri-delete-bin-7-line btn-base text-red-500"
+                  class="ri-delete-bin-7-line c-bg-el-active h-8 w-8 rounded text-red-600"
                   @click="delPost"
                 ></button>
               </div>

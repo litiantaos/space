@@ -1,21 +1,17 @@
 <template>
-  <NodeViewWrapper class="w-fit flex-none" draggable="true" data-drag-handle>
-    <div v-if="!src" class="flex w-full gap-2 sm:w-96">
+  <NodeViewWrapper class="w-full flex-none" draggable="true" data-drag-handle>
+    <div v-if="!files?.length" class="flex w-full gap-2 sm:w-96">
       <button
         @click="chooseFile"
-        class="c-text-base c-border-el c-bg-page c-bg-el-active flex h-10 w-20 items-center justify-center rounded-md text-xl"
+        class="ri-arrow-up-line c-text-base c-border-el c-bg-page c-bg-el-active flex h-10 w-20 items-center justify-center rounded-md text-xl"
       >
-        <div
-          :class="
-            uploading ? 'ri-loader-4-line animate-spin' : 'ri-arrow-up-line'
-          "
-        ></div>
         <input
           ref="fileInputRef"
           type="file"
           :accept="isImg ? 'image/*' : 'video/*'"
+          :multiple="isImg ? true : false"
           hidden
-          @change="uploadFile"
+          @change="getFile"
         />
       </button>
 
@@ -32,14 +28,17 @@
     </div>
 
     <div
-      v-else
+      v-else-if="files.length === 1"
       :style="{ width: attrs.width }"
       :class="{ 'mx-auto': attrs.align === 'center' }"
       class="c-bg-el group relative overflow-hidden rounded-md transition-[width] duration-300"
     >
-      <img v-if="isImg" :src="src" alt="image" class="w-full" />
-
-      <video v-else :src="src" class="w-full" controls></video>
+      <MediaItem
+        class="w-full"
+        :file="files[0]"
+        :type="isImg ? 'img' : 'video'"
+        @upload="onUploaded"
+      />
 
       <div
         class="c-bg-el absolute right-2 top-2 flex overflow-hidden rounded border opacity-0 transition-opacity group-hover:opacity-90"
@@ -65,41 +64,17 @@
           @click="() => updateAttributes({ width: '100%' })"
         ></button>
       </div>
+    </div>
 
-      <Transition name="fade">
-        <div
-          v-if="uploading"
-          class="absolute bottom-2 right-2 flex items-center gap-2 rounded bg-black/30 px-3 py-1 text-white backdrop-blur-md"
-        >
-          <svg width="20" height="20" xmlns="http://www.w3.org/2000/svg">
-            <circle
-              stroke="white"
-              stroke-width="2"
-              fill="none"
-              cx="10"
-              cy="10"
-              r="9"
-            />
-            <circle
-              class="origin-center -rotate-90 transition-[stroke-dasharray]"
-              stroke="white"
-              stroke-width="6"
-              fill="transparent"
-              cx="10"
-              cy="10"
-              r="3"
-              :stroke-dasharray="dasharray"
-            />
-          </svg>
-          <div class="text-base">{{ progress }} %</div>
-        </div>
-      </Transition>
+    <div v-else-if="files.length > 1" type="group">
+      <MediaItem v-for="file in files" :file="file" @upload="onUploaded" />
     </div>
   </NodeViewWrapper>
 </template>
 
 <script setup>
 import { NodeViewWrapper, nodeViewProps } from '@tiptap/vue-3'
+import MediaItem from './item.vue'
 
 const props = defineProps({
   nodeViewProps,
@@ -116,106 +91,34 @@ watch(
 
 const isImg = computed(() => attrs.value.type === 'img')
 
-const src = ref(null)
-
 if (attrs.value.src) {
-  src.value = attrs.value.src
+  files.value = [attrs.value.src]
 }
 
 // Upload File
 const fileInputRef = ref(null)
 
-const uploading = ref(false)
-
-const progress = ref(0)
-
-const circumference = 2 * Math.PI * 3
-
-const dasharray = computed(() => [
-  (circumference / 100) * progress.value,
-  circumference,
-])
+const files = ref(null)
 
 const chooseFile = () => {
-  if (uploading.value) return
-
   fileInputRef.value.click()
 }
 
-const uploadFile = async (e) => {
-  const files = e.target.files
-
+const getFile = async (e) => {
+  files.value = e.target.files
   // console.log(files)
-
-  if (!files || files.length === 0) return
-
-  const file = files[0]
-
-  src.value = URL.createObjectURL(file)
-
-  uploading.value = true
-
-  // return
-
-  const fileExt = splitFileName(file.name)[1]
-  const fileName =
-    splitFileName(file.name)[0] + '_' + Date.now() + '.' + fileExt
-
-  const path = isImg.value
-    ? 'post/images/' + fileName
-    : 'post/videos/' + fileName
-
-  const url = await uploadToSupabaseWithTus(file, path)
-
-  src.value = url
-
-  props.updateAttributes({
-    src: url,
-  })
-
-  uploading.value = false
 }
 
-// Tus
-const uploadToSupabaseWithTus = async (file, path, bucket = 'main') => {
-  const tus = await import('tus-js-client')
+// Get Uploaded Url
+let srcs = []
 
-  const options = await uploadToSupabaseOptions(path)
+const onUploaded = (e) => {
+  srcs.push(e)
 
-  return new Promise(async (resolve, reject) => {
-    const upload = new tus.Upload(file, {
-      ...options,
-      onError: (error) => {
-        reject(error)
-      },
-      onProgress: (bytesUploaded, bytesTotal) => {
-        const percentage = ((bytesUploaded / bytesTotal) * 100).toFixed(2)
+  // console.log(srcs)
 
-        // console.log(bytesUploaded, bytesTotal, percentage + '%')
-
-        progress.value = percentage
-      },
-      onSuccess: () => {
-        const config = useRuntimeConfig()
-
-        const url =
-          config.public.supabaseUrl +
-          '/storage/v1/object/public/' +
-          bucket +
-          '/' +
-          path
-
-        resolve(url)
-      },
-    })
-
-    const previousUploads = await upload.findPreviousUploads()
-
-    if (previousUploads.length) {
-      upload.resumeFromPreviousUpload(previousUploads[0])
-    }
-
-    upload.start()
+  props.updateAttributes({
+    srcs,
   })
 }
 
@@ -225,7 +128,7 @@ const inputValue = ref('')
 const submit = () => {
   if (!inputValue.value) return
 
-  src.value = inputValue.value
+  files.value = [inputValue.value]
 
   props.updateAttributes({
     src: inputValue.value,

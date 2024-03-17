@@ -214,7 +214,6 @@ import TextStyle from '@tiptap/extension-text-style'
 import { Color } from '@tiptap/extension-color'
 import Media from '~/extensions/media'
 import Map from '~/extensions/map'
-import Group from '~/extensions/group'
 
 import {
   floatingMenus,
@@ -267,7 +266,6 @@ const editor = useEditor({
     Color,
     Media,
     Map,
-    Group,
   ],
   onUpdate: () => {
     model.value = editor.value.getHTML()
