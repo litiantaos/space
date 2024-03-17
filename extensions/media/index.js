@@ -66,6 +66,7 @@ export default Node.create({
         return [
           'img',
           {
+            type: 'img',
             src,
           },
         ]

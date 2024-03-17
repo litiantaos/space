@@ -15,7 +15,11 @@
             {{ formatTime(data.created_at) }}
           </div>
 
-          <div v-if="content" v-html="content" class="html-style mt-4"></div>
+          <div
+            v-if="content"
+            v-html="content"
+            class="html-style group-img mt-4"
+          ></div>
 
           <div v-if="data.tags?.length" class="mt-4 flex items-center gap-2">
             <div class="tag bg-slate-100/85" v-for="tag in data.tags">
@@ -62,11 +66,13 @@ const loading = ref(true)
 
 const shot = async () => {
   if (shotRef.value) {
-    image.value = await toPng(shotRef.value)
+    setTimeout(async () => {
+      image.value = await toPng(shotRef.value)
 
-    setTimeout(() => {
-      loading.value = false
-    }, 500)
+      setTimeout(() => {
+        loading.value = false
+      }, 300)
+    }, 300)
   }
 }
 
@@ -140,3 +146,13 @@ onMounted(() => {
   process()
 })
 </script>
+
+<style>
+.group-img {
+  div[type='group'] {
+    img {
+      @apply h-auto w-full;
+    }
+  }
+}
+</style>
