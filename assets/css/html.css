@@ -165,7 +165,7 @@
 
   img,
   video {
-    @apply c-bg-el h-auto max-w-full rounded-md;
+    @apply c-bg-el c-border-el h-auto max-w-full rounded-md;
 
     &[align='center'] {
       @apply mx-auto;

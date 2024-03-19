@@ -91,10 +91,6 @@ watch(
 
 const isImg = computed(() => attrs.value.type === 'img')
 
-if (attrs.value.src) {
-  files.value = [attrs.value.src]
-}
-
 // Upload File
 const fileInputRef = ref(null)
 
@@ -120,6 +116,10 @@ const onUploaded = (e) => {
   props.updateAttributes({
     srcs,
   })
+}
+
+if (attrs.value.src) {
+  files.value = [attrs.value.src]
 }
 
 // Input Url

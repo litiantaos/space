@@ -52,7 +52,7 @@ export default Node.create({
   renderHTML({ HTMLAttributes }) {
     const { type, srcs } = HTMLAttributes
 
-    if (type === 'img' && !srcs) {
+    if (type === 'img' && (!srcs || srcs.length === 1)) {
       return ['img', HTMLAttributes]
     } else if (type === 'video') {
       return [
@@ -61,7 +61,7 @@ export default Node.create({
           controls: 'true',
         }),
       ]
-    } else if (srcs) {
+    } else if (srcs && srcs.length > 1) {
       let arr = srcs.map((src) => {
         return [
           'img',
