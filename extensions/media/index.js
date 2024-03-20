@@ -17,7 +17,7 @@ export default Node.create({
       type: {
         default: 'img',
       },
-      src: {
+      srcs: {
         default: null,
       },
       width: {
@@ -26,48 +26,74 @@ export default Node.create({
       align: {
         default: 'center',
       },
-      srcs: {
-        default: null,
-      },
     }
   },
 
   parseHTML() {
     return [
       {
-        tag: 'img[src]:not([src^="data:"])',
+        tag: 'img:not([type="group"] img)',
         getAttrs: (element) => ({
-          src: element.getAttribute('src'),
+          srcs: [element.getAttribute('src')],
         }),
       },
       {
         tag: 'video',
         getAttrs: (element) => ({
-          src: element.getAttribute('src'),
+          srcs: [element.getAttribute('src')],
         }),
+      },
+      {
+        tag: 'div[type="group"]',
+        getAttrs: (element) => {
+          let groupSrcs = []
+
+          const groupImgs = element.querySelectorAll('img[src]')
+
+          groupImgs.forEach((img) => {
+            const groupSrc = img.getAttribute('src')
+
+            if (groupSrc) groupSrcs.push(groupSrc)
+          })
+
+          return {
+            srcs: groupSrcs,
+          }
+        },
       },
     ]
   },
 
   renderHTML({ HTMLAttributes }) {
-    const { type, srcs } = HTMLAttributes
+    const { type, srcs, width, align } = HTMLAttributes
 
     if (type === 'img' && (!srcs || srcs.length === 1)) {
-      return ['img', HTMLAttributes]
+      return [
+        'img',
+        {
+          src: srcs?.[0],
+          width,
+          align,
+          zoomable: true,
+        },
+      ]
     } else if (type === 'video') {
       return [
         'video',
-        mergeAttributes(HTMLAttributes, {
-          controls: 'true',
-        }),
+        {
+          src: srcs?.[0],
+          width,
+          align,
+          controls: true,
+        },
       ]
     } else if (srcs && srcs.length > 1) {
       let arr = srcs.map((src) => {
         return [
           'img',
           {
-            type: 'img',
             src,
+            zoomable: true,
           },
         ]
       })

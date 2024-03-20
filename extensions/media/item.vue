@@ -46,18 +46,6 @@ const props = defineProps({
 
 const emit = defineEmits(['upload'])
 
-onMounted(() => {
-  if (typeof props.file === 'string') {
-    src.value = props.file
-  } else {
-    src.value = URL.createObjectURL(props.file)
-
-    uploading.value = true
-
-    uploadFile()
-  }
-})
-
 const src = ref(null)
 
 const uploading = ref(false)
@@ -127,5 +115,15 @@ const uploadToSupabaseWithTus = async (file, path, bucket = 'main') => {
 
     upload.start()
   })
+}
+
+if (typeof props.file === 'string') {
+  src.value = props.file
+} else {
+  src.value = URL.createObjectURL(props.file)
+
+  uploading.value = true
+
+  uploadFile()
 }
 </script>

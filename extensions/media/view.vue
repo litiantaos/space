@@ -1,6 +1,6 @@
 <template>
   <NodeViewWrapper class="w-full flex-none" draggable="true" data-drag-handle>
-    <div v-if="!files?.length" class="flex w-full gap-2 sm:w-96">
+    <div v-if="!files || !files.length" class="flex w-full gap-2 sm:w-96">
       <button
         @click="chooseFile"
         class="ri-arrow-up-line c-text-base c-border-el c-bg-page c-bg-el-active flex h-10 w-20 items-center justify-center rounded-md text-xl"
@@ -118,8 +118,8 @@ const onUploaded = (e) => {
   })
 }
 
-if (attrs.value.src) {
-  files.value = [attrs.value.src]
+if (attrs.value.srcs) {
+  files.value = attrs.value.srcs
 }
 
 // Input Url
@@ -131,7 +131,7 @@ const submit = () => {
   files.value = [inputValue.value]
 
   props.updateAttributes({
-    src: inputValue.value,
+    srcs: [inputValue.value],
   })
 }
 </script>

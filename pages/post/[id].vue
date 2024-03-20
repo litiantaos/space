@@ -75,7 +75,7 @@ onMounted(async () => {
 
   // Medium Zoom
   await nextTick()
-  mediumZoom('[type="img"]')
+  mediumZoom('[zoomable]')
 })
 
 onBeforeUnmount(() => {
