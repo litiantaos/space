@@ -1,7 +1,12 @@
 <template>
-  <div class="mt-10 flex w-full flex-col gap-6 sm:w-72">
-    <button class="c-text-base w-fit text-xl font-bold" @click="toggle">
-      {{ isSignIn ? '登录' : '注册' }}
+  <div
+    class="flex h-[50vh] w-full flex-col items-center justify-center gap-6 sm:w-72"
+  >
+    <button
+      class="c-text-base mb-10 w-fit flex-none text-2xl font-bold"
+      @click="toggle"
+    >
+      {{ isSignIn ? '向阳而生' : '注册' }}
     </button>
 
     <BaseInput
@@ -9,6 +14,7 @@
       placeholder="邮箱"
       v-model="email"
       @keyup.enter="submit"
+      class="w-full"
     ></BaseInput>
 
     <BaseInput
@@ -19,6 +25,7 @@
       :loading="loading"
       @confirm="submit"
       @keyup.enter="submit"
+      class="w-full"
     ></BaseInput>
 
     <div class="text-sm text-green-500">{{ message }}</div>

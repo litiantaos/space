@@ -9,23 +9,20 @@
           v-for="(tag, idx) in tags"
           :key="tag.id"
           :class="['whitespace-nowrap', { 'c-text-base font-bold': idx === 0 }]"
-          @click="checkTag(idx)"
+          @click="handleTag(idx)"
         >
           {{ tag.name }}
         </button>
       </TransitionGroup>
     </div>
 
-    <PostList
-      v-model:posts="posts"
-      v-model:page="page"
-      :key="listKey"
-      class="mt-10"
-    />
+    <div class="relative mt-10 min-h-[calc(100vh-200px)]">
+      <PostList v-model:posts="posts" v-model:page="page" :key="listKey" />
 
-    <BaseDefault v-if="!posts" class="h-[calc(100vh-200px)]" />
+      <BaseDefault v-if="!posts && !pageLoading" class="absolute h-full" />
 
-    <BaseLoading :loading="pageLoading" />
+      <BaseLoading :loading="pageLoading" type="absolute" />
+    </div>
   </div>
 </template>
 
@@ -51,18 +48,21 @@ const tagsRes = await client.from('tags').select('id, name')
 
 tags.value = tagsRes.data
 
-// Check Tag
-const checkTag = (index) => {
+// Handle Tag
+const handleTag = (index) => {
+  navigateTo(`/tag/${tags.value[index].id}`, {
+    replace: true,
+  })
+}
+
+// Sort Tag
+const sortTag = (index) => {
   if (index >= 0 && index < tags.value.length) {
     const item = tags.value.splice(index, 1)[0]
 
     tags.value.unshift(item)
 
     getTagPosts(tags.value[0].id)
-
-    navigateTo(`/tag/${tags.value[0].id}`, {
-      replace: true,
-    })
 
     setTimeout(() => {
       toTagsStart()
@@ -104,6 +104,6 @@ const toTagsStart = () => {
 onMounted(async () => {
   const currentTagIndex = tags.value.findIndex((item) => item.id === Number(id))
 
-  checkTag(currentTagIndex)
+  sortTag(currentTagIndex)
 })
 </script>

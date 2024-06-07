@@ -11,8 +11,6 @@
     </KeepAlive>
 
     <PostBoard />
-
-    <BaseLoading :loading="pageLoading" />
   </div>
 </template>
 
@@ -21,13 +19,9 @@ import { usePostStore } from '~/stores/post'
 
 const store = usePostStore()
 
-const pageLoading = ref(true)
-
 onMounted(async () => {
   if (store.posts === null) {
     store.posts = await store.getPosts()
   }
-
-  pageLoading.value = false
 })
 </script>
