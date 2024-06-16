@@ -41,6 +41,10 @@
     @apply border border-slate-300 dark:border-slate-600;
   }
 
+  .c-border-el-3 {
+    @apply border border-slate-400 dark:border-slate-500;
+  }
+
   .c-text-base {
     @apply text-gray-600 dark:text-gray-300;
   }

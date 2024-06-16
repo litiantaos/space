@@ -12,7 +12,7 @@
       placeholder="简历帖文 ID"
       v-model="resume_post_id"
       type="number"
-      :icon="resume_post_id ? 'ri-arrow-right-line' : ''"
+      :icon="resume_post_id ? 'ri-arrow-right-up-line' : ''"
       @confirm="toResumePost"
     ></BaseInput>
 

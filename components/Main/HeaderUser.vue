@@ -4,7 +4,7 @@
     class="c-border-el c-text-base c-bg-el-active flex h-8 items-center justify-center gap-3 rounded-full px-1.5"
   >
     <NuxtLink
-      to="/profile"
+      :to="`/${profile?.id}`"
       class="flex items-center gap-2 active:text-gray-400"
     >
       <img

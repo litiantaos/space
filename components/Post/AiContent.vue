@@ -3,7 +3,7 @@
     class="c-bg-page c-text-base relative flex min-h-60 w-full flex-col gap-6 overflow-hidden rounded-md p-6 sm:w-[540px]"
     :class="{ 'justify-between': data?.result }"
   >
-    <h1 class="text-xl">
+    <h1 class="select-none text-xl">
       {{ data.model.toUpperCase() }}
     </h1>
 

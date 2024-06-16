@@ -1,12 +1,12 @@
 <template>
   <Transition name="page">
-    <div
-      v-if="store.show"
-      class="fixed -top-10 bottom-0 left-0 right-0 z-30 flex cursor-pointer items-center justify-center bg-black/50 pt-10"
-      @click="() => (store.show = false)"
-    >
+    <div v-if="store.show" class="fixed -top-10 bottom-0 left-0 right-0 z-30">
       <div
-        class="no-scrollbar flex max-h-screen w-[calc(100vw-32px)] justify-center overflow-auto drop-shadow-xl transition-all sm:w-fit"
+        class="absolute bottom-0 left-0 right-0 top-0 cursor-pointer bg-black/50"
+        @click="() => (store.show = false)"
+      ></div>
+      <div
+        class="no-scrollbar absolute left-1/2 top-1/2 flex max-h-screen w-[calc(100vw-32px)] -translate-x-1/2 -translate-y-1/2 justify-center overflow-auto drop-shadow-xl transition-all sm:w-fit"
       >
         <component :is="store.component" v-model:data="store.data"></component>
       </div>

@@ -1,7 +1,13 @@
 <template>
   <div v-if="posts" class="flex w-full flex-col gap-10">
     <TransitionGroup name="list-move-up">
-      <PostCell v-for="post in posts" :key="post.id" :data="post" type="min" />
+      <PostCell
+        v-for="post in posts"
+        :key="post.id"
+        :data="post"
+        type="min"
+        :hideCitedPost="hideCitedPost"
+      />
     </TransitionGroup>
 
     <div class="mb-10 flex justify-center">
@@ -24,7 +30,7 @@ const posts = defineModel('posts')
 
 const page = defineModel('page')
 
-const props = defineProps(['ilike'])
+const props = defineProps(['ilike', 'hideCitedPost'])
 
 // Get More Posts
 const loading = ref(false)

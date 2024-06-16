@@ -248,6 +248,7 @@ const closeBoard = () => {
   editorContent.value = null
   store.editablePost = null
   store.editorContent = null
+  citeAsComment.value = false
 
   initTags()
 }

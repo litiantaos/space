@@ -1,6 +1,7 @@
 <template>
   <div
-    class="c-border-el c-bg-page c-text-base c-text-base flex h-10 items-center overflow-hidden rounded-md"
+    class="c-bg-page c-text-base c-text-base flex h-10 items-center overflow-hidden rounded-md"
+    :class="isFocus ? 'c-border-el-3' : 'c-border-el'"
   >
     <input
       ref="inputRef"
@@ -8,6 +9,8 @@
       v-model="model"
       :type="type"
       :placeholder="placeholder"
+      @focus="onFocus"
+      @blur="onBlur"
     />
 
     <div
@@ -68,4 +71,15 @@ watch(
     }
   },
 )
+
+// Focus
+const isFocus = ref(false)
+
+const onFocus = () => {
+  isFocus.value = true
+}
+
+const onBlur = () => {
+  isFocus.value = false
+}
 </script>

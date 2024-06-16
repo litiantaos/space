@@ -84,19 +84,20 @@
     </div>
 
     <div v-if="content" class="flex flex-col gap-2" ref="contentRef">
-      <div
-        :class="[
-          { 'relative h-[600px] overflow-hidden': hidden },
-          { 'cursor-pointer': type === 'min' },
-        ]"
-        @click="toPost"
-      >
-        <div v-html="content" class="html-style"></div>
+      <div :class="{ 'cursor-pointer': type === 'min' }" @click="toPost">
+        <div v-if="hidden" class="c-border-el rounded-md px-4">
+          <h1 class="c-text-base py-8 text-3xl font-bold">
+            {{ articleTitle(content).h1 }}
+          </h1>
+          <p class="c-text-base-2 text-justify text-sm">
+            {{ articleTitle(content).firstP }}
+          </p>
+          <div class="ri-arrow-right-line c-text-base-2 my-4 text-lg"></div>
+        </div>
 
-        <div
-          v-if="hidden"
-          class="ri-more-line c-text-base absolute bottom-0 left-0 right-0 flex h-48 items-end justify-center bg-gradient-to-t from-white to-transparent pb-3 text-xl dark:from-slate-900"
-        ></div>
+        <div v-else>
+          <div v-html="content" class="html-style"></div>
+        </div>
       </div>
 
       <NuxtLink
@@ -194,6 +195,20 @@ const h1Title = (html) => {
     }
   } else {
     return html
+  }
+}
+
+const articleTitle = (html) => {
+  const parser = new DOMParser()
+
+  const doc = parser.parseFromString(html, 'text/html')
+
+  const h1 = doc.querySelector('h1')
+  const firstP = doc.querySelector('p')
+
+  return {
+    h1: h1 ? h1.innerHTML : null,
+    firstP: firstP ? firstP.innerHTML : null,
   }
 }
 

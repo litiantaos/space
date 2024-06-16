@@ -18,10 +18,9 @@
           来自引用
         </div>
 
-        <PostCell
-          v-for="citedPost in citedPosts"
-          :key="citedPost.id"
-          :data="citedPost"
+        <PostList
+          v-model:posts="citedPosts"
+          v-model:page="store.currentPage"
           hideCitedPost
         />
       </div>
@@ -38,7 +37,6 @@ import { usePostStore } from '~/stores/post'
 import mediumZoom from 'medium-zoom'
 
 const store = usePostStore()
-const client = useSupabaseClient()
 
 const id = useRoute().params.id
 const cellKey = ref(0)
@@ -49,6 +47,7 @@ const pageLoading = ref(false)
 
 if (store.localPost) {
   post.value = store.localPost
+  store.localPost = null
 } else {
   pageLoading.value = true
 
