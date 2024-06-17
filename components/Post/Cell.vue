@@ -85,13 +85,17 @@
 
     <div v-if="content" class="flex flex-col gap-2" ref="contentRef">
       <div :class="{ 'cursor-pointer': type === 'min' }" @click="toPost">
-        <div v-if="hidden" class="c-border-el rounded-md px-4">
+        <div
+          v-if="type === 'min' && isArticle"
+          class="c-border-el rounded-md px-4"
+        >
           <h1 class="c-text-base py-8 text-3xl font-bold">
-            {{ articleTitle(content).h1 }}
+            {{ articleTitle }}
           </h1>
-          <p class="c-text-base-2 text-justify text-sm">
-            {{ articleTitle(content).firstP }}
-          </p>
+          <div
+            v-html="articleExcerpt"
+            class="c-text-base-2 text-justify text-sm"
+          ></div>
           <div class="ri-arrow-right-line c-text-base-2 my-4 text-lg"></div>
         </div>
 
@@ -139,24 +143,56 @@ const emit = defineEmits(['title'])
 
 // Parse HTML Content
 const content = ref(null)
-const hidden = ref(false)
+const isArticle = ref(false)
+
+const articleTitle = ref(null)
+const articleExcerpt = ref(null)
 
 const parseHtmlContent = () => {
-  // Highlight
-  const hledContent = highlight(props.data.content)
+  // H1
+  const h1edContent = handleH1(props.data.content)
 
-  // H1 Title
-  const h1edContent = h1Title(hledContent)
+  // Highlight
+  const hledContent = handleHl(h1edContent)
 
   // Map
-  const mapedContent = checkMap(h1edContent)
+  const mapedContent = handleMap(hledContent)
 
   setMap()
 
   content.value = mapedContent
 }
 
-const highlight = (html) => {
+const handleH1 = (html) => {
+  const parser = new DOMParser()
+
+  const doc = parser.parseFromString(html, 'text/html')
+
+  const h1 = doc.querySelector('h1')
+
+  if (h1 && h1 === doc.body.firstChild) {
+    isArticle.value = true
+
+    articleTitle.value = h1.textContent || ''
+
+    const firstP = doc.querySelector('p')
+
+    articleExcerpt.value = firstP ? firstP.innerHTML : ''
+
+    // Post Page
+    emit('title', articleTitle.value)
+
+    h1.remove()
+
+    const htmlWithoutH1 = doc.body.innerHTML
+
+    return htmlWithoutH1
+  } else {
+    return html
+  }
+}
+
+const handleHl = (html) => {
   const parser = new DOMParser()
 
   const doc = parser.parseFromString(html, 'text/html')
@@ -172,46 +208,6 @@ const highlight = (html) => {
   return doc.body.innerHTML
 }
 
-const h1Title = (html) => {
-  const parser = new DOMParser()
-
-  const doc = parser.parseFromString(html, 'text/html')
-
-  const h1 = doc.querySelector('h1')
-
-  if (h1 && h1 === doc.body.firstChild) {
-    const h1Content = h1.textContent || ''
-
-    h1.remove()
-
-    const htmlWithoutH1 = doc.body.innerHTML
-
-    if (props.type === 'min') {
-      hidden.value = true
-      return html
-    } else {
-      emit('title', h1Content)
-      return htmlWithoutH1
-    }
-  } else {
-    return html
-  }
-}
-
-const articleTitle = (html) => {
-  const parser = new DOMParser()
-
-  const doc = parser.parseFromString(html, 'text/html')
-
-  const h1 = doc.querySelector('h1')
-  const firstP = doc.querySelector('p')
-
-  return {
-    h1: h1 ? h1.innerHTML : null,
-    firstP: firstP ? firstP.innerHTML : null,
-  }
-}
-
 // Map
 let AMap = null
 let map = null
@@ -219,7 +215,7 @@ let map = null
 const loc = ref(null)
 const mapId = `map_${Date.now()}`
 
-const checkMap = (html) => {
+const handleMap = (html) => {
   const parser = new DOMParser()
 
   const doc = parser.parseFromString(html, 'text/html')

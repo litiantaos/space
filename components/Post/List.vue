@@ -5,8 +5,8 @@
         v-for="post in posts"
         :key="post.id"
         :data="post"
-        type="min"
         :hideCitedPost="hideCitedPost"
+        type="min"
       />
     </TransitionGroup>
 
