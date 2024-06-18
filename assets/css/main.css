@@ -42,7 +42,7 @@
   }
 
   .btn-base {
-    @apply c-bg-el-active c-text-base h-8 w-8 rounded;
+    @apply c-bg-el-active c-text-base h-8 w-8 select-none rounded;
 
     &.active {
       @apply font-bold text-blue-500;
@@ -50,7 +50,7 @@
   }
 
   .btn-circle {
-    @apply c-text-base-2 c-bg-el c-bg-el-active-2 h-12 w-12 overflow-hidden rounded-full text-xl active:scale-110;
+    @apply c-text-base-2 c-bg-el c-bg-el-active-2 h-12 w-12 select-none overflow-hidden rounded-full text-xl active:scale-110;
   }
 
   .tag {

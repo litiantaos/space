@@ -6,7 +6,7 @@
         @click="() => (store.show = false)"
       ></div>
       <div
-        class="no-scrollbar absolute left-1/2 top-1/2 flex max-h-screen w-[calc(100vw-32px)] -translate-x-1/2 -translate-y-1/2 justify-center overflow-auto drop-shadow-xl transition-all sm:w-fit"
+        class="no-scrollbar absolute left-1/2 top-[calc(50%+20px)] flex max-h-screen w-[calc(100vw-32px)] -translate-x-1/2 -translate-y-1/2 justify-center overflow-auto rounded-md drop-shadow-xl transition-all sm:w-fit"
       >
         <component :is="store.component" v-model:data="store.data"></component>
       </div>

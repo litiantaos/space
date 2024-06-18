@@ -202,31 +202,32 @@ const upsertPost = async () => {
       await upsertTags(data.id)
     }
 
-    // Add Post to Store
+    // Update Posts in View
     const newPost = await store.getPost(data.id)
 
-    if (store.posts) {
-      if (isEdit.value) {
-        const index = store.posts.findIndex((item) => item.id === data.id)
+    if (isEdit.value) {
+      // Replace Old Post in Store
+      const index = store.posts.findIndex((item) => item.id === data.id)
 
-        if (index !== -1) {
-          store.posts.splice(index, 1, newPost)
-        }
-      } else {
-        const index = store.posts.findIndex(
-          (item) => item.is_recommended === false,
-        )
-
-        if (index !== -1) {
-          store.posts.splice(index, 0, newPost)
-        }
+      if (index !== -1) {
+        store.posts.splice(index, 1, newPost)
       }
 
-      // Update Post List View
-      store.listKey++
-    } else {
+      // Update Post in Post Page
       emit('edited', newPost)
+    } else {
+      // Add New Post in Store
+      const index = store.posts.findIndex(
+        (item) => item.is_recommended === false,
+      )
+
+      if (index !== -1) {
+        store.posts.splice(index, 0, newPost)
+      }
     }
+
+    // Update Post List View
+    store.listKey++
 
     // Close and Reset Board
     store.boardShow = false
