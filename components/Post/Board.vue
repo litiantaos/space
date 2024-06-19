@@ -2,7 +2,7 @@
   <Transition name="board-up">
     <div
       v-if="store.boardShow"
-      class="c-bg-page fixed bottom-0 left-0 right-0 z-20 h-[calc(100vh-64px)]"
+      class="c-bg-page fixed bottom-0 left-0 right-0 z-[15] h-[calc(100vh-64px)]"
     >
       <div
         class="mx-auto flex h-full max-w-3xl flex-col items-center gap-4 p-4"
@@ -20,7 +20,7 @@
         <div class="no-scrollbar flex items-center gap-2 overflow-x-auto">
           <div v-if="isCite" class="flex flex-none items-center gap-2">
             <button
-              class="tag"
+              class="tag-base"
               :class="
                 citeAsComment ? 'c-text-base c-bg-el-2' : 'c-text-base c-bg-el'
               "
@@ -34,7 +34,7 @@
 
           <button
             v-for="(tag, idx) in tags"
-            class="tag"
+            class="tag-base"
             :class="
               tag.checked ? 'c-text-base c-bg-el-2' : 'c-text-base c-bg-el'
             "

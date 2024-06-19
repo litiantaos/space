@@ -22,7 +22,7 @@
           ></div>
 
           <div v-if="data.tags?.length" class="mt-4 flex items-center gap-2">
-            <div class="tag bg-slate-100/85" v-for="tag in data.tags">
+            <div class="tag-base bg-slate-100/85" v-for="tag in data.tags">
               {{ tag.name }}
             </div>
           </div>

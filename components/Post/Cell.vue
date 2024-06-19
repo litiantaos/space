@@ -75,7 +75,7 @@
 
     <div v-if="tags?.length" class="flex items-center gap-2">
       <NuxtLink
-        class="tag c-bg-el c-text-base c-bg-el-active-2"
+        class="tag-base c-bg-el c-text-base c-bg-el-active-2"
         v-for="tag in tags"
         :to="`/tag/${tag.id}`"
       >

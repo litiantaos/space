@@ -1,6 +1,6 @@
 <template>
   <Transition name="page">
-    <div v-if="store.show" class="fixed -top-10 bottom-0 left-0 right-0 z-30">
+    <div v-if="store.show" class="fixed -top-10 bottom-0 left-0 right-0 z-20">
       <div
         class="absolute bottom-0 left-0 right-0 top-0 cursor-pointer bg-black/50"
         @click="() => (store.show = false)"

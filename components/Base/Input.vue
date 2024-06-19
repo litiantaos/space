@@ -5,7 +5,7 @@
   >
     <input
       ref="inputRef"
-      class="h-full flex-1 px-2"
+      class="h-full flex-1 px-3"
       v-model="model"
       :type="type"
       :placeholder="placeholder"
