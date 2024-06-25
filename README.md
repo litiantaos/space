@@ -8,11 +8,22 @@ Website: [https://www.litiantao.com](https://www.litiantao.com)
 
 ## Configuration
 
-Add `SUPABASE_URL` and `SUPABASE_KEY` to the `.env` file:
+Add `.env` file:
 
 ```
+--- Supabase ---
 SUPABASE_URL="https://example.supabase.co"
 SUPABASE_KEY="<your_key>"
+
+--- Your Domain ---
+NUXT_PUBLIC_SITE_URL="https://example.com"
+
+--- Gemini Key ---
+NUXT_GEMINI_AK="<your_key>"
+
+--- GaoDe Map Key ---
+NUXT_AMAP_AK="<your_key>"
+NUXT_AMAP_SK="<your_key>"
 ```
 
 ## Setup
@@ -22,5 +33,5 @@ SUPABASE_KEY="<your_key>"
 npm install
 
 # Start dev server at localhost:3000
-npm run dev
+npm run dev -- -o
 ```

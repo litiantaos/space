@@ -1,55 +1,68 @@
 <template>
-  <Transition name="board-up">
-    <div
-      v-if="store.boardShow"
-      class="c-bg-page fixed bottom-0 left-0 right-0 z-[15] h-[calc(100vh-64px)]"
-    >
+  <div
+    v-if="store.boardShow"
+    class="fixed bottom-0 left-0 right-0 z-[15] h-screen"
+  >
+    <Transition name="back-blur">
       <div
-        class="mx-auto flex h-full max-w-3xl flex-col items-center gap-4 p-4"
-      >
-        <button
-          class="ri-arrow-down-wide-fill text-xl text-gray-400 active:text-gray-300"
-          @click="closeBoard"
-        ></button>
+        v-if="show"
+        class="absolute left-0 top-0 h-full w-full bg-black/20 backdrop-blur"
+        @click="closeBoard"
+      ></div>
+    </Transition>
 
-        <BaseEditor
-          v-model="editorContent"
-          class="h-[calc(100%-200px)] w-full"
-        />
+    <Transition name="move-up-vh">
+      <div v-if="show" class="c-bg-page absolute left-0 top-0 h-full w-full">
+        <div
+          class="mx-auto flex h-full max-w-3xl flex-col items-center gap-4 p-4"
+        >
+          <button
+            class="ri-arrow-down-wide-fill text-xl text-gray-400 active:text-gray-300"
+            @click="closeBoard"
+          ></button>
 
-        <div class="no-scrollbar flex items-center gap-2 overflow-x-auto">
-          <div v-if="isCite" class="flex flex-none items-center gap-2">
+          <BaseEditor
+            v-if="showEditor"
+            v-model="editorContent"
+            class="h-[calc(100%-184px)] w-full"
+          />
+
+          <div class="no-scrollbar flex items-center gap-2 overflow-x-auto">
+            <div v-if="isCite" class="flex flex-none items-center gap-2">
+              <button
+                class="tag-base"
+                :class="
+                  citeAsComment
+                    ? 'c-text-base c-bg-el-2'
+                    : 'c-text-base c-bg-el'
+                "
+                @click="() => (citeAsComment = !citeAsComment)"
+              >
+                仅回帖
+              </button>
+
+              <div class="c-bg-el-2 mx-1 h-5 w-px"></div>
+            </div>
+
             <button
+              v-for="(tag, idx) in tags"
               class="tag-base"
               :class="
-                citeAsComment ? 'c-text-base c-bg-el-2' : 'c-text-base c-bg-el'
+                tag.checked ? 'c-text-base c-bg-el-2' : 'c-text-base c-bg-el'
               "
-              @click="() => (citeAsComment = !citeAsComment)"
+              @click="checkTag(idx)"
             >
-              仅回帖
+              {{ tag.name }}
             </button>
-
-            <div class="c-bg-el-2 mx-1 h-5 w-px"></div>
           </div>
 
-          <button
-            v-for="(tag, idx) in tags"
-            class="tag-base"
-            :class="
-              tag.checked ? 'c-text-base c-bg-el-2' : 'c-text-base c-bg-el'
-            "
-            @click="checkTag(idx)"
-          >
-            {{ tag.name }}
+          <button v-if="user" @click="submit" class="btn-circle mt-4">
+            <div class="ri-rocket-fill" :class="{ bounce: loading }"></div>
           </button>
         </div>
-
-        <button v-if="user" @click="submit" class="btn-circle mt-3">
-          <div class="ri-rocket-fill" :class="{ bounce: loading }"></div>
-        </button>
       </div>
-    </div>
-  </Transition>
+    </Transition>
+  </div>
 </template>
 
 <script setup>
@@ -65,6 +78,9 @@ const loading = ref(false)
 
 const emit = defineEmits(['cited', 'edited'])
 
+const show = ref(false)
+const showEditor = ref(false)
+
 // Watch
 const isEdit = ref(false)
 const isCite = ref(false)
@@ -79,6 +95,15 @@ watch(
   ([newBoardShow, newEditorContent, newEditablePost, newCitedPostId]) => {
     if (newBoardShow) {
       document.body.style.overflow = 'hidden'
+
+      setTimeout(() => {
+        show.value = true
+
+        // Fix FloatingMenu Mispositioned When Opening Board
+        setTimeout(() => {
+          showEditor.value = true
+        }, 100)
+      }, 100)
     } else if (!newBoardShow) {
       document.body.style.overflow = ''
     }
@@ -207,22 +232,27 @@ const upsertPost = async () => {
 
     if (isEdit.value) {
       // Replace Old Post in Store
-      const index = store.posts.findIndex((item) => item.id === data.id)
+      if (store.posts) {
+        const index = store.posts.findIndex((item) => item.id === data.id)
 
-      if (index !== -1) {
-        store.posts.splice(index, 1, newPost)
+        if (index !== -1) {
+          store.posts.splice(index, 1, newPost)
+        }
       }
 
       // Update Post in Post Page
       emit('edited', newPost)
     } else {
-      // Add New Post in Store
-      const index = store.posts.findIndex(
-        (item) => item.is_recommended === false,
-      )
+      if (store.posts) {
+        const index = store.posts.findIndex(
+          (item) => item.is_recommended === false,
+        )
 
-      if (index !== -1) {
-        store.posts.splice(index, 0, newPost)
+        if (index !== -1) {
+          store.posts.splice(index, 0, newPost)
+        }
+      } else {
+        store.posts = [newPost]
       }
     }
 
@@ -245,30 +275,22 @@ const upsertPost = async () => {
 }
 
 const closeBoard = () => {
-  store.boardShow = false
-  editorContent.value = null
-  store.editablePost = null
-  store.editorContent = null
-  citeAsComment.value = false
+  show.value = false
+  showEditor.value = false
 
-  initTags()
+  setTimeout(() => {
+    store.boardShow = false
+    editorContent.value = null
+    store.editablePost = null
+    store.editorContent = null
+    citeAsComment.value = false
+
+    initTags()
+  }, 500)
 }
 </script>
 
 <style>
-.board-up-enter-active,
-.board-up-leave-active {
-  transition:
-    transform 0.4s,
-    opacity 0.4s;
-}
-
-.board-up-enter-from,
-.board-up-leave-to {
-  transform: translateY(50vh);
-  opacity: 0;
-}
-
 .bounce {
   animation: bounce 0.8s infinite;
 

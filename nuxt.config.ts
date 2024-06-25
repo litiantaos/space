@@ -13,17 +13,14 @@ export default defineNuxtConfig({
         },
       ],
     },
-    pageTransition: { name: 'page', mode: 'out-in' },
+    pageTransition: { name: 'move-up', mode: 'out-in' },
   },
   css: ['remixicon/fonts/remixicon.css', '~/assets/css/main.css'],
   runtimeConfig: {
     public: {
       siteUrl: '',
-      fileUrl: '',
       supabaseUrl: process.env.SUPABASE_URL,
     },
-    qiniuAK: '',
-    qiniuSK: '',
     geminiAK: '',
     amapAK: '',
     amapSK: '',

@@ -1,52 +1,50 @@
 <template>
-  <div class="h-fit max-h-[calc(100vh-32px)]">
+  <div
+    class="relative h-fit max-h-full w-full overflow-hidden rounded-md sm:w-96"
+  >
+    <img v-if="image && !loading" :src="image" class="w-full" />
+
     <div
-      class="relative mx-auto w-[calc(100vw-32px)] overflow-hidden rounded-md sm:w-96"
+      v-if="loading"
+      ref="shotRef"
+      class="w-full overflow-hidden bg-white text-gray-500"
     >
-      <img v-if="image && !loading" :src="image" class="w-full" />
-
-      <div
-        v-if="loading"
-        ref="shotRef"
-        class="w-full overflow-hidden bg-white text-gray-500"
-      >
-        <div class="p-8">
-          <div class="text-sm text-gray-400">
-            {{ formatTime(data.created_at) }}
-          </div>
-
-          <div
-            v-if="content"
-            v-html="content"
-            class="html-style group-img mt-4"
-          ></div>
-
-          <div v-if="data.tags?.length" class="mt-4 flex items-center gap-2">
-            <div class="tag-base bg-slate-100/85" v-for="tag in data.tags">
-              {{ tag.name }}
-            </div>
-          </div>
+      <div class="p-8">
+        <div class="text-sm text-gray-400">
+          {{ formatTime(data.created_at) }}
         </div>
 
-        <div class="flex items-center justify-between bg-slate-100/60 p-8">
-          <div class="flex items-center gap-3">
-            <img
-              v-if="data.users?.avatar_url"
-              :src="data.users?.avatar_url"
-              class="h-6 w-6 rounded-full border"
-            />
-            <div class="font-bold">
-              {{ data.users?.nickname || defaultNickname }}
-            </div>
-          </div>
-          <div class="text-blue-500">
-            TEO<span class="text-gray-500">SPACE</span>
+        <div
+          v-if="content"
+          v-html="content"
+          class="html-style group-img mt-4"
+        ></div>
+
+        <div v-if="data.tags?.length" class="mt-4 flex items-center gap-2">
+          <div class="tag-base bg-slate-100/85" v-for="tag in data.tags">
+            {{ tag.name }}
           </div>
         </div>
       </div>
 
-      <BaseLoading type="absolute" :loading="loading" />
+      <div class="flex items-center justify-between bg-slate-100/60 p-8">
+        <div class="flex items-center gap-3">
+          <img
+            v-if="data.users?.avatar_url"
+            :src="data.users?.avatar_url"
+            class="h-6 w-6 rounded-full border"
+          />
+          <div class="font-bold">
+            {{ data.users?.nickname || defaultNickname }}
+          </div>
+        </div>
+        <div class="text-blue-500">
+          TEO<span class="text-gray-500">SPACE</span>
+        </div>
+      </div>
     </div>
+
+    <BaseLoading type="absolute" :loading="loading" />
   </div>
 </template>
 

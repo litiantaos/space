@@ -1,13 +1,13 @@
 /* Move Up */
-.page-enter-active,
-.page-leave-active {
+.move-up-enter-active,
+.move-up-leave-active {
   transition:
     transform 0.3s,
     opacity 0.3s;
 }
 
-.page-enter-from,
-.page-leave-to {
+.move-up-enter-from,
+.move-up-leave-to {
   transform: translateY(10px);
   opacity: 0;
 }
@@ -22,7 +22,21 @@
 
 .move-up-center-enter-from,
 .move-up-center-leave-to {
-  transform: translate(-50%, 10px);
+  transform: translate(-50%, 10px) !important;
+  opacity: 0;
+}
+
+/* Move Up VH */
+.move-up-vh-enter-active,
+.move-up-vh-leave-active {
+  transition:
+    transform 0.4s,
+    opacity 0.4s;
+}
+
+.move-up-vh-enter-from,
+.move-up-vh-leave-to {
+  transform: translateY(100vh);
   opacity: 0;
 }
 
@@ -49,6 +63,19 @@
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
+}
+
+/* Back Blur */
+.back-blur-enter-active,
+.back-blur-leave-active {
+  transition:
+    backdrop-filter 0.4s,
+    background-color 0.4s;
+}
+
+.back-blur-enter-from,
+.back-blur-leave-to {
+  @apply bg-black/0 backdrop-blur-none !important;
 }
 
 /* List Move Up */

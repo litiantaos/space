@@ -89,7 +89,7 @@
           v-if="type === 'min' && isArticle"
           class="c-border-el rounded-md px-4"
         >
-          <h1 class="c-text-base py-8 text-3xl font-bold">
+          <h1 class="c-text-base py-8 text-justify text-3xl font-bold">
             {{ articleTitle }}
           </h1>
           <div
@@ -173,20 +173,14 @@ const handleH1 = (html) => {
   if (h1 && h1 === doc.body.firstChild) {
     isArticle.value = true
 
-    articleTitle.value = h1.textContent || ''
+    articleTitle.value = h1.textContent
+    articleExcerpt.value = doc.querySelector('p').innerHTML
 
-    const firstP = doc.querySelector('p')
-
-    articleExcerpt.value = firstP ? firstP.innerHTML : ''
-
-    // Post Page
     emit('title', articleTitle.value)
 
     h1.remove()
 
-    const htmlWithoutH1 = doc.body.innerHTML
-
-    return htmlWithoutH1
+    return doc.body.innerHTML
   } else {
     return html
   }

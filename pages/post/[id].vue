@@ -106,10 +106,30 @@ const getTitle = (e) => {
 }
 
 // SEO
-let seoTitle = post.value.content.replace(/<\/[^>]+>/g, ' ')
-seoTitle = seoTitle.replace(/<[^>]+>/g, '')
+const getSeoTitle = (html) => {
+  const h1Regex = /^<h1>(.*?)<\/h1>/
+  const pRegex = /<p>(.*?)<\/p>/
+
+  const h1Match = html.match(h1Regex)
+
+  if (h1Match) {
+    return h1Match[1]
+  } else {
+    const pMatch = html.match(pRegex)
+
+    if (pMatch) {
+      return pMatch[1]
+    } else {
+      return ''
+    }
+  }
+}
+
+const seoTitle = getSeoTitle(post.value.content)
+const seoDesc = post.value.content.replace(/<[^>]+>/g, '').trim()
 
 useSeoMeta({
   title: seoTitle,
+  description: seoDesc,
 })
 </script>

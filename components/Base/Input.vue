@@ -1,6 +1,6 @@
 <template>
   <div
-    class="c-bg-page c-text-base c-text-base flex h-10 items-center overflow-hidden rounded-md"
+    class="c-bg-page c-text-base c-text-base flex h-10 items-center overflow-hidden rounded-md transition-[border]"
     :class="isFocus ? 'c-border-el-3' : 'c-border-el'"
   >
     <input

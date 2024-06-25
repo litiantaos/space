@@ -1,6 +1,6 @@
 <template>
   <div
-    class="c-bg-page c-text-base relative flex min-h-60 w-full flex-col gap-6 overflow-hidden rounded-md p-6 sm:w-[540px]"
+    class="c-bg-page c-text-base relative flex max-h-full min-h-60 w-full flex-col gap-6 overflow-hidden rounded-md p-6 sm:w-[540px]"
     :class="{ 'justify-between': data?.result }"
   >
     <h1 class="select-none text-xl">
@@ -20,7 +20,7 @@
     <div
       v-if="htmlContent"
       v-html="htmlContent"
-      class="no-scrollbar c-text-base max-h-[540px] overflow-auto text-justify text-sm leading-7"
+      class="no-scrollbar c-text-base flex-1 overflow-auto text-justify text-sm leading-7"
     ></div>
 
     <div v-if="data?.result" class="flex items-center gap-6">

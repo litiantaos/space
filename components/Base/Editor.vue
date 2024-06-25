@@ -223,6 +223,8 @@ import {
   colorMenus,
 } from '~/utils/editor-menus'
 
+import { hideAll } from 'tippy.js'
+
 import { useOverlay } from '~/stores/overlay'
 import PostAiContent from '~/components/Post/AiContent.vue'
 
@@ -344,6 +346,8 @@ const askAi = (model) => {
     mode: 'ask',
     model,
   }
+
+  hideAll()
 }
 </script>
 
