@@ -1,15 +1,11 @@
 <template>
   <div>
     <div
-      class="c-bg-page sticky left-0 right-0 top-0 z-10 mx-auto flex h-16 max-w-3xl items-center justify-end px-4"
+      class="c-bg-page sticky left-0 right-0 top-0 z-10 mx-auto h-16 max-w-3xl px-4"
     >
       <div
-        class="c-text-base absolute top-1/2 max-w-3xl -translate-y-1/2 cursor-pointer select-none transition-all duration-500"
-        :class="
-          isCenter
-            ? 'left-1/2 -translate-x-1/2 text-2xl'
-            : 'left-4 translate-x-0 text-xl'
-        "
+        class="c-text-base absolute top-1/2 max-w-3xl -translate-y-1/2 cursor-pointer select-none text-2xl transition-[left,transform] duration-500"
+        :class="isCenter ? 'left-1/2 -translate-x-1/2' : 'left-4 translate-x-0'"
         @click="goHome"
       >
         <span class="text-blue-500">TEO</span>
@@ -17,7 +13,10 @@
       </div>
 
       <Transition name="fade">
-        <div v-show="!isCenter">
+        <div
+          v-show="!isCenter"
+          class="absolute right-4 top-1/2 -translate-y-1/2"
+        >
           <MainHeader is-mini />
         </div>
       </Transition>
@@ -46,32 +45,29 @@ const goHome = () => {
 }
 
 // On Page Scroll
-const currentScrollPosition = ref(0)
-const previousScrollPosition = ref(0)
-const scrollThreshold = 400
+const route = useRoute()
 
 const isCenter = ref(true)
 
-const route = useRoute()
+const currentScrollY = ref(0)
+const previousScrollY = ref(0)
 
 const handleScroll = () => {
-  const parts = route.fullPath.split('/')
+  const routeParts = route.fullPath.split('/')
 
-  if (parts[1] === '' || parts[1] === 'post') {
-    currentScrollPosition.value =
-      window.scrollY || document.documentElement.scrollTop
+  if (routeParts[1] === '' || routeParts[1] === 'post') {
+    currentScrollY.value = window.scrollY
 
-    const distanceScrolled =
-      currentScrollPosition.value - previousScrollPosition.value
+    const scrollDistance = currentScrollY.value - previousScrollY.value
 
-    if (Math.abs(distanceScrolled) >= scrollThreshold) {
-      if (distanceScrolled > 0) {
+    if (Math.abs(scrollDistance) >= 400) {
+      if (scrollDistance > 0) {
         isCenter.value = false
       } else {
         isCenter.value = true
       }
 
-      previousScrollPosition.value = currentScrollPosition.value
+      previousScrollY.value = currentScrollY.value
     }
   }
 }

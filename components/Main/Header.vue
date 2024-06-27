@@ -11,6 +11,11 @@
         心有从容，向阳而生
       </button>
 
+      <button
+        class="ri-donut-chart-line c-bg-el-active c-border-el c-text-base flex h-8 w-8 items-center justify-center rounded-full text-xl"
+        @click="toSearch"
+      ></button>
+
       <div>
         <div
           v-if="user"
@@ -38,25 +43,25 @@
         <button
           v-else
           class="ri-user-smile-line c-border-el c-text-base c-bg-el-active flex h-8 w-8 items-center justify-center rounded-full text-xl"
-          @click="() => navigateTo('/login')"
+          @click="toLogin"
         ></button>
       </div>
-
-      <button
-        class="ri-donut-chart-line c-bg-el-active c-border-el c-text-base flex h-8 w-8 items-center justify-center rounded-full text-xl"
-        @click="toSearch"
-      ></button>
     </div>
 
     <div v-else class="c-text-base flex w-fit gap-6">
       <button class="ri-add-circle-line text-xl" @click="createPost"></button>
       <button class="ri-donut-chart-line text-xl" @click="toSearch"></button>
-      <button @click="toUserPage">
+      <button v-if="user" @click="toUserPage">
         <img
           :src="profile?.avatar_url || defaultAvatarUrl"
           class="c-bg-el c-border-el h-5 w-5 overflow-hidden rounded-full object-cover"
         />
       </button>
+      <button
+        v-else
+        class="ri-user-smile-line text-xl"
+        @click="toLogin"
+      ></button>
     </div>
   </ClientOnly>
 </template>
@@ -115,5 +120,9 @@ const toUserPage = () => {
 
 const toSearch = () => {
   navigateTo('/search')
+}
+
+const toLogin = () => {
+  navigateTo('/login')
 }
 </script>

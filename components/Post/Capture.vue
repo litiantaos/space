@@ -1,7 +1,5 @@
 <template>
-  <div
-    class="relative h-fit max-h-full w-full overflow-hidden rounded-md sm:w-96"
-  >
+  <div class="relative h-fit max-h-full w-full overflow-hidden sm:w-96">
     <img v-if="image && !loading" :src="image" class="w-full" />
 
     <div

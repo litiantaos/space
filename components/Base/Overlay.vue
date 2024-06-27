@@ -11,7 +11,7 @@
     <Transition name="move-up-center">
       <div
         v-if="show"
-        class="no-scrollbar absolute left-1/2 top-1/2 flex max-h-[calc(100vh-32px)] w-[calc(100vw-32px)] -translate-x-1/2 -translate-y-1/2 justify-center overflow-auto rounded-md drop-shadow-xl sm:w-fit"
+        class="no-scrollbar absolute left-1/2 top-1/2 max-h-[calc(100vh-32px)] w-[calc(100vw-32px)] -translate-x-1/2 -translate-y-1/2 overflow-auto rounded-md shadow-xl sm:w-fit"
       >
         <component :is="store.component" v-model:data="store.data"></component>
       </div>

@@ -24,7 +24,8 @@
           <BaseEditor
             v-if="showEditor"
             v-model="editorContent"
-            class="h-[calc(100%-184px)] w-full"
+            class="w-full"
+            :class="user ? 'h-[calc(100%-184px)]' : 'h-[calc(100%-120px)]'"
           />
 
           <div class="no-scrollbar flex items-center gap-2 overflow-x-auto">
