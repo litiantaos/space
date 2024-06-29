@@ -1,8 +1,10 @@
 <template>
   <div class="mt-10 flex w-full flex-col gap-6 sm:w-72">
-    <div class="c-text-base text-xl font-bold">个人</div>
-
-    <BaseAvatar v-model:src="avatar_url" @upload="update" />
+    <BaseAvatar
+      class="mx-auto mb-6"
+      v-model:src="avatar_url"
+      @upload="update"
+    />
 
     <BaseInput placeholder="昵称" v-model="nickname"></BaseInput>
 
@@ -38,20 +40,20 @@ const resume_post_id = ref('')
 
 const profile = ref(null)
 
-onMounted(() => {
-  profile.value = useUserProfile().profile.value
-
-  if (profile.value) {
-    avatar_url.value = profile.value.avatar_url
-    nickname.value = profile.value.nickname
-    birthday.value = profile.value.birthday
-    resume_post_id.value = profile.value.resume_post_id?.toString()
-  }
-})
-
 loading.value = false
 
 const update = throttle(async () => {
+  const isNicknameUnique = await checkNicknameUnique()
+
+  if (!isNicknameUnique) {
+    useToast().push({
+      type: 'info',
+      text: '昵称已存在',
+    })
+
+    return
+  }
+
   try {
     loading.value = true
 
@@ -87,6 +89,20 @@ const update = throttle(async () => {
   }
 }, 2000)
 
+const checkNicknameUnique = async () => {
+  const { data } = await client
+    .from('users')
+    .select('nickname')
+    .eq('nickname', nickname.value)
+    .single()
+
+  if (data) {
+    return false
+  } else {
+    return true
+  }
+}
+
 const toResumePost = () => {
   const siteUrl = useRuntimeConfig().public.siteUrl
 
@@ -95,5 +111,16 @@ const toResumePost = () => {
 
 definePageMeta({
   middleware: ['auth'],
+})
+
+onMounted(() => {
+  profile.value = useUserProfile().profile.value
+
+  if (profile.value) {
+    avatar_url.value = profile.value.avatar_url
+    nickname.value = profile.value.nickname
+    birthday.value = profile.value.birthday
+    resume_post_id.value = profile.value.resume_post_id?.toString()
+  }
 })
 </script>

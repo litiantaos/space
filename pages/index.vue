@@ -1,6 +1,6 @@
 <template>
   <div class="flex w-full flex-col items-center gap-16">
-    <MainHeader />
+    <MainMenu />
 
     <KeepAlive>
       <PostList
@@ -9,8 +9,6 @@
         :key="store.listKey"
       />
     </KeepAlive>
-
-    <PostBoard />
   </div>
 </template>
 

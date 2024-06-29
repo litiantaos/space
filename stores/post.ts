@@ -8,6 +8,9 @@ export const usePostStore = defineStore('Post', () => {
   const localPost = ref(null)
 
   const citedPostId = ref(null)
+  const cited = ref(false)
+
+  const editedPost = ref(null)
 
   const posts = ref(null)
 
@@ -76,6 +79,8 @@ export const usePostStore = defineStore('Post', () => {
     editablePost,
     localPost,
     citedPostId,
+    cited,
+    editedPost,
     posts,
     pageSize,
     currentPage,

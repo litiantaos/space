@@ -34,12 +34,6 @@ const route = useRoute()
 
 const input = ref(route.query.q || '')
 
-onMounted(() => {
-  if (route.query?.q) {
-    search()
-  }
-})
-
 const posts = ref(null)
 
 const loading = ref(false)
@@ -65,4 +59,10 @@ const search = async () => {
 const clear = () => {
   input.value = null
 }
+
+onMounted(() => {
+  if (route.query?.q) {
+    search()
+  }
+})
 </script>

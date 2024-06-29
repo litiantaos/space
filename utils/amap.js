@@ -35,9 +35,7 @@ export const getAMapLocation = async (AMap) => {
 }
 
 export const setAMap = async (AMap, center, id) => {
-  const isDarkMode = ref(
-    window.matchMedia('(prefers-color-scheme: dark)').matches,
-  )
+  const isDarkMode = ref(localStorage.getItem('theme'))
 
   return await new AMap.Map(id, {
     viewMode: '2D',

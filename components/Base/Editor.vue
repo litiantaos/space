@@ -347,7 +347,9 @@ const askAi = (model) => {
     model,
   }
 
-  hideAll()
+  setTimeout(() => {
+    hideAll()
+  }, 500)
 }
 </script>
 

@@ -56,16 +56,18 @@ const handleTag = (index) => {
 }
 
 // Sort Tag
+const tagsRef = ref(null)
+
 const sortTag = (index) => {
   if (index >= 0 && index < tags.value.length) {
     const item = tags.value.splice(index, 1)[0]
 
     tags.value.unshift(item)
 
-    getTagPosts(tags.value[0].id)
-
     setTimeout(() => {
-      toTagsStart()
+      if (tagsRef.value) {
+        tagsRef.value.scrollTo({ left: 0, behavior: 'smooth' })
+      }
     }, 500)
   }
 }
@@ -73,13 +75,13 @@ const sortTag = (index) => {
 // Get Tag Posts
 const posts = ref(null)
 
-const getTagPosts = async (tagId) => {
+const getTagPosts = async () => {
   pageLoading.value = true
 
   const { data } = await client
     .from('posts_tags')
     .select('post_id, tags(name)')
-    .eq('tag_id', tagId)
+    .eq('tag_id', id)
 
   const postIds = data.map((item) => item.post_id)
 
@@ -93,13 +95,7 @@ const getTagPosts = async (tagId) => {
   pageLoading.value = false
 }
 
-const tagsRef = ref(null)
-
-const toTagsStart = () => {
-  if (tagsRef.value) {
-    tagsRef.value.scrollTo({ left: 0, behavior: 'smooth' })
-  }
-}
+getTagPosts()
 
 onMounted(async () => {
   const currentTagIndex = tags.value.findIndex((item) => item.id === Number(id))

@@ -1,22 +1,24 @@
 <template>
   <div class="flex flex-col gap-5">
-    <div class="flex items-end gap-2 text-sm text-slate-400">
-      <div class="c-text-base">
-        <div>{{ daysDiff }}</div>
-        <div>{{ monthsDiff }}</div>
+    <div class="flex items-end justify-between text-sm text-slate-400">
+      <div class="flex items-end gap-2">
+        <div class="c-text-base">
+          <div>{{ daysDiff }}</div>
+          <div>{{ monthsDiff }}</div>
+        </div>
+
+        <div>
+          <div>DAYS</div>
+          <div>MONTHS</div>
+        </div>
+
+        <div class="c-text-base ml-1 text-[44px] leading-10">90</div>
+
+        <div>YEARS</div>
       </div>
 
-      <div>
-        <div>DAYS</div>
-        <div>MONTHS</div>
-      </div>
-
-      <div class="c-text-base ml-1 text-[44px] leading-10">90</div>
-
-      <div>YEARS</div>
-
-      <Transition name="move-left">
-        <div v-if="checkedDate" class="ml-2">
+      <Transition name="move-right">
+        <div v-if="checkedDate">
           {{ checkedDate }}
         </div>
       </Transition>
@@ -27,7 +29,7 @@
     >
       <div
         v-for="num in 1080"
-        class="h-3 w-3 flex-none rounded-sm"
+        class="h-3 w-3 flex-none rounded-sm transition-all duration-300"
         :class="
           groupedPosts[toDate(num)]
             ? 'bg-emerald-300/80'

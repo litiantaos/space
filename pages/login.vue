@@ -107,4 +107,8 @@ const toggle = () => {
   isSignIn.value = !isSignIn.value
   message.value = ''
 }
+
+if (user.value) {
+  navigateTo('/')
+}
 </script>

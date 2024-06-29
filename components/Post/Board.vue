@@ -1,12 +1,12 @@
 <template>
   <div
     v-if="store.boardShow"
-    class="fixed bottom-0 left-0 right-0 z-[15] h-screen"
+    class="fixed bottom-0 left-0 right-0 top-0 z-[15]"
   >
-    <Transition name="back-blur">
+    <Transition name="fade">
       <div
         v-if="show"
-        class="absolute left-0 top-0 h-full w-full bg-black/20 backdrop-blur"
+        class="absolute left-0 top-0 h-full w-full bg-black/30"
         @click="closeBoard"
       ></div>
     </Transition>
@@ -14,7 +14,7 @@
     <Transition name="move-up-vh">
       <div v-if="show" class="c-bg-page absolute left-0 top-0 h-full w-full">
         <div
-          class="mx-auto flex h-full max-w-3xl flex-col items-center gap-4 p-4"
+          class="mx-auto flex h-full w-full max-w-3xl flex-col items-center gap-4 p-4"
         >
           <button
             class="ri-arrow-down-wide-fill text-xl text-gray-400 active:text-gray-300"
@@ -76,8 +76,6 @@ const user = useSupabaseUser()
 
 const editorContent = ref(null)
 const loading = ref(false)
-
-const emit = defineEmits(['cited', 'edited'])
 
 const show = ref(false)
 const showEditor = ref(false)
@@ -242,7 +240,7 @@ const upsertPost = async () => {
       }
 
       // Update Post in Post Page
-      emit('edited', newPost)
+      store.editedPost = newPost
     } else {
       if (store.posts) {
         const index = store.posts.findIndex(
@@ -266,7 +264,7 @@ const upsertPost = async () => {
 
     if (upsert.cited_post_id) {
       store.citedPostId = null
-      emit('cited')
+      store.cited = true
     }
   } catch (error) {
     alert(error.message)

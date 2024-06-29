@@ -6,6 +6,8 @@
   <BaseToast />
 
   <BaseOverlay />
+
+  <PostBoard />
 </template>
 
 <script setup></script>

@@ -1,9 +1,9 @@
 <template>
   <div v-if="store.show" class="fixed bottom-0 left-0 right-0 top-0 z-20">
-    <Transition name="back-blur">
+    <Transition name="fade">
       <div
         v-if="show"
-        class="absolute bottom-0 left-0 right-0 top-0 cursor-pointer bg-black/20 backdrop-blur"
+        class="absolute bottom-0 left-0 right-0 top-0 cursor-pointer bg-black/30"
         @click="close"
       ></div>
     </Transition>

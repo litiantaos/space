@@ -35,6 +35,13 @@ const { data: profile } = await client
   .eq('id', id)
   .single()
 
+if (!profile) {
+  throw createError({
+    statusCode: 404,
+    statusMessage: 'Page Not Found',
+  })
+}
+
 // Resume
 const resume = ref(null)
 

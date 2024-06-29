@@ -1,128 +1,115 @@
 <template>
-  <ClientOnly>
+  <div
+    class="c-bg-page sticky left-0 right-0 top-0 z-10 mx-auto h-16 max-w-3xl overflow-hidden"
+  >
     <div
-      v-if="!isMini"
-      class="flex justify-center gap-2 transition-all duration-200"
+      class="px-4 transition-transform duration-[400ms]"
+      :class="scroll ? 'move-up' : 'move-down'"
     >
-      <button
-        class="c-border-el c-text-base c-bg-el-active flex h-8 select-none items-center gap-3 rounded-full px-4 text-xs"
-        @click="createPost"
-      >
-        心有从容，向阳而生
-      </button>
+      <div class="flex h-16 items-center justify-center">
+        <MainTitle />
+      </div>
 
-      <button
-        class="ri-donut-chart-line c-bg-el-active c-border-el c-text-base flex h-8 w-8 items-center justify-center rounded-full text-xl"
-        @click="toSearch"
-      ></button>
-
-      <div>
-        <div
-          v-if="user"
-          class="c-border-el c-text-base c-bg-el-active flex h-8 items-center justify-center gap-3 rounded-full px-1.5"
-        >
-          <button
-            class="flex items-center gap-2 active:text-gray-400"
-            @click="toUserPage"
-          >
-            <img
-              :src="profile?.avatar_url || defaultAvatarUrl"
-              class="c-bg-el c-border-el h-5 w-5 overflow-hidden rounded-full object-cover"
-            />
-            <div class="text-sm">
-              {{ profile?.nickname || defaultNickname }}
-            </div>
-          </button>
-
-          <button
-            class="ri-arrow-right-line text-gray-500 active:text-gray-400"
-            @click="logout"
-          ></button>
-        </div>
-
+      <div class="flex h-16 items-center justify-between">
+        <MainMenu is-mini />
         <button
-          v-else
-          class="ri-user-smile-line c-border-el c-text-base c-bg-el-active flex h-8 w-8 items-center justify-center rounded-full text-xl"
-          @click="toLogin"
+          class="c-text-base c-bg-el-active-scale text-xl"
+          :class="theme === 'dark' ? 'ri-contrast-2-line' : 'ri-sun-line'"
+          @click="toggleTheme"
         ></button>
       </div>
     </div>
-
-    <div v-else class="c-text-base flex w-fit gap-6">
-      <button class="ri-add-circle-line text-xl" @click="createPost"></button>
-      <button class="ri-donut-chart-line text-xl" @click="toSearch"></button>
-      <button v-if="user" @click="toUserPage">
-        <img
-          :src="profile?.avatar_url || defaultAvatarUrl"
-          class="c-bg-el c-border-el h-5 w-5 overflow-hidden rounded-full object-cover"
-        />
-      </button>
-      <button
-        v-else
-        class="ri-user-smile-line text-xl"
-        @click="toLogin"
-      ></button>
-    </div>
-  </ClientOnly>
+  </div>
 </template>
 
 <script setup>
-import { usePostStore } from '~/stores/post'
-import { useToast } from '~/stores/toast'
+const props = defineProps(['scroll'])
 
-const props = defineProps({
-  isMini: {
-    type: Boolean,
-    default: false,
-  },
-})
+const theme = ref(null)
 
-const client = useSupabaseClient()
-const user = useSupabaseUser()
+const toggleTheme = () => {
+  if (theme.value === 'light') {
+    theme.value = 'dark'
+  } else {
+    theme.value = 'light'
+  }
 
-const profile = ref(null)
-
-onMounted(() => {
-  profile.value = useUserProfile().profile.value
-})
-
-const logout = () => {
-  useToast().push({
-    type: 'action',
-    text: '确定登出吗？',
-    action: () => signOut(),
-  })
+  setTheme()
 }
 
-const signOut = async () => {
-  try {
-    const { error } = await client.auth.signOut()
-
-    if (error) throw error
-
-    localStorage.removeItem('profile')
-
-    useToast().show = false
-
-    navigateTo('/')
-  } catch (error) {
-    alert(error.message)
+const setTheme = () => {
+  if (theme.value === 'light') {
+    localStorage.setItem('theme', 'light')
+    document.documentElement.classList.remove('dark')
+  } else {
+    localStorage.setItem('theme', 'dark')
+    document.documentElement.classList.add('dark')
   }
 }
 
-const createPost = () => {
-  usePostStore().boardShow = true
-}
+onMounted(() => {
+  const localTheme = localStorage.getItem('theme')
 
-const toUserPage = () => {
-  navigateTo(`/${profile.value?.id}`)
-}
-
-const toSearch = () => {
-  navigateTo('/search')
-}
-
-const toLogin = () => {
-  navigateTo('/login')
-}
+  if (localTheme) {
+    theme.value = localTheme
+    setTheme()
+  } else {
+    theme.value = 'light'
+    setTheme()
+  }
+})
 </script>
+
+<style>
+.move-up {
+  animation: move-up 0.4s forwards;
+
+  @keyframes move-up {
+    0% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    45% {
+      transform: translateY(-10%);
+      opacity: 0;
+    }
+
+    55% {
+      transform: translateY(-40%);
+      opacity: 0;
+    }
+
+    100% {
+      transform: translateY(-50%);
+      opacity: 1;
+    }
+  }
+}
+
+.move-down {
+  animation: move-down 0.4s forwards;
+
+  @keyframes move-down {
+    0% {
+      transform: translateY(-50%);
+      opacity: 1;
+    }
+
+    45% {
+      transform: translateY(-40%);
+      opacity: 0;
+    }
+
+    55% {
+      transform: translateY(-10%);
+      opacity: 0;
+    }
+
+    100% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+}
+</style>

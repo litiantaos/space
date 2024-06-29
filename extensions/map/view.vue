@@ -1,7 +1,7 @@
 <template>
   <NodeViewWrapper>
     <div class="relative my-2 w-full overflow-hidden">
-      <div :id="mapId" class="c-bg-el c-text-base h-80 w-full rounded-md"></div>
+      <div :id="mapId" class="c-bg-el c-text-base h-60 w-full rounded-md"></div>
 
       <div v-if="address" address="">{{ address }}</div>
 

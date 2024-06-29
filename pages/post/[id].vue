@@ -5,7 +5,7 @@
         {{ title }}
       </h1>
 
-      <PostCell :data="post" @title="getTitle" :key="cellKey" />
+      <PostCell v-if="post" :data="post" @title="getTitle" :key="cellKey" />
     </div>
 
     <div class="flex flex-col items-center gap-14 py-14">
@@ -19,14 +19,13 @@
         </div>
 
         <PostList
+          v-if="citedPosts"
           v-model:posts="citedPosts"
           v-model:page="store.currentPage"
           hideCitedPost
         />
       </div>
     </div>
-
-    <PostBoard @cited="onCited" @edited="onEdited" />
 
     <BaseLoading :loading="pageLoading" />
   </div>
@@ -55,8 +54,29 @@ if (store.localPost) {
     return await store.getPost(id)
   })
 
+  if (!data.value) {
+    throw createError({
+      statusCode: 404,
+      statusMessage: 'Page Not Found',
+    })
+  }
+
   post.value = data.value
 }
+
+watch(
+  () => [store.cited, store.editedPost],
+  ([newCited, newEditedPost]) => {
+    if (newCited) {
+      getCitedPosts()
+    }
+
+    if (newEditedPost) {
+      post.value = e
+      cellKey.value++
+    }
+  },
+)
 
 // Get CitedPosts
 const citedPosts = ref(null)
@@ -67,29 +87,6 @@ const getCitedPosts = async () => {
   })
 
   pageLoading.value = false
-}
-
-onMounted(async () => {
-  getCitedPosts()
-
-  // Medium Zoom
-  await nextTick()
-  mediumZoom('[zoomable]')
-})
-
-onBeforeUnmount(() => {
-  store.editablePost = null
-})
-
-// On Post Cited
-const onCited = () => {
-  getCitedPosts()
-}
-
-// On Post Edited
-const onEdited = (e) => {
-  post.value = e
-  cellKey.value++
 }
 
 // Cite Post
@@ -125,11 +122,30 @@ const getSeoTitle = (html) => {
   }
 }
 
-const seoTitle = getSeoTitle(post.value.content)
-const seoDesc = post.value.content.replace(/<[^>]+>/g, '').trim()
+if (post.value) {
+  const seoTitle = getSeoTitle(post.value.content)
+  const seoDesc = post.value.content.replace(/<[^>]+>/g, '').trim()
 
-useSeoMeta({
-  title: seoTitle,
-  description: seoDesc,
+  useSeoMeta({
+    title: seoTitle,
+    description: seoDesc,
+  })
+}
+
+onMounted(async () => {
+  if (post.value) getCitedPosts()
+
+  // Medium Zoom
+  const theme = localStorage.getItem('theme')
+
+  await nextTick()
+
+  mediumZoom('[zoomable]', {
+    background: theme === 'light' ? '#fff' : '#000',
+  })
+})
+
+onBeforeUnmount(() => {
+  store.editablePost = null
 })
 </script>
