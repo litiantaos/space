@@ -29,13 +29,13 @@
     >
       <div
         v-for="num in 1080"
-        class="h-3 w-3 flex-none rounded-sm transition-all duration-300"
+        class="h-3 w-3 flex-none cursor-pointer rounded-sm transition-all duration-300 sm:hover:scale-90"
         :class="
           groupedPosts[toDate(num)]
-            ? 'bg-emerald-300/80'
+            ? 'bg-emerald-300'
             : num <= monthsDiff
-              ? 'bg-blue-200 dark:bg-sky-700'
-              : 'bg-slate-100 dark:bg-slate-700'
+              ? 'bg-blue-300 dark:bg-slate-500'
+              : 'bg-slate-100 dark:bg-zinc-700'
         "
         :style="{ 'grid-row-start': num === 1 ? birthdayMonth : 'unset' }"
         @click="checkDate(num)"

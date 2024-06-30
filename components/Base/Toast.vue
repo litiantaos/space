@@ -3,6 +3,8 @@
     <div
       v-if="toast.show"
       class="c-bg-page c-border-el c-text-base fixed bottom-10 left-[50%] z-50 flex h-10 min-w-16 -translate-x-2/4 select-none items-center justify-center gap-3 rounded-full px-2"
+      @mouseenter="onMouseEnter"
+      @mouseleave="onMouseLeave"
     >
       <div
         v-if="toast.options?.type"
@@ -22,13 +24,13 @@
 
       <button
         v-if="toast.options?.action"
-        class="c-bg-el-2 c-bg-el-active flex h-6 w-6 items-center justify-center rounded-full"
+        class="c-bg-el c-bg-el-active-2 flex h-6 w-6 items-center justify-center rounded-full"
         @click="toast.options?.action"
       >
         <div
           class="text-sm"
           :class="
-            toast.loading ? 'ri-loader-4-line animate-spin' : 'ri-check-line'
+            toast.options?.btnIcon ? toast.options.btnIcon : 'ri-check-line'
           "
         ></div>
       </button>
@@ -45,6 +47,35 @@ const iconMap = {
   info: 'ri-information-fill',
   success: 'ri-checkbox-circle-fill text-green-300',
 }
+
+const timer = ref(null)
+
+const resetTimeout = () => {
+  clearTimeout(timer.value)
+
+  timer.value = setTimeout(() => {
+    toast.show = false
+  }, 3000)
+}
+
+const onMouseEnter = () => {
+  clearTimeout(timer.value)
+}
+
+const onMouseLeave = () => {
+  resetTimeout()
+}
+
+watch(
+  () => toast.show,
+  (newShow) => {
+    if (newShow) {
+      resetTimeout()
+    } else {
+      clearTimeout(timer.value)
+    }
+  },
+)
 </script>
 
 <style>

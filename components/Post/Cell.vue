@@ -63,7 +63,7 @@
                 ></button>
 
                 <button
-                  class="ri-delete-bin-7-line c-bg-el-active h-8 w-8 rounded text-red-600"
+                  class="ri-delete-bin-7-line btn-base text-red-500"
                   @click="delPost"
                 ></button>
               </div>
@@ -75,7 +75,7 @@
 
     <div v-if="tags?.length" class="flex items-center gap-2">
       <NuxtLink
-        class="tag-base c-bg-el c-text-base c-bg-el-active-2"
+        class="tag-base c-bg-el c-text-base-2 c-bg-el-active-2"
         v-for="tag in tags"
         :to="`/tag/${tag.id}`"
       >
@@ -283,7 +283,7 @@ tags.value = tagRes.map((item) => item.tags)
 const toPost = () => {
   if (props.type !== 'min') return
 
-  store.localPost = props.data
+  store.tempPost = props.data
 
   navigateTo('/post/' + props.data.id)
 }
@@ -311,7 +311,12 @@ const deletePost = throttle(async () => {
     useToast().loading = false
     useToast().show = false
 
-    deleteLocalPost()
+    // Delete Post of Store Posts
+    const index = store.posts.findIndex((x) => x.id === props.data.id)
+
+    if (index !== -1) {
+      store.posts.splice(index, 1)
+    }
 
     if (useRoute().path !== '/') {
       navigateTo('/')
@@ -321,19 +326,11 @@ const deletePost = throttle(async () => {
   }
 }, 2000)
 
-const deleteLocalPost = () => {
-  const index = store.posts.findIndex((x) => x.id === props.data.id)
-
-  if (index !== -1) {
-    store.posts.splice(index, 1)
-  }
-}
-
 // Edit Post
 const editPost = () => {
   store.boardShow = true
-  store.editablePost = props.data
-  store.editablePost.tags = tags.value
+  store.postToEdit = props.data
+  store.postToEdit.tags = tags.value
 
   hideAll()
 }

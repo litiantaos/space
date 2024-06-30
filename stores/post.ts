@@ -1,26 +1,23 @@
 export const usePostStore = defineStore('Post', () => {
   const client = useSupabaseClient()
 
-  const boardShow = ref(false)
-
-  const editablePost = ref(null)
-
-  const localPost = ref(null)
-
-  const citedPostId = ref(null)
-  const cited = ref(false)
-
-  const editedPost = ref(null)
-
+  // Posts
   const posts = ref(null)
+  const tempPost = ref(null)
 
   const pageSize = ref(10)
-
   const currentPage = ref(2)
 
   const listKey = ref(0)
 
-  const editorContent = ref(null)
+  // Board
+  const boardShow = ref(false)
+
+  const postToEdit = ref(null)
+  const edited = ref(false)
+
+  const postIdToCite = ref(null)
+  const cited = ref(false)
 
   const getPosts = async ({
     page = 1,
@@ -75,17 +72,16 @@ export const usePostStore = defineStore('Post', () => {
   }
 
   return {
-    boardShow,
-    editablePost,
-    localPost,
-    citedPostId,
-    cited,
-    editedPost,
     posts,
+    tempPost,
     pageSize,
     currentPage,
     listKey,
-    editorContent,
+    boardShow,
+    postToEdit,
+    edited,
+    postIdToCite,
+    cited,
     getPosts,
     getPost,
   }

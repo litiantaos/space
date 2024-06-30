@@ -13,7 +13,7 @@
       <div class="flex h-16 items-center justify-between">
         <MainMenu is-mini />
         <button
-          class="c-text-base c-bg-el-active-scale text-xl"
+          class="c-text-base t-active-scale text-xl sm:hover:-rotate-45"
           :class="theme === 'dark' ? 'ri-contrast-2-line' : 'ri-sun-line'"
           @click="toggleTheme"
         ></button>

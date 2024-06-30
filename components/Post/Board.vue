@@ -29,7 +29,10 @@
           />
 
           <div class="no-scrollbar flex items-center gap-2 overflow-x-auto">
-            <div v-if="isCite" class="flex flex-none items-center gap-2">
+            <div
+              v-if="store.postIdToCite"
+              class="flex flex-none items-center gap-2"
+            >
               <button
                 class="tag-base"
                 :class="
@@ -49,7 +52,9 @@
               v-for="(tag, idx) in tags"
               class="tag-base"
               :class="
-                tag.checked ? 'c-text-base c-bg-el-2' : 'c-text-base c-bg-el'
+                tag.checked
+                  ? 'bg-slate-400 text-white dark:bg-zinc-400/80 dark:text-zinc-800'
+                  : 'c-text-base c-bg-el'
               "
               @click="checkTag(idx)"
             >
@@ -58,7 +63,10 @@
           </div>
 
           <button v-if="user" @click="submit" class="btn-circle mt-4">
-            <div class="ri-rocket-fill" :class="{ bounce: loading }"></div>
+            <div
+              class="ri-rocket-fill"
+              :class="{ 'bounce text-blue-500': loading }"
+            ></div>
           </button>
         </div>
       </div>
@@ -74,24 +82,18 @@ const store = usePostStore()
 const client = useSupabaseClient()
 const user = useSupabaseUser()
 
-const editorContent = ref(null)
-const loading = ref(false)
+const profile = ref(null)
 
 const show = ref(false)
-const showEditor = ref(false)
 
-// Watch
-const isEdit = ref(false)
-const isCite = ref(false)
+const showEditor = ref(false)
+const editorContent = ref(null)
+
+const citeAsComment = ref(false)
 
 watch(
-  () => [
-    store.boardShow,
-    store.editorContent,
-    store.editablePost,
-    store.citedPostId,
-  ],
-  ([newBoardShow, newEditorContent, newEditablePost, newCitedPostId]) => {
+  () => [store.boardShow, store.postToEdit],
+  ([newBoardShow, newPostToEdit]) => {
     if (newBoardShow) {
       document.body.style.overflow = 'hidden'
 
@@ -107,18 +109,9 @@ watch(
       document.body.style.overflow = ''
     }
 
-    if (newEditorContent) {
-      editorContent.value = newEditorContent
-    }
-
-    if (newEditablePost) {
-      isEdit.value = true
-      editorContent.value = newEditablePost.content
+    if (newPostToEdit) {
+      editorContent.value = newPostToEdit.content
       matchCheckedTags()
-    }
-
-    if (newCitedPostId) {
-      isCite.value = true
     }
   },
 )
@@ -163,7 +156,7 @@ const upsertTags = async (id) => {
 
 // Edit Post: Match Checked Tags
 const matchCheckedTags = () => {
-  const postTags = store.editablePost.tags
+  const postTags = store.postToEdit.tags
 
   if (postTags?.length) {
     checkedTags.value = postTags
@@ -176,15 +169,8 @@ const matchCheckedTags = () => {
   }
 }
 
-// Profile
-const profile = ref(null)
-
-onMounted(() => {
-  profile.value = useUserProfile().profile.value
-})
-
 // Submit
-const citeAsComment = ref(false)
+const loading = ref(false)
 
 const submit = throttle(async () => {
   // console.log(editorContent.value)
@@ -203,16 +189,16 @@ const upsertPost = async () => {
     user_id: profile.value.id,
   }
 
-  if (isEdit.value) {
-    upsert.id = store.editablePost.id
+  if (store.postToEdit) {
+    upsert.id = store.postToEdit.id
 
     // Delete All Tags
     const { error } = await client
       .from('posts_tags')
       .delete()
-      .eq('post_id', store.editablePost.id)
-  } else if (isCite.value) {
-    upsert.cited_post_id = store.citedPostId
+      .eq('post_id', store.postToEdit.id)
+  } else if (store.postIdToCite) {
+    upsert.cited_post_id = store.postIdToCite
 
     if (citeAsComment.value) {
       upsert.as_comment = true
@@ -229,8 +215,8 @@ const upsertPost = async () => {
     // Update Posts in View
     const newPost = await store.getPost(data.id)
 
-    if (isEdit.value) {
-      // Replace Old Post in Store
+    if (store.postToEdit) {
+      // Update Posts: Replace Old Post in Store Posts
       if (store.posts) {
         const index = store.posts.findIndex((item) => item.id === data.id)
 
@@ -239,10 +225,13 @@ const upsertPost = async () => {
         }
       }
 
-      // Update Post in Post Page
-      store.editedPost = newPost
+      // Update Post: Update Post in Post Page
+      store.tempPost = newPost
+
+      store.edited = true
     } else {
-      if (store.posts) {
+      // Update Posts: Insert New Post After Recommended Post
+      if (store.posts && !citeAsComment.value) {
         const index = store.posts.findIndex(
           (item) => item.is_recommended === false,
         )
@@ -250,22 +239,13 @@ const upsertPost = async () => {
         if (index !== -1) {
           store.posts.splice(index, 0, newPost)
         }
-      } else {
-        store.posts = [newPost]
       }
     }
 
     // Update Post List View
     store.listKey++
 
-    // Close and Reset Board
-    store.boardShow = false
-    editorContent.value = null
-
-    if (upsert.cited_post_id) {
-      store.citedPostId = null
-      store.cited = true
-    }
+    closeBoard()
   } catch (error) {
     alert(error.message)
   } finally {
@@ -280,13 +260,22 @@ const closeBoard = () => {
   setTimeout(() => {
     store.boardShow = false
     editorContent.value = null
-    store.editablePost = null
-    store.editorContent = null
+
+    store.postToEdit = null
+    store.edited = false
+
+    store.postIdToCite = null
+    store.cited = false
+
     citeAsComment.value = false
 
     initTags()
   }, 500)
 }
+
+onMounted(() => {
+  profile.value = useUserProfile().profile.value
+})
 </script>
 
 <style>

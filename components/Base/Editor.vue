@@ -14,7 +14,7 @@
         :theme="true"
       >
         <button
-          class="ri-sparkling-line text-xl text-slate-400 transition-all active:text-slate-300"
+          class="ri-sparkling-line t-active-scale text-xl text-slate-400 sm:hover:text-blue-500"
         ></button>
 
         <template #content>

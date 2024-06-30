@@ -5,21 +5,21 @@
       class="flex justify-center gap-2 transition-all duration-200"
     >
       <button
-        class="c-border-el c-text-base c-bg-el-active flex h-8 select-none items-center gap-3 rounded-full px-4 text-xs"
+        class="c-border-el c-text-base c-bg-el-active c-bg-el-hover flex h-8 select-none items-center gap-3 rounded-full px-4 text-xs"
         @click="createPost"
       >
         心有从容，向阳而生
       </button>
 
       <button
-        class="ri-donut-chart-line c-bg-el-active c-border-el c-text-base flex h-8 w-8 items-center justify-center rounded-full text-xl"
+        class="ri-donut-chart-line c-bg-el-active c-border-el c-text-base c-bg-el-hover flex h-8 w-8 items-center justify-center rounded-full text-xl"
         @click="toSearch"
       ></button>
 
       <div>
         <div
           v-if="user"
-          class="c-border-el c-text-base c-bg-el-active flex h-8 items-center justify-center gap-3 rounded-full px-1.5"
+          class="c-border-el c-text-base c-bg-el-active c-bg-el-hover flex h-8 items-center justify-center gap-3 rounded-full px-1.5"
         >
           <button
             class="flex items-center gap-2 active:text-gray-400"
@@ -42,7 +42,7 @@
 
         <button
           v-else
-          class="ri-user-smile-line c-border-el c-text-base c-bg-el-active flex h-8 w-8 items-center justify-center rounded-full text-xl"
+          class="ri-user-smile-line c-border-el c-text-base c-bg-el-active c-bg-el-hover flex h-8 w-8 items-center justify-center rounded-full text-xl"
           @click="toLogin"
         ></button>
       </div>
@@ -50,14 +50,14 @@
 
     <div v-else class="flex w-fit gap-5 text-xl">
       <button
-        class="ri-add-circle-line c-bg-el-active-scale c-text-base"
+        class="ri-add-circle-line t-active-scale c-text-base"
         @click="createPost"
       ></button>
       <button
-        class="ri-donut-chart-line c-bg-el-active-scale c-text-base"
+        class="ri-donut-chart-line t-active-scale c-text-base"
         @click="toSearch"
       ></button>
-      <button v-if="user" @click="toUserPage" class="c-bg-el-active-scale">
+      <button v-if="user" @click="toUserPage" class="t-active-scale">
         <img
           :src="profile?.avatar_url || defaultAvatarUrl"
           class="c-bg-el c-border-el h-5 w-5 overflow-hidden rounded-full object-cover"
@@ -65,7 +65,7 @@
       </button>
       <button
         v-else
-        class="ri-user-smile-line c-text-base c-bg-el-active-scale"
+        class="ri-user-smile-line c-text-base t-active-scale"
         @click="toLogin"
       ></button>
     </div>

@@ -44,9 +44,9 @@ const cellKey = ref(0)
 const post = ref(null)
 const pageLoading = ref(false)
 
-if (store.localPost) {
-  post.value = store.localPost
-  store.localPost = null
+if (store.tempPost) {
+  post.value = store.tempPost
+  store.tempPost = null
 } else {
   pageLoading.value = true
 
@@ -65,15 +65,16 @@ if (store.localPost) {
 }
 
 watch(
-  () => [store.cited, store.editedPost],
-  ([newCited, newEditedPost]) => {
-    if (newCited) {
-      getCitedPosts()
+  () => [store.edited, store.cited],
+  ([newEdited, newCited]) => {
+    if (newEdited) {
+      post.value = store.tempPost
+      store.tempPost = null
+      cellKey.value++
     }
 
-    if (newEditedPost) {
-      post.value = e
-      cellKey.value++
+    if (newCited) {
+      getCitedPosts()
     }
   },
 )
@@ -92,7 +93,7 @@ const getCitedPosts = async () => {
 // Cite Post
 const citePost = () => {
   store.boardShow = true
-  store.citedPostId = post.value.id
+  store.postIdToCite = post.value.id
 }
 
 // Title
@@ -143,9 +144,5 @@ onMounted(async () => {
   mediumZoom('[zoomable]', {
     background: theme === 'light' ? '#fff' : '#000',
   })
-})
-
-onBeforeUnmount(() => {
-  store.editablePost = null
 })
 </script>

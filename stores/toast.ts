@@ -6,15 +6,13 @@ export const useToast = defineStore('Toast', () => {
   const show = ref(false)
   const options = ref({})
 
-  const loading = ref(false)
-
   const push = (e: options) => {
     if (show.value) {
       show.value = false
 
       setTimeout(() => {
         show.value = true
-      }, 400)
+      }, 420)
     } else {
       show.value = true
     }
@@ -22,13 +20,7 @@ export const useToast = defineStore('Toast', () => {
     if (e) {
       options.value = e
     }
-
-    if (!loading.value) {
-      setTimeout(() => {
-        show.value = false
-      }, 3000)
-    }
   }
 
-  return { show, options, loading, push }
+  return { show, options, push }
 })

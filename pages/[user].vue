@@ -7,7 +7,7 @@
       >
         <img
           :src="profile?.avatar_url || defaultAvatarUrl"
-          class="h-10 w-10 rounded-md object-cover"
+          class="c-border-el h-10 w-10 rounded-md object-cover"
         />
         <h1>{{ profile?.nickname || defaultNickname }}</h1>
       </NuxtLink>

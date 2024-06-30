@@ -19,11 +19,11 @@
   }
 
   code {
-    @apply c-bg-el rounded px-1.5 py-1 font-mono text-xs;
+    @apply c-bg-el c-text-base rounded px-1.5 py-1 font-mono text-xs;
   }
 
   pre {
-    @apply c-bg-el flex-none overflow-x-auto rounded-md p-4 font-mono;
+    @apply c-bg-el c-text-base flex-none overflow-x-auto rounded-md p-4 font-mono;
     white-space: pre !important;
 
     &::-webkit-scrollbar {
@@ -32,11 +32,6 @@
 
     code {
       @apply rounded-none border-none bg-transparent p-0;
-
-      .hljs {
-        color: #383a42;
-        background: #fafafa;
-      }
 
       .hljs-comment,
       .hljs-quote {
@@ -111,7 +106,7 @@
   }
 
   blockquote {
-    @apply border-l-2 pl-3 transition-all duration-300 dark:border-slate-700;
+    @apply border-l-2 pl-3 transition-all duration-300 dark:border-zinc-600;
 
     p {
       @apply p-0;
@@ -119,7 +114,7 @@
   }
 
   hr {
-    @apply my-5 border-t transition-all duration-300 dark:border-slate-700;
+    @apply my-5 border-t transition-all duration-300 dark:border-zinc-600;
   }
 
   ul,
@@ -173,22 +168,22 @@
   }
 
   a {
-    @apply text-sky-600 hover:text-sky-700;
+    @apply text-slate-500 transition-all duration-300 hover:text-slate-400 dark:text-slate-400 dark:hover:text-slate-500;
 
     &::after {
       content: '\ea6c';
       font-family: 'remixicon';
 
-      @apply c-text-base ml-1 inline-block;
+      @apply ml-1 inline-block;
     }
   }
 
   table {
-    @apply c-border-el w-full table-fixed border-separate border-spacing-0 overflow-hidden rounded-md text-sm;
+    @apply w-full table-fixed border-separate border-spacing-0 overflow-hidden rounded-md border text-sm dark:border-zinc-600;
 
     td,
     th {
-      @apply relative box-border border-r px-3 py-2 align-middle transition-all duration-300 last:border-r-0 dark:border-slate-700;
+      @apply relative box-border border-r px-3 py-2 align-middle transition-all duration-300 last:border-r-0 dark:border-zinc-600;
     }
 
     th {
@@ -196,7 +191,7 @@
     }
 
     td {
-      @apply border-t;
+      @apply border-t dark:border-zinc-600;
     }
 
     p {
@@ -213,7 +208,7 @@
   }
 
   div[address] {
-    @apply c-bg-page-opacity c-text-base absolute bottom-2 left-2 h-fit max-w-[calc(100%-16px)] rounded-md px-3 py-1.5 text-justify text-xs backdrop-blur-md;
+    @apply c-bg-page-opacity c-text-base absolute bottom-2 left-2 h-fit max-w-[calc(100%-16px)] rounded-md px-3 py-1.5 text-justify text-xs backdrop-blur;
   }
 
   div[type='group'] {
