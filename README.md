@@ -11,19 +11,15 @@ Website: [https://www.litiantao.com](https://www.litiantao.com)
 Add `.env` file:
 
 ```
---- Supabase ---
 SUPABASE_URL="https://example.supabase.co"
-SUPABASE_KEY="<your_key>"
+SUPABASE_KEY="<key>"
 
---- Your Domain ---
 NUXT_PUBLIC_SITE_URL="https://example.com"
 
---- Gemini Key ---
-NUXT_GEMINI_AK="<your_key>"
+NUXT_GEMINI_AK="<key>"
 
---- GaoDe Map Key ---
-NUXT_AMAP_AK="<your_key>"
-NUXT_AMAP_SK="<your_key>"
+NUXT_AMAP_AK="<key>"
+NUXT_AMAP_SK="<key>"
 ```
 
 ## Setup

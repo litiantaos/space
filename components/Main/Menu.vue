@@ -120,7 +120,7 @@ const createPost = () => {
 }
 
 const toUserPage = () => {
-  navigateTo(`/${profile.value?.id}`)
+  navigateTo(`/user/${profile.value?.id}`)
 }
 
 const toSearch = () => {

@@ -2,7 +2,7 @@
   <div class="flex flex-col gap-4">
     <div class="flex items-center justify-between">
       <NuxtLink
-        :to="`/${data.users?.id}`"
+        :to="`/user/${data.users?.id}`"
         class="flex items-center gap-3 text-sm"
       >
         <img
@@ -261,14 +261,6 @@ const addMapAddress = async (location) => {
   }
 }
 
-onMounted(async () => {
-  parseHtmlContent()
-})
-
-onUnmounted(() => {
-  map?.destroy()
-})
-
 // Get Tags
 const tags = ref(null)
 
@@ -375,4 +367,12 @@ const capture = async () => {
 
   hideAll()
 }
+
+onMounted(async () => {
+  parseHtmlContent()
+})
+
+onUnmounted(() => {
+  map?.destroy()
+})
 </script>

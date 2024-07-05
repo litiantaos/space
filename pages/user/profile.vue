@@ -43,9 +43,24 @@ const profile = ref(null)
 loading.value = false
 
 const update = throttle(async () => {
-  const isNicknameUnique = await checkNicknameUnique()
+  const containsSpecialChars = /[!@#$%^&*/]/.test(nickname.value)
 
-  if (!isNicknameUnique) {
+  if (containsSpecialChars) {
+    useToast().push({
+      type: 'info',
+      text: '昵称不允许特殊字符',
+    })
+
+    return
+  }
+
+  const { data: nicknameData } = await client
+    .from('users')
+    .select('nickname')
+    .eq('nickname', nickname.value)
+    .single()
+
+  if (nicknameData) {
     useToast().push({
       type: 'info',
       text: '昵称已存在',
@@ -88,20 +103,6 @@ const update = throttle(async () => {
     loading.value = false
   }
 }, 2000)
-
-const checkNicknameUnique = async () => {
-  const { data } = await client
-    .from('users')
-    .select('nickname')
-    .eq('nickname', nickname.value)
-    .single()
-
-  if (data) {
-    return false
-  } else {
-    return true
-  }
-}
 
 const toResumePost = () => {
   const siteUrl = useRuntimeConfig().public.siteUrl
