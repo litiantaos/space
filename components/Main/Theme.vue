@@ -49,5 +49,11 @@ onMounted(() => {
         document.documentElement.classList.remove('dark')
       }
     })
+
+  console.log(
+    '%cTEO%cSPACE ',
+    'font-size: 40px; font-weight: bold; font-style: italic; color: transparent; -webkit-text-stroke: 1px #3b82f6;',
+    'font-size: 40px; font-weight: bold; font-style: italic; color: transparent; -webkit-text-stroke: 1px #3f3f46;',
+  )
 })
 </script>

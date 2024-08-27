@@ -1,114 +1,86 @@
 /* Move Up */
 .move-up-enter-active,
 .move-up-leave-active {
-  transition:
-    transform 0.4s,
-    opacity 0.4s;
+  @apply transition-[transform,opacity] duration-[400ms] !important;
 }
 
 .move-up-enter-from,
 .move-up-leave-to {
-  transform: translateY(10px);
-  opacity: 0;
+  @apply translate-y-3 opacity-0 !important;
 }
 
 /* Move Up Center */
 .move-up-center-enter-active,
 .move-up-center-leave-active {
-  transition:
-    transform 0.4s,
-    opacity 0.4s;
+  @apply transition-[transform,opacity] duration-[400ms] !important;
 }
 
 .move-up-center-enter-from,
 .move-up-center-leave-to {
-  transform: translate(-50%, 10px) !important;
-  opacity: 0;
-}
-
-/* Move Up VH */
-.move-up-vh-enter-active,
-.move-up-vh-leave-active {
-  transition:
-    transform 0.4s,
-    opacity 0.4s !important;
-}
-
-.move-up-vh-enter-from,
-.move-up-vh-leave-to {
-  transform: translateY(100vh);
-  opacity: 0;
+  @apply -translate-x-1/2 translate-y-3 opacity-0 !important;
 }
 
 /* Move Right */
 .move-right-enter-active,
 .move-right-leave-active {
-  transition:
-    transform 0.4s,
-    opacity 0.4s;
+  @apply transition-[transform,opacity] duration-[400ms] !important;
 }
 
 .move-right-enter-from,
 .move-right-leave-to {
-  transform: translateX(-10px);
-  opacity: 0;
+  @apply -translate-x-3 opacity-0 !important;
 }
 
 /* Move Down */
 .move-down-enter-active,
 .move-down-leave-active {
-  transition:
-    transform 0.4s,
-    opacity 0.4s;
+  @apply transition-[transform,opacity] duration-[400ms] !important;
 }
 
 .move-down-enter-from,
 .move-down-leave-to {
-  transform: translateY(-10px);
-  opacity: 0;
+  @apply -translate-y-3 opacity-0 !important;
 }
 
 /* Fade */
 .fade-enter-active,
 .fade-leave-active {
-  transition: opacity 0.4s;
+  @apply transition-opacity duration-[400ms] !important;
 }
 
 .fade-enter-from,
 .fade-leave-to {
-  opacity: 0;
+  @apply opacity-0 !important;
 }
 
 /* List Move Up */
 .list-move-up-move,
 .list-move-up-enter-active,
 .list-move-up-leave-active {
-  transition: all 0.4s;
+  @apply transition-all duration-[400ms] !important;
 }
 
 .list-move-up-enter-from,
 .list-move-up-leave-to {
-  opacity: 0;
-  transform: translateY(20px);
+  @apply translate-y-5 opacity-0 !important;
 }
 
 .list-move-up-leave-active {
-  position: absolute;
+  @apply absolute;
 }
 
 /* List Move Left */
 .list-move-left-move,
 .list-move-left-enter-active,
 .list-move-left-leave-active {
-  transition: all 0.4s;
+  @apply transition-all duration-[400ms] !important;
 }
 
 .list-move-left-enter-from,
 .list-move-left-leave-to {
-  opacity: 0;
-  transform: translateX(20px);
+  @apply translate-x-5 opacity-0 !important;
 }
 
 .list-move-left-leave-active {
-  position: absolute;
+  @apply absolute;
 }

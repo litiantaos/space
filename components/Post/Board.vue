@@ -1,18 +1,10 @@
 <template>
-  <div
-    v-if="store.boardShow"
-    class="fixed bottom-0 left-0 right-0 top-0 z-[15]"
-  >
-    <Transition name="fade">
-      <div
-        v-if="show"
-        class="absolute left-0 top-0 h-full w-full bg-black/30"
-        @click="closeBoard"
-      ></div>
-    </Transition>
-
-    <Transition name="move-up-vh">
-      <div v-if="show" class="c-bg-page absolute left-0 top-0 h-full w-full">
+  <Transition name="move-up">
+    <div
+      v-if="store.boardShow"
+      class="fixed bottom-0 left-0 right-0 top-0 z-[15]"
+    >
+      <div class="c-bg-page absolute left-0 top-0 h-full w-full">
         <div
           class="mx-auto flex h-full w-full max-w-3xl flex-col items-center gap-4 p-4"
         >
@@ -22,7 +14,6 @@
           ></button>
 
           <BaseEditor
-            v-if="showEditor"
             v-model="editorContent"
             class="w-full"
             :class="user ? 'h-[calc(100%-184px)]' : 'h-[calc(100%-120px)]'"
@@ -70,8 +61,8 @@
           </button>
         </div>
       </div>
-    </Transition>
-  </div>
+    </div>
+  </Transition>
 </template>
 
 <script setup>
@@ -84,9 +75,6 @@ const user = useSupabaseUser()
 
 const profile = ref(null)
 
-const show = ref(false)
-
-const showEditor = ref(false)
 const editorContent = ref(null)
 
 const citeAsComment = ref(false)
@@ -96,15 +84,6 @@ watch(
   ([newBoardShow, newPostToEdit]) => {
     if (newBoardShow) {
       document.body.style.overflow = 'hidden'
-
-      setTimeout(() => {
-        show.value = true
-
-        // Fix FloatingMenu Mispositioned When Opening Board
-        setTimeout(() => {
-          showEditor.value = true
-        }, 100)
-      }, 100)
     } else if (!newBoardShow) {
       document.body.style.overflow = ''
     }
@@ -254,23 +233,18 @@ const upsertPost = async () => {
 }
 
 const closeBoard = () => {
-  show.value = false
-  showEditor.value = false
+  store.boardShow = false
+  editorContent.value = null
 
-  setTimeout(() => {
-    store.boardShow = false
-    editorContent.value = null
+  store.postToEdit = null
+  store.edited = false
 
-    store.postToEdit = null
-    store.edited = false
+  store.postIdToCite = null
+  store.cited = false
 
-    store.postIdToCite = null
-    store.cited = false
+  citeAsComment.value = false
 
-    citeAsComment.value = false
-
-    initTags()
-  }, 500)
+  initTags()
 }
 
 onMounted(() => {
